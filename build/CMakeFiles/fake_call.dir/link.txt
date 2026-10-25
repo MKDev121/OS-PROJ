@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o -o fake_call  libisp_core.a 
+/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/fake_call.dir/link.d CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o -o fake_call  libisp_core.a

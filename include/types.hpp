@@ -59,7 +59,10 @@ struct ResourcePolicy {
     uint32_t background_memory_high_percent{60};
     uint32_t poll_interval_ms{1000};
     uint32_t hysteresis_delay_sec{8};
-    std::string video_device{"/dev/video10"};
+    std::string video_device{"/dev/video"};
+    bool detect_audio{true};
+    bool detect_pipewire{true};
+    std::string status_file{"/tmp/protector.status"};
     std::string cgroup_mount{"/sys/fs/cgroup"};
     std::string proc_mount{"/proc"};
     bool dry_run{false};

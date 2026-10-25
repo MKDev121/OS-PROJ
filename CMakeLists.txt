@@ -50,6 +50,7 @@ add_library(isp_core STATIC
     src/resource_shaper.cpp
     src/daemon.cpp
     src/fake_call.cpp
+    src/overlay/overlay_model.cpp
 )
 
 target_include_directories(isp_core PUBLIC
@@ -88,6 +89,7 @@ add_executable(unit_tests
     tests/test_daemon.cpp
     tests/test_fake_call.cpp
     tests/test_hardening.cpp
+    tests/test_overlay.cpp
 )
 target_include_directories(unit_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/tests
@@ -97,3 +99,50 @@ target_link_libraries(unit_tests PRIVATE isp_core)
 # Enable CTest integration
 enable_testing()
 add_test(NAME ConfigUnitTests COMMAND unit_tests)
+
+# ------------------------------------------------------------------------------
+# Target 4: isp_overlay (Dear ImGui Dynamic HUD)
+# ------------------------------------------------------------------------------
+find_package(OpenGL REQUIRED)
+
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+add_subdirectory(third_party/glfw EXCLUDE_FROM_ALL)
+
+add_library(imgui STATIC
+    third_party/imgui/imgui.cpp
+    third_party/imgui/imgui_draw.cpp
+    third_party/imgui/imgui_tables.cpp
+    third_party/imgui/imgui_widgets.cpp
+    third_party/imgui/backends/imgui_impl_glfw.cpp
+    third_party/imgui/backends/imgui_impl_opengl3.cpp
+)
+target_include_directories(imgui SYSTEM PUBLIC
+    third_party/imgui
+    third_party/imgui/backends
+    third_party/glfw/include
+)
+target_link_libraries(imgui PUBLIC
+    glfw
+    OpenGL::GL
+)
+
+add_executable(isp_overlay
+    src/overlay/overlay_model.cpp
+    src/overlay/overlay_ui.cpp
+    src/overlay/overlay_main.cpp
+)
+target_include_directories(isp_overlay PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/imgui
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/imgui/backends
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/include
+)
+target_link_libraries(isp_overlay PRIVATE
+    imgui
+    glfw
+    OpenGL::GL
+    Threads::Threads
+)

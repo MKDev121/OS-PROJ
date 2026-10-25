@@ -79,9 +79,11 @@ private:
     void monitor_loop();
     void shaper_loop();
 
-    // PID file management
+    // PID and status file management
     bool acquire_pidfile();
     void release_pidfile();
+    void write_status_file();
+    void remove_status_file();
 };
 
 } // namespace isp

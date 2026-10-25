@@ -8,7 +8,10 @@
 #include <sys/file.h>
 #include <sys/stat.h>
 #include <iostream>
+#include <fstream>
+#include <filesystem>
 
+namespace fs = std::filesystem;
 namespace isp {
 
 static std::atomic<int> g_signal_received{0};
@@ -143,6 +146,7 @@ void ProtectorDaemon::stop() {
     cgroup_mgr_.cleanup();
 
     release_pidfile();
+    remove_status_file();
     g_daemon_instance.store(nullptr);
     ISP_LOG_INFO("Protector daemon shutdown complete.");
 }
@@ -181,8 +185,8 @@ bool ProtectorDaemon::wait(int timeout_sec) {
 
 void ProtectorDaemon::monitor_loop() {
     while (!stop_requested_.load()) {
-        // Refresh process table and classifications
-        proc_table_.refresh(policy_.proc_mount, policy_.video_device);
+        // Refresh process table and classifications with audio and PipeWire detection
+        proc_table_.refresh(policy_.proc_mount, policy_.video_device, policy_.detect_audio, policy_.detect_pipewire);
 
         auto protected_procs = proc_table_.get_by_class(ProcessClass::PROTECTED);
         auto bg_procs = proc_table_.get_by_class(ProcessClass::BACKGROUND);
@@ -207,6 +211,8 @@ void ProtectorDaemon::monitor_loop() {
                 state_changed_ = true;
             }
         }
+
+        write_status_file();
 
         // Notify shaper thread of fresh scan
         cv_.notify_one();
@@ -247,6 +253,7 @@ void ProtectorDaemon::shaper_loop() {
         // Step the state machine
         shaper_.update(has_session);
         SessionState cur_state = shaper_.get_state();
+        write_status_file();
 
         if (cur_state == SessionState::ACTIVE) {
             // Apply shaped weights
@@ -307,6 +314,64 @@ size_t ProtectorDaemon::get_background_procs_count() const {
 
 uint32_t ProtectorDaemon::get_current_bg_cpu_weight() const {
     return shaper_.get_background_cpu_weight();
+}
+
+void ProtectorDaemon::write_status_file() {
+    if (policy_.status_file.empty()) {
+        return;
+    }
+
+    std::string tmp_path = policy_.status_file + ".tmp";
+    std::ofstream out(tmp_path);
+    if (!out.is_open()) {
+        return;
+    }
+
+    out << "daemon_pid=" << getpid() << "\n";
+    out << "mode=" << (policy_.dry_run ? "DRY-RUN" : "REAL") << "\n";
+    out << "state=" << to_string(shaper_.get_state()) << "\n";
+    out << "bg_cpu_weight=" << shaper_.get_background_cpu_weight() << "\n";
+    out << "prot_cpu_weight=" << shaper_.get_protected_cpu_weight() << "\n";
+    out << "hysteresis_remaining_sec=" << shaper_.get_remaining_hysteresis_seconds() << "\n";
+
+    std::vector<pid_t> prot_pids;
+    std::vector<pid_t> bg_pids;
+    {
+        std::lock_guard<std::mutex> lock(state_mutex_);
+        prot_pids = current_protected_pids_;
+        bg_pids = current_background_pids_;
+    }
+
+    out << "active_sessions_count=" << prot_pids.size() << "\n";
+    out << "background_procs_count=" << bg_pids.size() << "\n";
+
+    out << "protected_pids=";
+    for (size_t i = 0; i < prot_pids.size(); ++i) {
+        auto e = proc_table_.get_entry(prot_pids[i]);
+        out << prot_pids[i] << ":" << (e ? e->comm : "unknown");
+        if (i + 1 < prot_pids.size()) out << ",";
+    }
+    out << "\n";
+
+    out << "background_pids=";
+    for (size_t i = 0; i < bg_pids.size(); ++i) {
+        auto e = proc_table_.get_entry(bg_pids[i]);
+        out << bg_pids[i] << ":" << (e ? e->comm : "unknown");
+        if (i + 1 < bg_pids.size()) out << ",";
+    }
+    out << "\n";
+
+    out.close();
+    std::error_code ec;
+    fs::rename(tmp_path, policy_.status_file, ec);
+}
+
+void ProtectorDaemon::remove_status_file() {
+    if (!policy_.status_file.empty()) {
+        std::error_code ec;
+        fs::remove(policy_.status_file, ec);
+        fs::remove(policy_.status_file + ".tmp", ec);
+    }
 }
 
 } // namespace isp

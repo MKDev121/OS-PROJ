@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/protector.dir/src/protector_main.cpp.o -o protector  libisp_core.a 
+/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/protector.dir/link.d CMakeFiles/protector.dir/src/protector_main.cpp.o -o protector  libisp_core.a

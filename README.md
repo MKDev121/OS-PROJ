@@ -107,9 +107,49 @@ Protected Session (Low latency, 0% frame deadline misses)
   - **Async-Signal-Safe Handling**: Signal handler stores to atomic integer; teardown and I/O occur in normal thread context
   - **Verification Script**: Automated audit script [`scripts/verify_hardening.sh`](file:///c:/Users/agrbr/OneDrive/Desktop/OS%20PROJ/scripts/verify_hardening.sh)
 - [x] **Phase 11: Final Integration & Demonstration Workflow**
-  - 10-step end-to-end demo script ([`scripts/demo.sh`](file:///c:/Users/agrbr/OneDrive/Desktop/OS%20PROJ/scripts/demo.sh))
+  - 10-step end-to-end demo script ([`scripts/demo.sh`](file:///home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/scripts/demo.sh))
   - Concise color-coded terminal output detailing every lifecycle phase
   - Verified in both `--real` (active cgroup v2) and `--dry-run` modes
+- [x] **Phase 12: Production Readiness & Real Video Meeting Support**
+  - **Hardware Webcam Discovery**: Dynamic wildcard `/dev/video*` matching supporting native laptop and USB cameras (`/dev/video0`, `/dev/video1`).
+  - **PipeWire & WirePlumber Stream Detection**: Zero-dependency parser detecting client capture streams (`Stream/Input/Audio`, `Stream/Input/Video`) across Google Meet (Chrome, Firefox), Zoom, Teams, Discord, and Slack.
+  - **Microphone & "Camera-Off" Protection**: Monitors ALSA capture nodes (`/dev/snd/pcm*c`) and PipeWire audio streams, ensuring meetings remain fully protected even when video is muted or screen-sharing.
+  - **False-Positive Elimination**: Idle browsers browsing web pages remain in `NORMAL` unthrottled state; protection activates strictly upon verified active media I/O.
+  - **Kernel Thread Protection**: Automatically protects `kthreadd`, `kworker`, and system daemons from background classification via PPID filtering and token-boundary pattern matching.
+  - **Instantaneous CLI Dashboard (`protector --status`)**: Live colorized status reporting of daemon state, active meeting PIDs, throttled workloads, and hysteresis countdowns.
+  - **Systemd Service & Automated Packaging**: Production systemd service unit ([`scripts/isp.service`](file:///home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/scripts/isp.service)), installer ([`scripts/install.sh`](file:///home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/scripts/install.sh)), and uninstaller ([`scripts/uninstall.sh`](file:///home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/scripts/uninstall.sh)).
+- [x] **Phase 13: Dear ImGui Interactive Session Overlay HUD (`isp_overlay`)**
+  - **Auto-Activation on Call Start**: Automatically detects active meetings and pops up an elegant floating translucent HUD.
+  - **Collapsible Floating Pill**: Unobtrusive compact badge (`Call: 87% | BG: 2% | Sys: 11%`) with animated glowing pulsing indicator.
+  - **Expanded Resource Allocation Dashboard**:
+    - **Video Call Slice**: High-priority guaranteed bandwidth (e.g. 87.0% CPU shares, `cpu.weight=800`, `ioprio=BE-0`).
+    - **Background Processes**: Throttled allocation (e.g. 2.2% CPU shares, `cpu.weight=20`, `ioprio=IDLE`, dynamic aging tracking).
+    - **Critical / Normal Processes**: Core OS, kernel workers, display compositor, and audio daemon (e.g. 10.8% CPU shares, `cpu.weight=100`).
+  - **Live Process Telemetry**: Lists active protected meeting applications (PIDs and process names) and clamped background tasks in real time.
+  - **Draggable & Configurable**: Draggable across monitors, opacity slider, always-on-top toggle, and headless mock simulation mode (`isp_overlay --mock`).
+
+---
+
+## Interactive Dear ImGui Overlay HUD
+
+Launch the floating overlay:
+
+```bash
+# Launch overlay HUD (connects to running protector daemon)
+./build/isp_overlay &
+
+# Or test in standalone simulation/mock mode
+./build/isp_overlay --mock --expanded
+```
+
+### Key UI Features:
+- **Collapsed Pill View**: Stays neatly in the corner of your screen showing `[ ISP Shield: CALL PROTECTED | 87% Call · 2% BG · 11% Sys | Details ▼ ]`.
+- **Expanded Dashboard**: Click `Details ▼` to expand into full diagnostics:
+  - Visual color-coded proportional resource distribution bar.
+  - Interactive metric tiles for Video Call, Background, and Critical System processes.
+  - Live PID and application inspection for protected calls and throttled background jobs.
+  - Grace countdown timer during hysteresis camera reconnects.
+  - Opacity adjustment and always-on-top controls.
 
 ---
 
@@ -144,7 +184,7 @@ To run the complete 10-step demonstration workflow:
 cmake -B build -S .
 cmake --build build
 
-# Run all 40 unit tests
+# Run all 53 unit tests
 ./build/unit_tests
 ```
 

@@ -167,3 +167,98 @@ TEST_CASE(SessionDetector_NonExistentAndEmptyProcRoot) {
     auto pids_empty = isp::findSessionPids(empty_fixture.str(), "/dev/video");
     ASSERT_EQ(pids_empty.size(), 0u);
 }
+
+TEST_CASE(SessionDetector_AudioCaptureDeviceDetection) {
+    FakeProcFsFixture fixture("audio_capture");
+    // Process 7001 holding mic capture stream: /dev/snd/pcmC1D0c
+    fixture.add_process(7001, "mic_recorder", 1, {
+        {0, "/dev/null"},
+        {3, "/dev/snd/pcmC1D0c"}
+    });
+
+    // Process 7002 holding audio playback stream (speakers): /dev/snd/pcmC1D0p
+    fixture.add_process(7002, "music_player", 1, {
+        {0, "/dev/null"},
+        {3, "/dev/snd/pcmC1D0p"}
+    });
+
+    ASSERT_TRUE(isp::SessionDetector::is_holding_audio_device(7001, fixture.str()));
+    ASSERT_FALSE(isp::SessionDetector::is_holding_audio_device(7002, fixture.str()));
+}
+
+TEST_CASE(SessionDetector_PipeWireDumpParser) {
+    std::string sample_json = R"([
+        {
+            "id": 42,
+            "type": "PipeWire:Interface:Client",
+            "info": {
+                "props": {
+                    "application.name": "Google Chrome",
+                    "application.process.id": 8888
+                }
+            }
+        },
+        {
+            "id": 43,
+            "type": "PipeWire:Interface:Client",
+            "info": {
+                "props": {
+                    "application.name": "Firefox",
+                    "pipewire.sec.pid": 9999
+                }
+            }
+        },
+        {
+            "id": 105,
+            "type": "PipeWire:Interface:Node",
+            "info": {
+                "props": {
+                    "client.id": 42,
+                    "media.class": "Stream/Input/Audio",
+                    "node.name": "webrtc_mic"
+                }
+            }
+        },
+        {
+            "id": 106,
+            "type": "PipeWire:Interface:Node",
+            "info": {
+                "props": {
+                    "client.id": 43,
+                    "media.class": "Stream/Input/Video",
+                    "node.name": "camera_stream"
+                }
+            }
+        },
+        {
+            "id": 107,
+            "type": "PipeWire:Interface:Node",
+            "info": {
+                "props": {
+                    "application.process.id": 7777,
+                    "media.class": "Stream/Output/Audio",
+                    "node.name": "speaker_playback"
+                }
+            }
+        }
+    ])";
+
+    auto pids = isp::SessionDetector::parse_pipewire_dump_pids(sample_json);
+    ASSERT_EQ(pids.size(), 2u);
+    ASSERT_TRUE(std::find(pids.begin(), pids.end(), 8888) != pids.end());
+    ASSERT_TRUE(std::find(pids.begin(), pids.end(), 9999) != pids.end());
+    // 7777 is playback output, not capture input, so it should not be in pids
+    ASSERT_TRUE(std::find(pids.begin(), pids.end(), 7777) == pids.end());
+}
+
+TEST_CASE(SessionDetector_WildcardVideoPrefix) {
+    FakeProcFsFixture fixture("wildcard_video");
+    fixture.add_process(8001, "webcam_user", 1, {
+        {3, "/dev/video0"}
+    });
+
+    ASSERT_TRUE(isp::SessionDetector::is_holding_device(8001, fixture.str(), "/dev/video*"));
+    ASSERT_TRUE(isp::SessionDetector::is_holding_device(8001, fixture.str(), "/dev/video"));
+    ASSERT_FALSE(isp::SessionDetector::is_holding_device(8001, fixture.str(), "/dev/video10"));
+}
+

@@ -134,6 +134,9 @@ ResourcePolicy Config::to_resource_policy() const {
     p.poll_interval_ms = static_cast<uint32_t>(get_int("poll_interval_ms", p.poll_interval_ms));
     p.hysteresis_delay_sec = static_cast<uint32_t>(get_int("hysteresis_delay_sec", p.hysteresis_delay_sec));
     p.video_device = get_string("video_device", p.video_device);
+    p.detect_audio = get_bool("detect_audio", p.detect_audio);
+    p.detect_pipewire = get_bool("detect_pipewire", p.detect_pipewire);
+    p.status_file = get_string("status_file", p.status_file);
     p.cgroup_mount = get_string("cgroup_mount", p.cgroup_mount);
     p.proc_mount = get_string("proc_mount", p.proc_mount);
     p.dry_run = get_bool("dry_run", p.dry_run);

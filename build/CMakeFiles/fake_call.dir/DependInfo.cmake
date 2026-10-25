@@ -8,7 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/mnt/c/Users/agrbr/OneDrive/Desktop/OS PROJ/src/fake_call_main.cpp" "CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o" "gcc" "CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o.d"
+  "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call_main.cpp" "CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o" "gcc" "CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o.d"
+  "" "fake_call" "gcc" "CMakeFiles/fake_call.dir/link.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

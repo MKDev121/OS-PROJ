@@ -209,3 +209,253 @@ TEST_CASE(ProcTable_ProcfsRefreshIntegration) {
     // Clean up
     fs::remove_all(fake_proc, ec);
 }
+
+TEST_CASE(ProcTable_IdleBrowserIsNotProtected) {
+    isp::ProcTable table;
+
+    // Main browser process
+    isp::ProcEntry chrome_main;
+    chrome_main.pid = 9000;
+    chrome_main.ppid = 1;
+    chrome_main.comm = "chrome";
+    chrome_main.cmdline = "/opt/google/chrome/chrome";
+    chrome_main.holds_video_device = false;
+    chrome_main.holds_audio_device = false;
+    chrome_main.has_pipewire_stream = false;
+    table.upsert_entry(chrome_main);
+
+    // Browser tab (reading Wikipedia)
+    isp::ProcEntry chrome_renderer;
+    chrome_renderer.pid = 9001;
+    chrome_renderer.ppid = 9000;
+    chrome_renderer.comm = "chrome";
+    chrome_renderer.cmdline = "/opt/google/chrome/chrome --type=renderer";
+    chrome_renderer.holds_video_device = false;
+    chrome_renderer.holds_audio_device = false;
+    chrome_renderer.has_pipewire_stream = false;
+    table.upsert_entry(chrome_renderer);
+
+    // Idle browser MUST remain NORMAL (must NOT trigger active session protection!)
+    ASSERT_EQ(table.classify_process(9000), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(9001), isp::ProcessClass::NORMAL);
+
+    auto protected_list = table.get_by_class(isp::ProcessClass::PROTECTED);
+    ASSERT_EQ(protected_list.size(), 0u);
+}
+
+TEST_CASE(ProcTable_AudioCaptureCallProtection) {
+    isp::ProcTable table;
+
+    // Main browser process
+    isp::ProcEntry chrome_main;
+    chrome_main.pid = 9100;
+    chrome_main.ppid = 1;
+    chrome_main.comm = "chrome";
+    chrome_main.cmdline = "/opt/google/chrome/chrome";
+    table.upsert_entry(chrome_main);
+
+    // Browser audio recording process (e.g. Google Meet with camera off, mic on)
+    isp::ProcEntry chrome_audio;
+    chrome_audio.pid = 9102;
+    chrome_audio.ppid = 9100;
+    chrome_audio.comm = "chrome";
+    chrome_audio.cmdline = "/opt/google/chrome/chrome --type=utility --utility-sub-type=audio";
+    chrome_audio.holds_audio_device = true; // Mic capture active!
+    table.upsert_entry(chrome_audio);
+
+    // Entire browser tree MUST be PROTECTED
+    ASSERT_EQ(table.classify_process(9100), isp::ProcessClass::PROTECTED);
+    ASSERT_EQ(table.classify_process(9102), isp::ProcessClass::PROTECTED);
+
+    auto protected_list = table.get_by_class(isp::ProcessClass::PROTECTED);
+    ASSERT_EQ(protected_list.size(), 2u);
+}
+
+TEST_CASE(ProcTable_ForceProtectedProcess) {
+    isp::ProcTable table;
+
+    isp::ProcEntry custom_app;
+    custom_app.pid = 9200;
+    custom_app.ppid = 1;
+    custom_app.comm = "custom_meeting_agent";
+    custom_app.cmdline = "./custom_meeting_agent";
+    table.upsert_entry(custom_app);
+
+    // Before force protection -> NORMAL
+    ASSERT_EQ(table.classify_process(9200), isp::ProcessClass::NORMAL);
+
+    // Add to force-protected patterns
+    table.add_force_protected_pattern("custom_meeting_agent");
+
+    // After force protection -> PROTECTED
+    ASSERT_EQ(table.classify_process(9200), isp::ProcessClass::PROTECTED);
+}
+
+TEST_CASE(ProcTable_ExcludesNonVideoCallAppsLikeUnityHub) {
+    isp::ProcTable table;
+
+    // Simulate Unity Hub processes
+    isp::ProcEntry unityhub_main;
+    unityhub_main.pid = 54046;
+    unityhub_main.ppid = 5124; // child of desktop shell
+    unityhub_main.comm = "unityhub-bin";
+    unityhub_main.cmdline = "/usr/lib/unityhub/unityhub-bin";
+    table.upsert_entry(unityhub_main);
+
+    isp::ProcEntry unityhub_crashpad;
+    unityhub_crashpad.pid = 54088;
+    unityhub_crashpad.ppid = 54046;
+    unityhub_crashpad.comm = "crashpad_handler";
+    unityhub_crashpad.cmdline = "/usr/lib/unityhub/chrome_crashpad_handler --monitor-self-annotation=ptype=crashpad-handler";
+    table.upsert_entry(unityhub_crashpad);
+
+    isp::ProcEntry unityhub_renderer;
+    unityhub_renderer.pid = 54126;
+    unityhub_renderer.ppid = 54046;
+    unityhub_renderer.comm = "unityhub-bin";
+    unityhub_renderer.cmdline = "/usr/lib/unityhub/unityhub-bin --type=renderer";
+    table.upsert_entry(unityhub_renderer);
+
+    // Also add an active video call process (e.g. Zoom)
+    isp::ProcEntry zoom_call;
+    zoom_call.pid = 60000;
+    zoom_call.ppid = 5124;
+    zoom_call.comm = "zoom";
+    zoom_call.cmdline = "/opt/zoom/zoom";
+    zoom_call.holds_video_device = true;
+    table.upsert_entry(zoom_call);
+
+    // Zoom must be PROTECTED
+    ASSERT_EQ(table.classify_process(60000), isp::ProcessClass::PROTECTED);
+
+    // All UnityHub processes MUST remain NORMAL (never protected)
+    ASSERT_EQ(table.classify_process(54046), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(54088), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(54126), isp::ProcessClass::NORMAL);
+
+    auto protected_list = table.get_by_class(isp::ProcessClass::PROTECTED);
+    ASSERT_EQ(protected_list.size(), 1u);
+    ASSERT_EQ(protected_list[0].pid, 60000);
+}
+
+TEST_CASE(ProcTable_StopsSessionClimbAtApplicationBoundary) {
+    isp::ProcTable table;
+
+    // Desktop shell (e.g. gnome-shell)
+    isp::ProcEntry desktop_shell;
+    desktop_shell.pid = 5124;
+    desktop_shell.ppid = 1;
+    desktop_shell.comm = "gnome-shell";
+    desktop_shell.cmdline = "/usr/bin/gnome-shell";
+    table.upsert_entry(desktop_shell);
+
+    // Chrome browser main
+    isp::ProcEntry chrome_main;
+    chrome_main.pid = 70000;
+    chrome_main.ppid = 5124; // child of gnome-shell
+    chrome_main.comm = "chrome";
+    chrome_main.cmdline = "/opt/google/chrome/chrome";
+    table.upsert_entry(chrome_main);
+
+    // Chrome video capture service (holds camera)
+    isp::ProcEntry chrome_capture;
+    chrome_capture.pid = 70001;
+    chrome_capture.ppid = 70000; // child of chrome_main
+    chrome_capture.comm = "chrome";
+    chrome_capture.cmdline = "/opt/google/chrome/chrome --type=utility --utility-sub-type=video_capture";
+    chrome_capture.holds_video_device = true;
+    table.upsert_entry(chrome_capture);
+
+    // Another app launched by gnome-shell (e.g. unityhub or text editor)
+    isp::ProcEntry other_app;
+    other_app.pid = 70002;
+    other_app.ppid = 5124; // child of gnome-shell
+    other_app.comm = "unityhub";
+    other_app.cmdline = "/usr/lib/unityhub/unityhub";
+    table.upsert_entry(other_app);
+
+    // Session root of chrome_capture must be chrome_main (70000), NEVER gnome-shell (5124)
+    ASSERT_EQ(table.get_session_root(70001), 70000);
+
+    // Chrome processes are PROTECTED
+    ASSERT_EQ(table.classify_process(70000), isp::ProcessClass::PROTECTED);
+    ASSERT_EQ(table.classify_process(70001), isp::ProcessClass::PROTECTED);
+
+    // gnome-shell and other_app must NOT be protected
+    ASSERT_EQ(table.classify_process(5124), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(70002), isp::ProcessClass::NORMAL);
+}
+
+TEST_CASE(ProcTable_ProtectsFullFirefoxProcessTree) {
+    isp::ProcTable table;
+
+    // Desktop shell (gnome-shell)
+    isp::ProcEntry shell;
+    shell.pid = 5124;
+    shell.ppid = 1;
+    shell.comm = "gnome-shell";
+    shell.cmdline = "/usr/bin/gnome-shell";
+    table.upsert_entry(shell);
+
+    // Firefox main UI process
+    isp::ProcEntry ff_main;
+    ff_main.pid = 6708;
+    ff_main.ppid = 5124;
+    ff_main.comm = "firefox";
+    ff_main.cmdline = "/snap/firefox/9036/usr/lib/firefox/firefox";
+    table.upsert_entry(ff_main);
+
+    // Firefox forkserver
+    isp::ProcEntry ff_forkserver;
+    ff_forkserver.pid = 6918;
+    ff_forkserver.ppid = 6708;
+    ff_forkserver.comm = "forkserver";
+    ff_forkserver.cmdline = "/snap/firefox/9036/usr/lib/firefox/firefox -contentproc -parentPid 6708 forkserver";
+    table.upsert_entry(ff_forkserver);
+
+    // Firefox WebRTC video call tab (holds camera or PipeWire stream)
+    isp::ProcEntry ff_tab;
+    ff_tab.pid = 61585;
+    ff_tab.ppid = 6918;
+    ff_tab.comm = "Isolated Web Co";
+    ff_tab.cmdline = "/snap/firefox/9036/usr/lib/firefox/firefox -contentproc -parentPid 6708 tab";
+    ff_tab.has_pipewire_stream = true;
+    table.upsert_entry(ff_tab);
+
+    // Unrelated application (VS Code)
+    isp::ProcEntry vscode;
+    vscode.pid = 80000;
+    vscode.ppid = 5124;
+    vscode.comm = "code";
+    vscode.cmdline = "/usr/share/code/code";
+    table.upsert_entry(vscode);
+
+    // Session root of the call tab must resolve to Firefox main (6708)
+    ASSERT_EQ(table.get_session_root(61585), 6708);
+
+    // The entire Firefox application family must be PROTECTED
+    ASSERT_EQ(table.classify_process(6708), isp::ProcessClass::PROTECTED);
+    ASSERT_EQ(table.classify_process(6918), isp::ProcessClass::PROTECTED);
+    ASSERT_EQ(table.classify_process(61585), isp::ProcessClass::PROTECTED);
+
+    // Shell and unrelated apps must NOT be protected
+    ASSERT_EQ(table.classify_process(5124), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(80000), isp::ProcessClass::NORMAL);
+}
+
+TEST_CASE(ProcTable_DoesNotMatchPathSubstrings) {
+    isp::ProcTable table;
+
+    // App located in /home/meet-kareliya/... (must not trigger video pattern 'meet')
+    isp::ProcEntry local_app;
+    local_app.pid = 88888;
+    local_app.ppid = 1;
+    local_app.comm = "my_worker";
+    local_app.cmdline = "/home/meet-kareliya/projects/my_worker --active";
+    local_app.holds_video_device = true; // Even if it holds video, binary name is not a video call app
+    table.upsert_entry(local_app);
+
+    // Must NOT be classified as PROTECTED because 'my_worker' is not a video call app
+    ASSERT_EQ(table.classify_process(88888), isp::ProcessClass::NORMAL);
+}
+

@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/protector.dir/link.d"
   "CMakeFiles/protector.dir/src/protector_main.cpp.o"
   "CMakeFiles/protector.dir/src/protector_main.cpp.o.d"
   "protector"

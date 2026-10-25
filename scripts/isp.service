@@ -1,0 +1,24 @@
+[Unit]
+Description=Interactive Session Protector (OS Latency & QoS Daemon)
+Documentation=https://github.com/MKDev121/OS-PROJ
+After=network.target local-fs.target sound.target
+Wants=sound.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/protector -c /etc/isp/protector.conf --real
+Restart=on-failure
+RestartSec=3s
+KillMode=mixed
+TimeoutStopSec=10s
+StandardOutput=journal
+StandardError=journal
+LimitMEMLOCK=infinity
+Delegate=yes
+
+# Ensure lockfile & status directory permissions
+RuntimeDirectory=isp
+PIDFile=/tmp/protector.pid
+
+[Install]
+WantedBy=multi-user.target

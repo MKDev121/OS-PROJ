@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/fake_call.dir/link.d"
   "CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o"
   "CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o.d"
   "fake_call"

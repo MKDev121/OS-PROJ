@@ -18,7 +18,10 @@ ProcTable::ProcTable() = default;
 ProcTable::ProcTable(ClassificationRules rules)
     : rules_(std::move(rules)) {}
 
-bool ProcTable::refresh(const std::string& procRoot, const std::string& videoDevicePrefix) {
+bool ProcTable::refresh(const std::string& procRoot,
+                        const std::string& videoDevicePrefix,
+                        bool detectAudio,
+                        bool detectPipewire) {
     std::lock_guard<std::mutex> lock(mutex_);
     std::error_code ec;
 
@@ -26,6 +29,13 @@ bool ProcTable::refresh(const std::string& procRoot, const std::string& videoDev
     if (!fs::exists(root_path, ec) || !fs::is_directory(root_path, ec)) {
         ISP_LOG_DEBUG("ProcTable: root does not exist: " << procRoot);
         return false;
+    }
+
+    // Query PipeWire active capture/streaming PIDs once per refresh cycle if on real /proc
+    std::unordered_set<pid_t> pipewire_pids;
+    if (detectPipewire && procRoot == "/proc") {
+        auto pw_vec = SessionDetector::find_pipewire_media_pids();
+        pipewire_pids.insert(pw_vec.begin(), pw_vec.end());
     }
 
     auto now = std::chrono::steady_clock::now();
@@ -106,8 +116,10 @@ bool ProcTable::refresh(const std::string& procRoot, const std::string& videoDev
                     }
                 }
 
-                // Check webcam usage
+                // Media session detection (camera, microphone, PipeWire)
                 entry.holds_video_device = SessionDetector::is_holding_device(pid, procRoot, videoDevicePrefix);
+                entry.holds_audio_device = detectAudio && SessionDetector::is_holding_audio_device(pid, procRoot);
+                entry.has_pipewire_stream = (pipewire_pids.find(pid) != pipewire_pids.end());
 
                 // Allowlist evaluation
                 entry.allowlisted = is_allowlisted_locked(entry);
@@ -163,12 +175,33 @@ bool ProcTable::matches_pattern(const std::string& text, const std::string& patt
     std::transform(lower_pattern.begin(), lower_pattern.end(), lower_pattern.begin(),
                    [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
 
+    // For short patterns (<= 3 chars, e.g. "dd", "xz"), enforce word/token boundaries
+    // to prevent false positives like matching "dd" in "kblockd" or "address"
+    if (lower_pattern.size() <= 3) {
+        size_t pos = 0;
+        while ((pos = lower_text.find(lower_pattern, pos)) != std::string::npos) {
+            bool left_boundary = (pos == 0 || !std::isalnum(static_cast<unsigned char>(lower_text[pos - 1])));
+            size_t end_pos = pos + lower_pattern.size();
+            bool right_boundary = (end_pos == lower_text.size() || !std::isalnum(static_cast<unsigned char>(lower_text[end_pos])));
+            if (left_boundary && right_boundary) {
+                return true;
+            }
+            pos++;
+        }
+        return false;
+    }
+
     return lower_text.find(lower_pattern) != std::string::npos;
 }
 
 bool ProcTable::is_allowlisted_locked(const ProcEntry& entry) const {
-    if (entry.pid <= 1) {
-        return true; // init / systemd is always allowlisted
+    // init (1) and kthreadd (2) are always allowlisted
+    if (entry.pid <= 2) {
+        return true;
+    }
+    // Kernel worker threads (children of kthreadd, PPid: 2) must never be throttled
+    if (entry.ppid == 2) {
+        return true;
     }
     for (const auto& allow : rules_.allowlist) {
         if (matches_pattern(entry.comm, allow) || matches_pattern(entry.cmdline, allow)) {
@@ -190,14 +223,107 @@ bool ProcTable::is_background_locked(const ProcEntry& entry) const {
     return false;
 }
 
-bool ProcTable::is_protected_locked(const ProcEntry& entry) const {
-    if (entry.allowlisted) {
+bool ProcTable::has_active_media_locked(const ProcEntry& entry) const {
+    return entry.holds_video_device || entry.holds_audio_device || entry.has_pipewire_stream;
+}
+
+bool ProcTable::is_excluded_from_protection_locked(const ProcEntry& entry) const {
+    for (const auto& pattern : rules_.excluded_patterns) {
+        if (matches_pattern(entry.comm, pattern) || matches_pattern(entry.cmdline, pattern)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool ProcTable::is_video_call_app_locked(const ProcEntry& entry) const {
+    if (entry.allowlisted || is_excluded_from_protection_locked(entry)) {
         return false;
     }
-    if (entry.holds_video_device) {
+    if (is_force_protected_locked(entry)) {
         return true;
     }
+
+    auto extract_bin = [](const std::string& cmdline) -> std::string {
+        if (cmdline.empty()) return "";
+        std::string exe = cmdline.substr(0, cmdline.find(' '));
+        auto slash = exe.find_last_of('/');
+        return (slash != std::string::npos) ? exe.substr(slash + 1) : exe;
+    };
+
+    std::string bin = extract_bin(entry.cmdline);
+
     for (const auto& pattern : rules_.protected_patterns) {
+        if (matches_pattern(entry.comm, pattern)) {
+            return true;
+        }
+        if (!bin.empty() && matches_pattern(bin, pattern)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool ProcTable::is_same_app_family_locked(const ProcEntry& a, const ProcEntry& b) const {
+    if (a.pid <= 1 || b.pid <= 1) {
+        return false;
+    }
+    if (a.allowlisted || b.allowlisted) {
+        return false;
+    }
+    if (is_excluded_from_protection_locked(a) || is_excluded_from_protection_locked(b)) {
+        return false;
+    }
+
+    // Helper to extract binary executable basename from cmdline
+    auto extract_bin = [](const std::string& cmdline) -> std::string {
+        if (cmdline.empty()) return "";
+        std::string exe = cmdline.substr(0, cmdline.find(' '));
+        auto slash = exe.find_last_of('/');
+        return (slash != std::string::npos) ? exe.substr(slash + 1) : exe;
+    };
+
+    std::string bin_a = extract_bin(a.cmdline);
+    std::string bin_b = extract_bin(b.cmdline);
+
+    // 1. Direct comm match or matching executable binary
+    if (!a.comm.empty() && a.comm == b.comm) {
+        return true;
+    }
+    if (!bin_a.empty() && !bin_b.empty() && bin_a == bin_b) {
+        return true;
+    }
+
+    // 2. Both match known video call application patterns
+    if (is_video_call_app_locked(a) && is_video_call_app_locked(b)) {
+        for (const auto& pattern : rules_.protected_patterns) {
+            bool a_matches = matches_pattern(a.comm, pattern) || (!bin_a.empty() && matches_pattern(bin_a, pattern));
+            bool b_matches = matches_pattern(b.comm, pattern) || (!bin_b.empty() && matches_pattern(bin_b, pattern));
+            if (a_matches && b_matches) {
+                return true;
+            }
+        }
+    }
+
+    // 3. Known browser helper processes / threads in the same systemd user app scope
+    if (!a.current_cgroup.empty() && a.current_cgroup != "/" && a.current_cgroup == b.current_cgroup) {
+        if (is_video_call_app_locked(a) || is_video_call_app_locked(b)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool ProcTable::is_protected_candidate_locked(const ProcEntry& entry) const {
+    return is_video_call_app_locked(entry);
+}
+
+bool ProcTable::is_force_protected_locked(const ProcEntry& entry) const {
+    if (entry.allowlisted || is_excluded_from_protection_locked(entry)) {
+        return false;
+    }
+    for (const auto& pattern : rules_.force_protected_patterns) {
         if (matches_pattern(entry.comm, pattern) || matches_pattern(entry.cmdline, pattern)) {
             return true;
         }
@@ -253,17 +379,22 @@ std::vector<pid_t> ProcTable::get_ancestors_locked(pid_t pid) const {
 }
 
 pid_t ProcTable::get_session_root_locked(pid_t pid) const {
+    auto it = entries_.find(pid);
+    if (it == entries_.end()) {
+        return pid;
+    }
+
     pid_t curr = pid;
     std::unordered_set<pid_t> visited;
 
     while (true) {
         visited.insert(curr);
-        auto it = entries_.find(curr);
-        if (it == entries_.end()) {
+        auto curr_it = entries_.find(curr);
+        if (curr_it == entries_.end()) {
             return curr;
         }
 
-        pid_t parent = it->second.ppid;
+        pid_t parent = curr_it->second.ppid;
         // Stop if parent is init (1) or missing or allowlisted
         if (parent <= 1 || visited.count(parent)) {
             return curr;
@@ -271,6 +402,12 @@ pid_t ProcTable::get_session_root_locked(pid_t pid) const {
 
         auto parent_it = entries_.find(parent);
         if (parent_it == entries_.end() || parent_it->second.allowlisted) {
+            return curr;
+        }
+
+        // Only ascend if parent is in the same application family (e.g. Chrome parent)
+        // Never ascend into a desktop shell (gnome-shell), system manager, or unrelated app!
+        if (!is_same_app_family_locked(curr_it->second, parent_it->second)) {
             return curr;
         }
 
@@ -282,26 +419,29 @@ void ProcTable::classify_all_locked() {
     // Phase 1: Set initial baseline classification
     for (auto& [pid, entry] : entries_) {
         entry.allowlisted = is_allowlisted_locked(entry);
-        if (entry.allowlisted) {
-            entry.classification = ProcessClass::NORMAL;
-        } else {
-            entry.classification = ProcessClass::NORMAL;
-        }
+        entry.classification = ProcessClass::NORMAL;
     }
 
     // Phase 2: Identify and protect interactive session trees (e.g. browser parent/child)
+    // Only verified video call applications with active media capture trigger protection!
     std::unordered_set<pid_t> protected_pids;
     for (auto& [pid, entry] : entries_) {
-        if (entry.allowlisted) {
+        if (entry.allowlisted || is_excluded_from_protection_locked(entry)) {
             continue;
         }
-        if (entry.holds_video_device || is_protected_locked(entry)) {
+        bool is_call = is_video_call_app_locked(entry);
+        bool has_media = has_active_media_locked(entry);
+
+        if ((is_call && has_media) || is_force_protected_locked(entry)) {
             pid_t session_root = get_session_root_locked(pid);
-            if (entries_.count(session_root) && !entries_[session_root].allowlisted) {
+            if (entries_.count(session_root) && !entries_[session_root].allowlisted &&
+                !is_excluded_from_protection_locked(entries_[session_root])) {
                 protected_pids.insert(session_root);
                 auto descendants = get_descendants_locked(session_root);
                 for (pid_t d : descendants) {
-                    if (entries_.count(d) && !entries_[d].allowlisted) {
+                    if (entries_.count(d) && !entries_[d].allowlisted &&
+                        !is_excluded_from_protection_locked(entries_[d]) &&
+                        is_same_app_family_locked(entries_[session_root], entries_[d])) {
                         protected_pids.insert(d);
                     }
                 }
@@ -428,6 +568,18 @@ void ProcTable::add_background_pattern(const std::string& pattern) {
 void ProcTable::add_protected_pattern(const std::string& pattern) {
     std::lock_guard<std::mutex> lock(mutex_);
     rules_.protected_patterns.push_back(pattern);
+    classify_all_locked();
+}
+
+void ProcTable::add_force_protected_pattern(const std::string& pattern) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    rules_.force_protected_patterns.push_back(pattern);
+    classify_all_locked();
+}
+
+void ProcTable::add_excluded_pattern(const std::string& pattern) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    rules_.excluded_patterns.push_back(pattern);
     classify_all_locked();
 }
 

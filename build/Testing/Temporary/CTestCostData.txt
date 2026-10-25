@@ -1,2 +1,2 @@
-ConfigUnitTests 5 0.0722687
+ConfigUnitTests 2 0.837136
 ---
