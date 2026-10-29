@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build_tsan/cmake_install.cmake",
+		"/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build_tsan/third_party/glfw/cmake_install.cmake",
+		"/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build_tsan/third_party/glfw/src/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

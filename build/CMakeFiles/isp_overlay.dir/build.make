@@ -76,43 +76,43 @@ CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o: CMakeFiles/isp_overl
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o: /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_model.cpp
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o: CMakeFiles/isp_overlay.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o -MF CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o.d -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_model.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o -MF CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o.d -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_model.cpp
 
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_model.cpp > CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_model.cpp > CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.i
 
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_model.cpp -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_model.cpp -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.s
 
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o: CMakeFiles/isp_overlay.dir/flags.make
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o: /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_ui.cpp
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o: CMakeFiles/isp_overlay.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o -MF CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o.d -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_ui.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o -MF CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o.d -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_ui.cpp
 
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_ui.cpp > CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_ui.cpp > CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.i
 
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_ui.cpp -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_ui.cpp -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.s
 
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o: CMakeFiles/isp_overlay.dir/flags.make
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o: /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_main.cpp
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o: CMakeFiles/isp_overlay.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o -MF CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o.d -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_main.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o -MF CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o.d -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_main.cpp
 
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_main.cpp > CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_main.cpp > CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.i
 
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_main.cpp -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_main.cpp -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.s
 
 # Object files for target isp_overlay
 isp_overlay_OBJECTS = \
@@ -128,6 +128,7 @@ isp_overlay: CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o
 isp_overlay: CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o
 isp_overlay: CMakeFiles/isp_overlay.dir/build.make
 isp_overlay: CMakeFiles/isp_overlay.dir/compiler_depend.ts
+isp_overlay: libisp_core.a
 isp_overlay: libimgui.a
 isp_overlay: third_party/glfw/src/libglfw3.a
 isp_overlay: /usr/lib/x86_64-linux-gnu/librt.a

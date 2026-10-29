@@ -166,6 +166,19 @@ fake_call/fast:
 .PHONY : fake_call/fast
 
 #=============================================================================
+# Target rules for targets named bg_workload
+
+# Build rule for target.
+bg_workload: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 bg_workload
+.PHONY : bg_workload
+
+# fast build rule for target.
+bg_workload/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/bg_workload.dir/build.make CMakeFiles/bg_workload.dir/build
+.PHONY : bg_workload/fast
+
+#=============================================================================
 # Target rules for targets named unit_tests
 
 # Build rule for target.
@@ -229,6 +242,54 @@ update_mappings: cmake_check_build_system
 update_mappings/fast:
 	$(MAKE) $(MAKESILENT) -f third_party/glfw/src/CMakeFiles/update_mappings.dir/build.make third_party/glfw/src/CMakeFiles/update_mappings.dir/build
 .PHONY : update_mappings/fast
+
+src/bg_workload.o: src/bg_workload.cpp.o
+.PHONY : src/bg_workload.o
+
+# target to build an object file
+src/bg_workload.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/isp_core.dir/build.make CMakeFiles/isp_core.dir/src/bg_workload.cpp.o
+.PHONY : src/bg_workload.cpp.o
+
+src/bg_workload.i: src/bg_workload.cpp.i
+.PHONY : src/bg_workload.i
+
+# target to preprocess a source file
+src/bg_workload.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/isp_core.dir/build.make CMakeFiles/isp_core.dir/src/bg_workload.cpp.i
+.PHONY : src/bg_workload.cpp.i
+
+src/bg_workload.s: src/bg_workload.cpp.s
+.PHONY : src/bg_workload.s
+
+# target to generate assembly for a file
+src/bg_workload.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/isp_core.dir/build.make CMakeFiles/isp_core.dir/src/bg_workload.cpp.s
+.PHONY : src/bg_workload.cpp.s
+
+src/bg_workload_main.o: src/bg_workload_main.cpp.o
+.PHONY : src/bg_workload_main.o
+
+# target to build an object file
+src/bg_workload_main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/bg_workload.dir/build.make CMakeFiles/bg_workload.dir/src/bg_workload_main.cpp.o
+.PHONY : src/bg_workload_main.cpp.o
+
+src/bg_workload_main.i: src/bg_workload_main.cpp.i
+.PHONY : src/bg_workload_main.i
+
+# target to preprocess a source file
+src/bg_workload_main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/bg_workload.dir/build.make CMakeFiles/bg_workload.dir/src/bg_workload_main.cpp.i
+.PHONY : src/bg_workload_main.cpp.i
+
+src/bg_workload_main.s: src/bg_workload_main.cpp.s
+.PHONY : src/bg_workload_main.s
+
+# target to generate assembly for a file
+src/bg_workload_main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/bg_workload.dir/build.make CMakeFiles/bg_workload.dir/src/bg_workload_main.cpp.s
+.PHONY : src/bg_workload_main.cpp.s
 
 src/cgroup_manager.o: src/cgroup_manager.cpp.o
 .PHONY : src/cgroup_manager.o
@@ -568,6 +629,30 @@ src/session_detector.s: src/session_detector.cpp.s
 src/session_detector.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/isp_core.dir/build.make CMakeFiles/isp_core.dir/src/session_detector.cpp.s
 .PHONY : src/session_detector.cpp.s
+
+tests/test_bg_workload.o: tests/test_bg_workload.cpp.o
+.PHONY : tests/test_bg_workload.o
+
+# target to build an object file
+tests/test_bg_workload.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/unit_tests.dir/build.make CMakeFiles/unit_tests.dir/tests/test_bg_workload.cpp.o
+.PHONY : tests/test_bg_workload.cpp.o
+
+tests/test_bg_workload.i: tests/test_bg_workload.cpp.i
+.PHONY : tests/test_bg_workload.i
+
+# target to preprocess a source file
+tests/test_bg_workload.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/unit_tests.dir/build.make CMakeFiles/unit_tests.dir/tests/test_bg_workload.cpp.i
+.PHONY : tests/test_bg_workload.cpp.i
+
+tests/test_bg_workload.s: tests/test_bg_workload.cpp.s
+.PHONY : tests/test_bg_workload.s
+
+# target to generate assembly for a file
+tests/test_bg_workload.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/unit_tests.dir/build.make CMakeFiles/unit_tests.dir/tests/test_bg_workload.cpp.s
+.PHONY : tests/test_bg_workload.cpp.s
 
 tests/test_cgroup_manager.o: tests/test_cgroup_manager.cpp.o
 .PHONY : tests/test_cgroup_manager.o
@@ -963,6 +1048,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... update_mappings"
+	@echo "... bg_workload"
 	@echo "... fake_call"
 	@echo "... glfw"
 	@echo "... imgui"
@@ -970,6 +1056,12 @@ help:
 	@echo "... isp_overlay"
 	@echo "... protector"
 	@echo "... unit_tests"
+	@echo "... src/bg_workload.o"
+	@echo "... src/bg_workload.i"
+	@echo "... src/bg_workload.s"
+	@echo "... src/bg_workload_main.o"
+	@echo "... src/bg_workload_main.i"
+	@echo "... src/bg_workload_main.s"
 	@echo "... src/cgroup_manager.o"
 	@echo "... src/cgroup_manager.i"
 	@echo "... src/cgroup_manager.s"
@@ -1012,6 +1104,9 @@ help:
 	@echo "... src/session_detector.o"
 	@echo "... src/session_detector.i"
 	@echo "... src/session_detector.s"
+	@echo "... tests/test_bg_workload.o"
+	@echo "... tests/test_bg_workload.i"
+	@echo "... tests/test_bg_workload.s"
 	@echo "... tests/test_cgroup_manager.o"
 	@echo "... tests/test_cgroup_manager.i"
 	@echo "... tests/test_cgroup_manager.s"

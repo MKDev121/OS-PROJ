@@ -1,0 +1,84 @@
+{
+	"abstract" : true,
+	"backtrace" : 3,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"find_package",
+			"set_target_properties"
+		],
+		"files" : 
+		[
+			"/usr/share/cmake-4.2/Modules/FindX11.cmake",
+			"third_party/glfw/src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 181,
+				"parent" : 0
+			},
+			{
+				"file" : 0,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1259,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 1260,
+				"parent" : 2
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
+	"id" : "X11::Xv::@d5fdcda1ec52eb23cf38",
+	"imported" : true,
+	"interfaceCompileDependencies" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "X11::Xext::@d5fdcda1ec52eb23cf38"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "X11::X11::@d5fdcda1ec52eb23cf38"
+		}
+	],
+	"interfaceLinkLibraries" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "X11::Xext::@d5fdcda1ec52eb23cf38"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "X11::X11::@d5fdcda1ec52eb23cf38"
+		}
+	],
+	"local" : true,
+	"name" : "X11::Xv",
+	"paths" : 
+	{
+		"build" : "third_party/glfw/src",
+		"source" : "third_party/glfw/src"
+	},
+	"sources" : [],
+	"type" : "UNKNOWN_LIBRARY"
+}

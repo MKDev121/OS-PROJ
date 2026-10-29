@@ -71,21 +71,26 @@ cat <<EOF > "$DEMO_CONFIG"
 video_device = ${DEMO_VIDEO}
 cgroup_mount = /sys/fs/cgroup
 proc_mount = /proc
+status_file = /tmp/protector.status
 poll_interval_ms = 400
 hysteresis_delay_sec = 4
 protected_cpu_weight = 800
 protected_io_weight = 800
 background_cpu_weight = 20
 starvation_floor_cpu_weight = 5
+background_cpu_max_percent = 5
 aging_increment = 10
 aging_interval_sec = 10
 aging_ceiling_cpu_weight = 100
 background_memory_high_percent = 60
+throttle_games_and_engines = true
+throttle_heavy_background = true
+launch_overlay = true
 dry_run = $( [ "$USE_REAL" = true ] && echo "false" || echo "true" )
 EOF
 
 # Ensure binaries exist
-if [ ! -f "build/protector" ] || [ ! -f "build/fake_call" ]; then
+if [ ! -f "build/protector" ] || [ ! -f "build/fake_call" ] || [ ! -f "build/bg_workload" ]; then
     info "Building project binaries..."
     cmake -B build -S . >/dev/null
     cmake --build build >/dev/null
@@ -144,17 +149,25 @@ success "Cgroup hierarchy initialized (protector.slice: protected, background, n
 # STEP 2: Background Workloads Starting
 # ------------------------------------------------------------------------------
 step 2 "Background Workloads Starting"
-info "Spawning synthetic high-contention CPU background workload..."
-# Run a background CPU consumer
-(
-    while true; do
-        :
-    done
-) &
-BG_WORKER_PID=$!
-disown "$BG_WORKER_PID" 2>/dev/null || true
-sleep 0.2
-success "Background worker active (PID: ${BG_WORKER_PID}, command: sh spin-loop)"
+info "Spawning synthetic high-contention background workload (bg_workload)..."
+if [ -f "build/bg_workload" ]; then
+    ./build/bg_workload --mode cpu --threads 2 --report 1.0 -q > /tmp/isp_demo_bg.log 2>&1 &
+    BG_WORKER_PID=$!
+    disown "$BG_WORKER_PID" 2>/dev/null || true
+    sleep 0.2
+    success "Background workload active (PID: ${BG_WORKER_PID}, command: bg_workload --mode cpu)"
+else
+    # Fallback spin loop
+    (
+        while true; do
+            :
+        done
+    ) &
+    BG_WORKER_PID=$!
+    disown "$BG_WORKER_PID" 2>/dev/null || true
+    sleep 0.2
+    success "Background worker active (PID: ${BG_WORKER_PID}, command: sh spin-loop)"
+fi
 
 # ------------------------------------------------------------------------------
 # STEP 3: Fake Call Starting
@@ -181,7 +194,7 @@ success "State machine transition: INACTIVE -> ACTIVE"
 step 5 "Protected / Background Classification"
 info "ProcTable and Classifier analyzed process relationships and allowlist:"
 echo -e "    ${GREEN}● [PROTECTED]  PID ${FAKE_CALL_PID} (fake_call) — holds interactive webcam session${NC}"
-echo -e "    ${YELLOW}● [BACKGROUND] PID ${BG_WORKER_PID} (background worker) — contending resource consumer${NC}"
+echo -e "    ${YELLOW}● [BACKGROUND] PID ${BG_WORKER_PID} (bg_workload) — contending resource consumer${NC}"
 echo -e "    ${BLUE}● [NORMAL]     System processes & user shell${NC}"
 success "Classification rules evaluated with zero allowlist collisions"
 

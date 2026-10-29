@@ -23,7 +23,8 @@ struct FakeCallConfig {
     uint32_t duration_sec{60};
     std::string output_csv{"fake_call_metrics.csv"};
     double deadline_tolerance_ratio{1.2}; // 1.2 * 33.33ms = 40.0ms deadline limit
-    bool simulate_cpu_load{true};        // Simulate light frame encoding workload
+    bool simulate_cpu_load{true};        // Simulate frame encoding CPU workload
+    double load_ms{14.0};                // Workload duration per frame in ms (simulates realistic 720p/1080p encode)
 };
 
 class FakeCallApp {
@@ -59,6 +60,7 @@ private:
     std::atomic<bool> is_running_{false};
     std::vector<FrameMetric> metrics_;
     size_t deadline_misses_{0};
+    uint64_t ops_per_ms_{0};
 
     void read_video_frame();
     void process_simulated_frame();

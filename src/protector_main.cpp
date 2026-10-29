@@ -13,6 +13,29 @@
 #include <sstream>
 #include <filesystem>
 #include <unordered_map>
+#include <unistd.h>
+#include <sys/wait.h>
+
+static std::string find_overlay_binary(const char* argv0) {
+    std::vector<std::string> candidates;
+    if (argv0) {
+        std::error_code ec;
+        std::filesystem::path p = std::filesystem::absolute(argv0, ec).parent_path() / "isp_overlay";
+        candidates.push_back(p.string());
+    }
+    candidates.push_back("build/isp_overlay");
+    candidates.push_back("bin/isp_overlay");
+    candidates.push_back("./isp_overlay");
+    candidates.push_back("/usr/local/bin/isp_overlay");
+
+    for (const auto& c : candidates) {
+        std::error_code ec;
+        if (std::filesystem::exists(c, ec)) {
+            return c;
+        }
+    }
+    return "";
+}
 
 void print_usage(const char* prog_name) {
     std::cout << "Usage: " << prog_name << " [options]\n\n"
@@ -22,8 +45,16 @@ void print_usage(const char* prog_name) {
               << "  --real                  Enable real cgroup writes and process migration\n"
               << "  -s, --status            Show daemon runtime status and active sessions\n"
               << "  -p, --pidfile <file>    Path to PID lockfile (default: /tmp/protector.pid)\n"
+              << "  -o, --overlay           Launch GUI overlay HUD automatically [default: on if display present]\n"
+              << "  --no-overlay            Disable GUI overlay HUD\n"
               << "  -t, --timeout <sec>     Run for specified seconds then exit (for testing)\n"
               << "  -v, --verbose           Enable debug-level logging\n"
+              << "  --throttle-games        Enable throttling of games and game engines (default: on)\n"
+              << "  --no-throttle-games     Disable throttling of games and game engines\n"
+              << "  --throttle-heavy        Enable throttling of heavy background tasks (default: on)\n"
+              << "  --no-throttle-heavy     Disable throttling of heavy background tasks\n"
+              << "  --hard-throttle [pct]   Hard-cap background CPU to [pct]% of 1 core (default: 5%)\n"
+              << "  --cpu-max <pct>         Explicitly set background cpu.max bandwidth quota (1-100%)\n"
               << "  -h, --help              Show this help message and exit\n";
 }
 
@@ -69,6 +100,11 @@ int show_status(const std::string& pidfile, const std::string& status_file) {
     std::string hyst = kv.count("hysteresis_remaining_sec") ? kv["hysteresis_remaining_sec"] : "0";
     std::string prot_pids = kv.count("protected_pids") ? kv["protected_pids"] : "";
     std::string bg_pids = kv.count("background_pids") ? kv["background_pids"] : "";
+    std::string throttle_games = kv.count("throttle_games_and_engines") ? kv["throttle_games_and_engines"] : "true";
+    std::string throttle_heavy = kv.count("throttle_heavy_background") ? kv["throttle_heavy_background"] : "true";
+    std::string cpu_max_str = kv.count("background_cpu_max_percent") ? kv["background_cpu_max_percent"] : "0";
+    uint32_t cpu_max_val = 0;
+    try { cpu_max_val = std::stoul(cpu_max_str); } catch (...) {}
 
     std::string state_color = (state == "ACTIVE") ? "\033[1;32m" : ((state == "IN_HYSTERESIS") ? "\033[1;33m" : "\033[1;34m");
 
@@ -79,6 +115,12 @@ int show_status(const std::string& pidfile, const std::string& status_file) {
               << "Session State:        " << state_color << state << "\033[0m"
               << (state == "IN_HYSTERESIS" ? (" (grace countdown: " + hyst + "s remaining)") : "") << "\n"
               << "Shaped Weights:       Protected: " << prot_cpu << " | Background: " << bg_cpu << "\n"
+              << "Hard CPU Quota:       "
+              << (cpu_max_val > 0 ? ("\033[1;31mCAPPED TO " + std::to_string(cpu_max_val) + "% OF 1 CORE (Hard CFS limit)\033[0m") : "UNLIMITED (CFS relative share)") << "\n"
+              << "Throttling Policies:  Games & Engines: "
+              << (throttle_games == "true" ? "\033[1;32mENABLED\033[0m" : "\033[1;31mDISABLED\033[0m")
+              << " | Heavy Tasks: "
+              << (throttle_heavy == "true" ? "\033[1;32mENABLED\033[0m" : "\033[1;31mDISABLED\033[0m") << "\n"
               << "--------------------------------------------------\n";
 
     std::cout << "Protected Sessions:   " << (prot_pids.empty() ? "None (no active call)" : "") << "\n";
@@ -98,7 +140,9 @@ int show_status(const std::string& pidfile, const std::string& status_file) {
         std::string item;
         while (std::getline(ss, item, ',')) {
             if (!item.empty()) {
-                std::cout << "  \033[1;31m■\033[0m [PID] " << item << " (cpu.weight=" << bg_cpu << ", ioprio=IDLE)\n";
+                std::cout << "  \033[1;31m■\033[0m [PID] " << item << " (cpu.weight=" << bg_cpu
+                          << (cpu_max_val > 0 ? (", cpu.max=" + std::to_string(cpu_max_val) + "%") : "")
+                          << ", ioprio=IDLE)\n";
             }
         }
     }
@@ -113,6 +157,10 @@ int main(int argc, char* argv[]) {
     bool verbose = false;
     bool check_status = false;
     int timeout_sec = 0;
+    std::optional<bool> cli_throttle_games;
+    std::optional<bool> cli_throttle_heavy;
+    std::optional<bool> cli_launch_overlay;
+    std::optional<uint32_t> cli_hard_throttle;
 
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
@@ -136,12 +184,38 @@ int main(int argc, char* argv[]) {
             dry_run = true;
         } else if (arg == "--real") {
             dry_run = false;
+        } else if (arg == "-o" || arg == "--overlay") {
+            cli_launch_overlay = true;
+        } else if (arg == "--no-overlay") {
+            cli_launch_overlay = false;
         } else if (arg == "-t" || arg == "--timeout") {
             if (i + 1 < argc) {
                 timeout_sec = std::stoi(argv[++i]);
             }
         } else if (arg == "-v" || arg == "--verbose") {
             verbose = true;
+        } else if (arg == "--throttle-games") {
+            cli_throttle_games = true;
+        } else if (arg == "--no-throttle-games") {
+            cli_throttle_games = false;
+        } else if (arg == "--throttle-heavy") {
+            cli_throttle_heavy = true;
+        } else if (arg == "--no-throttle-heavy") {
+            cli_throttle_heavy = false;
+        } else if (arg == "--hard-throttle") {
+            uint32_t pct = 5;
+            if (i + 1 < argc && argv[i + 1][0] != '-') {
+                try {
+                    pct = std::stoul(argv[++i]);
+                } catch (...) {
+                    pct = 5;
+                }
+            }
+            cli_hard_throttle = pct;
+        } else if (arg == "--cpu-max") {
+            if (i + 1 < argc) {
+                cli_hard_throttle = static_cast<uint32_t>(std::stoul(argv[++i]));
+            }
         } else {
             std::cerr << "Unknown option: " << arg << "\n";
             print_usage(argv[0]);
@@ -172,15 +246,35 @@ int main(int argc, char* argv[]) {
     }
 
     config.set("dry_run", dry_run ? "true" : "false");
+    if (cli_throttle_games.has_value()) {
+        config.set("throttle_games_and_engines", cli_throttle_games.value() ? "true" : "false");
+    }
+    if (cli_throttle_heavy.has_value()) {
+        config.set("throttle_heavy_background", cli_throttle_heavy.value() ? "true" : "false");
+    }
     isp::ResourcePolicy policy = config.to_resource_policy();
 
+    if (cli_hard_throttle.has_value()) {
+        policy.background_cpu_max_percent = cli_hard_throttle.value();
+        policy.background_cpu_weight = 1;
+        policy.starvation_floor_cpu_weight = 1;
+        policy.aging_ceiling_cpu_weight = 1;
+    }
+
     ISP_LOG_INFO("Configuration summary:");
-    ISP_LOG_INFO("  video_device: " << policy.video_device);
-    ISP_LOG_INFO("  cgroup_mount: " << policy.cgroup_mount);
-    ISP_LOG_INFO("  proc_mount:   " << policy.proc_mount);
-    ISP_LOG_INFO("  poll_ms:      " << policy.poll_interval_ms);
-    ISP_LOG_INFO("  hysteresis:   " << policy.hysteresis_delay_sec << "s");
-    ISP_LOG_INFO("  mode:         " << (policy.dry_run ? "DRY-RUN (SIMULATION)" : "REAL (ACTIVE)"));
+    ISP_LOG_INFO("  video_device:   " << policy.video_device);
+    ISP_LOG_INFO("  cgroup_mount:   " << policy.cgroup_mount);
+    ISP_LOG_INFO("  proc_mount:     " << policy.proc_mount);
+    ISP_LOG_INFO("  poll_ms:        " << policy.poll_interval_ms);
+    ISP_LOG_INFO("  hysteresis:     " << policy.hysteresis_delay_sec << "s");
+    ISP_LOG_INFO("  throttle_games: " << (policy.throttle_games_and_engines ? "ENABLED" : "DISABLED"));
+    ISP_LOG_INFO("  throttle_heavy: " << (policy.throttle_heavy_background ? "ENABLED" : "DISABLED"));
+    if (policy.background_cpu_max_percent > 0) {
+        ISP_LOG_INFO("  hard_cpu_max:   ENABLED (" << policy.background_cpu_max_percent << "% of 1 core hard CFS limit)");
+    } else {
+        ISP_LOG_INFO("  hard_cpu_max:   DISABLED (CFS proportional share)");
+    }
+    ISP_LOG_INFO("  mode:           " << (policy.dry_run ? "DRY-RUN (SIMULATION)" : "REAL (ACTIVE)"));
 
     isp::ProtectorDaemon daemon(policy, pidfile);
 
@@ -189,12 +283,48 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    bool should_launch_overlay = cli_launch_overlay.value_or(config.get_bool("launch_overlay", true));
+    pid_t overlay_pid = -1;
+
+    if (should_launch_overlay) {
+        const char* disp = std::getenv("DISPLAY");
+        const char* wayland_disp = std::getenv("WAYLAND_DISPLAY");
+        if (!disp && !wayland_disp) {
+            ISP_LOG_INFO("No graphical display detected ($DISPLAY/$WAYLAND_DISPLAY unset); running in headless mode");
+        } else {
+            std::string overlay_bin = find_overlay_binary(argv[0]);
+            if (!overlay_bin.empty()) {
+                ISP_LOG_INFO("Launching Dear ImGui session shield overlay: " << overlay_bin);
+                pid_t child = fork();
+                if (child == 0) {
+                    execl(overlay_bin.c_str(), "isp_overlay",
+                          "--pidfile", pidfile.c_str(),
+                          "--status-file", policy.status_file.c_str(),
+                          nullptr);
+                    _exit(1);
+                } else if (child > 0) {
+                    overlay_pid = child;
+                    ISP_LOG_INFO("Overlay HUD active (PID: " << overlay_pid << ")");
+                }
+            } else {
+                ISP_LOG_WARN("Could not locate isp_overlay binary to launch overlay HUD");
+            }
+        }
+    }
+
     if (timeout_sec > 0) {
         ISP_LOG_INFO("Running in timed mode for " << timeout_sec << " seconds...");
         daemon.wait(timeout_sec);
     } else {
         // Run indefinitely until signal
         daemon.wait();
+    }
+
+    if (overlay_pid > 0) {
+        ISP_LOG_INFO("Terminating overlay HUD (PID " << overlay_pid << ")...");
+        kill(overlay_pid, SIGTERM);
+        int wst = 0;
+        waitpid(overlay_pid, &wst, 0);
     }
 
     return 0;

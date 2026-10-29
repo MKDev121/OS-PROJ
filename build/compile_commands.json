@@ -1,0 +1,362 @@
+[
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_core.dir/src/config.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/config.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/config.cpp",
+  "output": "CMakeFiles/isp_core.dir/src/config.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_core.dir/src/logger.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/logger.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/logger.cpp",
+  "output": "CMakeFiles/isp_core.dir/src/logger.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_core.dir/src/session_detector.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/session_detector.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/session_detector.cpp",
+  "output": "CMakeFiles/isp_core.dir/src/session_detector.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_core.dir/src/proc_table.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/proc_table.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/proc_table.cpp",
+  "output": "CMakeFiles/isp_core.dir/src/proc_table.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_core.dir/src/cgroup_manager.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/cgroup_manager.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/cgroup_manager.cpp",
+  "output": "CMakeFiles/isp_core.dir/src/cgroup_manager.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_core.dir/src/ioprio.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/ioprio.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/ioprio.cpp",
+  "output": "CMakeFiles/isp_core.dir/src/ioprio.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_core.dir/src/resource_shaper.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/resource_shaper.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/resource_shaper.cpp",
+  "output": "CMakeFiles/isp_core.dir/src/resource_shaper.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_core.dir/src/daemon.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/daemon.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/daemon.cpp",
+  "output": "CMakeFiles/isp_core.dir/src/daemon.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_core.dir/src/fake_call.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call.cpp",
+  "output": "CMakeFiles/isp_core.dir/src/fake_call.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_core.dir/src/bg_workload.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/bg_workload.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/bg_workload.cpp",
+  "output": "CMakeFiles/isp_core.dir/src/bg_workload.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_core.dir/src/overlay/overlay_model.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_model.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_model.cpp",
+  "output": "CMakeFiles/isp_core.dir/src/overlay/overlay_model.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/protector.dir/src/protector_main.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/protector_main.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/protector_main.cpp",
+  "output": "CMakeFiles/protector.dir/src/protector_main.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call_main.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call_main.cpp",
+  "output": "CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/bg_workload.dir/src/bg_workload_main.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/bg_workload_main.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/bg_workload_main.cpp",
+  "output": "CMakeFiles/bg_workload.dir/src/bg_workload_main.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_main.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_main.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_main.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_main.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_config.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_config.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_config.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_config.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_session_detector.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_session_detector.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_session_detector.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_session_detector.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_proc_table.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_proc_table.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_proc_table.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_proc_table.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_cgroup_manager.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_cgroup_manager.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_cgroup_manager.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_cgroup_manager.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_resource_shaper.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_resource_shaper.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_resource_shaper.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_resource_shaper.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_daemon.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_daemon.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_daemon.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_daemon.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_fake_call.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_fake_call.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_fake_call.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_fake_call.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_bg_workload.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_bg_workload.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_bg_workload.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_bg_workload.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_hardening.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_hardening.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_hardening.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_hardening.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_overlay.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_overlay.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_overlay.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_overlay.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/imgui.dir/third_party/imgui/imgui.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/imgui.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/imgui.cpp",
+  "output": "CMakeFiles/imgui.dir/third_party/imgui/imgui.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/imgui.dir/third_party/imgui/imgui_draw.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/imgui_draw.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/imgui_draw.cpp",
+  "output": "CMakeFiles/imgui.dir/third_party/imgui/imgui_draw.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/imgui.dir/third_party/imgui/imgui_tables.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/imgui_tables.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/imgui_tables.cpp",
+  "output": "CMakeFiles/imgui.dir/third_party/imgui/imgui_tables.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/imgui.dir/third_party/imgui/imgui_widgets.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/imgui_widgets.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/imgui_widgets.cpp",
+  "output": "CMakeFiles/imgui.dir/third_party/imgui/imgui_widgets.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/imgui.dir/third_party/imgui/backends/imgui_impl_glfw.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends/imgui_impl_glfw.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends/imgui_impl_glfw.cpp",
+  "output": "CMakeFiles/imgui.dir/third_party/imgui/backends/imgui_impl_glfw.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/imgui.dir/third_party/imgui/backends/imgui_impl_opengl3.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends/imgui_impl_opengl3.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends/imgui_impl_opengl3.cpp",
+  "output": "CMakeFiles/imgui.dir/third_party/imgui/backends/imgui_impl_opengl3.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_model.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_model.cpp",
+  "output": "CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_ui.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_ui.cpp",
+  "output": "CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+  "command": "/usr/bin/g++  -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends -isystem /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -g -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_main.cpp",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/overlay/overlay_main.cpp",
+  "output": "CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/context.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/context.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/context.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/context.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/init.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/init.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/init.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/init.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/input.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/input.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/input.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/input.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/monitor.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/monitor.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/monitor.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/monitor.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/platform.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/platform.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/platform.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/platform.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/vulkan.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/vulkan.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/vulkan.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/window.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/window.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/window.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/window.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/egl_context.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/egl_context.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/egl_context.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/osmesa_context.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/osmesa_context.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/osmesa_context.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/null_init.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/null_init.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/null_init.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/null_init.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/null_monitor.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/null_monitor.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/null_monitor.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/null_window.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/null_window.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/null_window.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/null_window.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/null_joystick.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/null_joystick.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/null_joystick.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/posix_module.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/posix_module.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/posix_module.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/posix_time.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/posix_time.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/posix_time.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/posix_time.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/posix_thread.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/posix_thread.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/posix_thread.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/x11_init.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/x11_init.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/x11_init.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/x11_init.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/x11_monitor.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/x11_monitor.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/x11_monitor.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/x11_monitor.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/x11_window.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/x11_window.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/x11_window.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/x11_window.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/xkb_unicode.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/xkb_unicode.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/xkb_unicode.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/xkb_unicode.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/glx_context.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/glx_context.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/glx_context.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/glx_context.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/wl_init.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/wl_init.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/wl_init.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/wl_init.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/wl_monitor.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/wl_monitor.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/wl_monitor.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/wl_monitor.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/wl_window.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/wl_window.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/wl_window.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/wl_window.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/linux_joystick.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/linux_joystick.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/linux_joystick.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/linux_joystick.c.o"
+},
+{
+  "directory": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src",
+  "command": "/usr/bin/gcc -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -D_GLFW_X11 -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src -I/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/third_party/glfw/src -g -std=c99 -fPIC -Wall -Wextra -Wpedantic -o CMakeFiles/glfw.dir/posix_poll.c.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/posix_poll.c",
+  "file": "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/posix_poll.c",
+  "output": "third_party/glfw/src/CMakeFiles/glfw.dir/posix_poll.c.o"
+}
+]

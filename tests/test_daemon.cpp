@@ -83,3 +83,79 @@ TEST_CASE(Daemon_MonitorAndShaperCoordination) {
 
     fs::remove_all(fake_proc, ec);
 }
+
+TEST_CASE(Daemon_ThrottlesGamesAndHeavyTasks) {
+    fs::path fake_proc = fs::temp_directory_path() / "isp_daemon_games_test";
+    std::error_code ec;
+    fs::remove_all(fake_proc, ec);
+    fs::create_directories(fake_proc, ec);
+
+    isp::ResourcePolicy policy;
+    policy.dry_run = true;
+    policy.poll_interval_ms = 50;
+    policy.hysteresis_delay_sec = 2;
+    policy.proc_mount = fake_proc.string();
+    policy.video_device = "/dev/video10";
+    policy.throttle_games_and_engines = true;
+    policy.throttle_heavy_background = true;
+    policy.status_file = (fs::temp_directory_path() / "test_isp_games.status").string();
+
+    std::string pidfile = "/tmp/isp_test_games.pid";
+    isp::ProtectorDaemon daemon(policy, pidfile);
+
+    ASSERT_TRUE(daemon.start());
+    ASSERT_TRUE(daemon.is_throttling_games_and_engines());
+    ASSERT_TRUE(daemon.is_throttling_heavy_background());
+
+    // 1. Create a video call app holding /dev/video10
+    fs::create_directories(fake_proc / "7001" / "fd", ec);
+    {
+        std::ofstream comm(fake_proc / "7001" / "comm"); comm << "fake_call\n";
+        std::ofstream status(fake_proc / "7001" / "status"); status << "Name:\tfake_call\nPPid:\t1\n";
+        fs::create_symlink("/dev/video10", fake_proc / "7001" / "fd" / "3", ec);
+    }
+
+    // 2. Create Unity Editor
+    fs::create_directories(fake_proc / "7002", ec);
+    {
+        std::ofstream comm(fake_proc / "7002" / "comm"); comm << "Unity\n";
+        std::ofstream status(fake_proc / "7002" / "status"); status << "Name:\tUnity\nPPid:\t1\n";
+    }
+
+    // 3. Create Steam launcher
+    fs::create_directories(fake_proc / "7003", ec);
+    {
+        std::ofstream comm(fake_proc / "7003" / "comm"); comm << "steam\n";
+        std::ofstream status(fake_proc / "7003" / "status"); status << "Name:\tsteam\nPPid:\t1\n";
+    }
+
+    // 4. Create heavy compiler
+    fs::create_directories(fake_proc / "7004", ec);
+    {
+        std::ofstream comm(fake_proc / "7004" / "comm"); comm << "clang++\n";
+        std::ofstream status(fake_proc / "7004" / "status"); status << "Name:\tclang++\nPPid:\t1\n";
+    }
+
+    // Allow monitor and shaper loops to scan and classify
+    std::this_thread::sleep_for(std::chrono::milliseconds(180));
+
+    ASSERT_EQ(daemon.get_session_state(), isp::SessionState::ACTIVE);
+    ASSERT_EQ(daemon.get_active_sessions_count(), 1u);
+    ASSERT_EQ(daemon.get_background_procs_count(), 3u);
+
+    // Verify status file contains throttling details
+    std::ifstream sf(policy.status_file);
+    ASSERT_TRUE(sf.is_open());
+    std::string content((std::istreambuf_iterator<char>(sf)), std::istreambuf_iterator<char>());
+    ASSERT_TRUE(content.find("throttle_games_and_engines=true") != std::string::npos);
+    ASSERT_TRUE(content.find("throttle_heavy_background=true") != std::string::npos);
+    ASSERT_TRUE(content.find("7002:Unity") != std::string::npos);
+    ASSERT_TRUE(content.find("7003:steam") != std::string::npos);
+    ASSERT_TRUE(content.find("7004:clang++") != std::string::npos);
+
+    daemon.stop();
+    ASSERT_FALSE(daemon.is_running());
+
+    fs::remove_all(fake_proc, ec);
+    fs::remove(policy.status_file, ec);
+}

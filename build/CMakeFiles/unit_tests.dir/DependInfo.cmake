@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_bg_workload.cpp" "CMakeFiles/unit_tests.dir/tests/test_bg_workload.cpp.o" "gcc" "CMakeFiles/unit_tests.dir/tests/test_bg_workload.cpp.o.d"
   "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_cgroup_manager.cpp" "CMakeFiles/unit_tests.dir/tests/test_cgroup_manager.cpp.o" "gcc" "CMakeFiles/unit_tests.dir/tests/test_cgroup_manager.cpp.o.d"
   "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_config.cpp" "CMakeFiles/unit_tests.dir/tests/test_config.cpp.o" "gcc" "CMakeFiles/unit_tests.dir/tests/test_config.cpp.o.d"
   "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/tests/test_daemon.cpp" "CMakeFiles/unit_tests.dir/tests/test_daemon.cpp.o" "gcc" "CMakeFiles/unit_tests.dir/tests/test_daemon.cpp.o.d"

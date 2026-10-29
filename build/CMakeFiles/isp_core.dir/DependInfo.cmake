@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/bg_workload.cpp" "CMakeFiles/isp_core.dir/src/bg_workload.cpp.o" "gcc" "CMakeFiles/isp_core.dir/src/bg_workload.cpp.o.d"
   "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/cgroup_manager.cpp" "CMakeFiles/isp_core.dir/src/cgroup_manager.cpp.o" "gcc" "CMakeFiles/isp_core.dir/src/cgroup_manager.cpp.o.d"
   "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/config.cpp" "CMakeFiles/isp_core.dir/src/config.cpp.o" "gcc" "CMakeFiles/isp_core.dir/src/config.cpp.o.d"
   "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/daemon.cpp" "CMakeFiles/isp_core.dir/src/daemon.cpp.o" "gcc" "CMakeFiles/isp_core.dir/src/daemon.cpp.o.d"

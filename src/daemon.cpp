@@ -41,6 +41,35 @@ ProtectorDaemon::ProtectorDaemon(ResourcePolicy policy,
     if (!clock_) {
         clock_ = std::make_shared<SystemClock>();
     }
+
+    // Configure workload classification and throttling rules
+    ClassificationRules rules = proc_table_.get_rules();
+    rules.throttle_games_and_engines = policy_.throttle_games_and_engines;
+    rules.throttle_heavy_background = policy_.throttle_heavy_background;
+
+    if (!policy_.custom_game_patterns.empty()) {
+        std::stringstream ss(policy_.custom_game_patterns);
+        std::string token;
+        while (std::getline(ss, token, ',')) {
+            token = Config::trim(token);
+            if (!token.empty()) {
+                rules.game_patterns.push_back(token);
+            }
+        }
+    }
+
+    if (!policy_.custom_background_patterns.empty()) {
+        std::stringstream ss(policy_.custom_background_patterns);
+        std::string token;
+        while (std::getline(ss, token, ',')) {
+            token = Config::trim(token);
+            if (!token.empty()) {
+                rules.heavy_background_patterns.push_back(token);
+            }
+        }
+    }
+
+    proc_table_.set_rules(rules);
 }
 
 ProtectorDaemon::~ProtectorDaemon() {
@@ -52,7 +81,7 @@ bool ProtectorDaemon::acquire_pidfile() {
         return true;
     }
 
-    pidfile_fd_ = open(pidfile_path_.c_str(), O_RDWR | O_CREAT, 0644);
+    pidfile_fd_ = open(pidfile_path_.c_str(), O_RDWR | O_CREAT | O_CLOEXEC, 0644);
     if (pidfile_fd_ < 0) {
         ISP_LOG_ERROR("Could not open pidfile: " << pidfile_path_);
         return false;
@@ -155,7 +184,11 @@ bool ProtectorDaemon::wait(int timeout_sec) {
     auto start_time = std::chrono::steady_clock::now();
     while (running_.load()) {
         int sig = g_signal_received.load();
-        if (sig != 0) {
+        if (sig == SIGHUP) {
+            ISP_LOG_INFO("Caught SIGHUP signal. Reloading daemon configuration...");
+            reset_signal();
+            reload_config();
+        } else if (sig != 0) {
             ISP_LOG_INFO("Caught termination signal (" << sig << "). Initiating graceful daemon shutdown...");
             stop();
             return false;
@@ -183,8 +216,113 @@ bool ProtectorDaemon::wait(int timeout_sec) {
     return true;
 }
 
+bool ProtectorDaemon::reload_config(const std::string& custom_path) {
+    std::string path = custom_path.empty() ? config_file_path_ : custom_path;
+    Config config;
+    if (!config.load_from_file(path)) {
+        ISP_LOG_WARN("ProtectorDaemon::reload_config: could not read " << path);
+        return false;
+    }
+    if (!config.has("dry_run")) {
+        config.set("dry_run", policy_.dry_run ? "true" : "false");
+    }
+    ResourcePolicy new_policy = config.to_resource_policy();
+    apply_policy(new_policy);
+    ISP_LOG_INFO("ProtectorDaemon: Reloaded configuration from " << path);
+    return true;
+}
+
+void ProtectorDaemon::apply_policy(const ResourcePolicy& new_policy) {
+    {
+        std::lock_guard<std::mutex> lock(state_mutex_);
+        policy_ = new_policy;
+        cgroup_mgr_.apply_policy(policy_);
+        shaper_.set_policy(policy_);
+
+        ClassificationRules rules;
+        rules.throttle_games_and_engines = policy_.throttle_games_and_engines;
+        rules.throttle_heavy_background = policy_.throttle_heavy_background;
+
+        if (!policy_.custom_game_patterns.empty()) {
+            std::stringstream ss(policy_.custom_game_patterns);
+            std::string token;
+            while (std::getline(ss, token, ',')) {
+                token = Config::trim(token);
+                if (!token.empty()) rules.game_patterns.push_back(token);
+            }
+        }
+        if (!policy_.custom_background_patterns.empty()) {
+            std::stringstream ss(policy_.custom_background_patterns);
+            std::string token;
+            while (std::getline(ss, token, ',')) {
+                token = Config::trim(token);
+                if (!token.empty()) rules.heavy_background_patterns.push_back(token);
+            }
+        }
+        proc_table_.set_rules(rules);
+        state_changed_ = true;
+        cv_.notify_all();
+    }
+    write_status_file();
+}
+
+void ProtectorDaemon::check_and_apply_commands() {
+    std::string cmd_path = "/tmp/protector.cmd";
+    std::error_code ec;
+    if (!fs::exists(cmd_path, ec)) {
+        return;
+    }
+
+    Config cmd_cfg;
+    if (cmd_cfg.load_from_file(cmd_path)) {
+        ISP_LOG_INFO("ProtectorDaemon: Applying configuration command from " << cmd_path);
+        ResourcePolicy updated_policy;
+        {
+            std::lock_guard<std::mutex> lock(state_mutex_);
+            updated_policy = policy_;
+        }
+        if (cmd_cfg.has("throttle_games_and_engines")) {
+            updated_policy.throttle_games_and_engines = cmd_cfg.get_bool("throttle_games_and_engines", updated_policy.throttle_games_and_engines);
+        }
+        if (cmd_cfg.has("throttle_heavy_background")) {
+            updated_policy.throttle_heavy_background = cmd_cfg.get_bool("throttle_heavy_background", updated_policy.throttle_heavy_background);
+        }
+        if (cmd_cfg.has("protected_cpu_weight")) {
+            updated_policy.protected_cpu_weight = static_cast<uint32_t>(cmd_cfg.get_int("protected_cpu_weight", updated_policy.protected_cpu_weight));
+        }
+        if (cmd_cfg.has("protected_io_weight")) {
+            updated_policy.protected_io_weight = static_cast<uint32_t>(cmd_cfg.get_int("protected_io_weight", updated_policy.protected_io_weight));
+        }
+        if (cmd_cfg.has("background_cpu_weight")) {
+            updated_policy.background_cpu_weight = static_cast<uint32_t>(cmd_cfg.get_int("background_cpu_weight", updated_policy.background_cpu_weight));
+        }
+        if (cmd_cfg.has("hysteresis_delay_sec")) {
+            updated_policy.hysteresis_delay_sec = static_cast<uint32_t>(cmd_cfg.get_int("hysteresis_delay_sec", updated_policy.hysteresis_delay_sec));
+        }
+        if (cmd_cfg.has("poll_interval_ms")) {
+            updated_policy.poll_interval_ms = static_cast<uint32_t>(cmd_cfg.get_int("poll_interval_ms", updated_policy.poll_interval_ms));
+        }
+        if (cmd_cfg.has("starvation_floor_cpu_weight")) {
+            updated_policy.starvation_floor_cpu_weight = static_cast<uint32_t>(cmd_cfg.get_int("starvation_floor_cpu_weight", updated_policy.starvation_floor_cpu_weight));
+        }
+        if (cmd_cfg.has("custom_game_patterns")) {
+            updated_policy.custom_game_patterns = cmd_cfg.get_string("custom_game_patterns", updated_policy.custom_game_patterns);
+        }
+        if (cmd_cfg.has("custom_background_patterns")) {
+            updated_policy.custom_background_patterns = cmd_cfg.get_string("custom_background_patterns", updated_policy.custom_background_patterns);
+        }
+        if (cmd_cfg.has("background_cpu_max_percent")) {
+            updated_policy.background_cpu_max_percent = static_cast<uint32_t>(cmd_cfg.get_int("background_cpu_max_percent", updated_policy.background_cpu_max_percent));
+        }
+        apply_policy(updated_policy);
+    }
+    fs::remove(cmd_path, ec);
+}
+
 void ProtectorDaemon::monitor_loop() {
     while (!stop_requested_.load()) {
+        check_and_apply_commands();
+
         // Refresh process table and classifications with audio and PipeWire detection
         proc_table_.refresh(policy_.proc_mount, policy_.video_device, policy_.detect_audio, policy_.detect_pipewire);
 
@@ -262,6 +400,11 @@ void ProtectorDaemon::shaper_loop() {
             cgroup_mgr_.set_cpu_weight(CgroupManager::GROUP_BACKGROUND, bg_cpu);
             cgroup_mgr_.set_cpu_weight(CgroupManager::GROUP_PROTECTED, prot_cpu);
 
+            // Apply hard CPU bandwidth cap if configured
+            if (policy_.background_cpu_max_percent > 0) {
+                cgroup_mgr_.set_cpu_max(CgroupManager::GROUP_BACKGROUND, policy_.background_cpu_max_percent);
+            }
+
             // Migrate protected processes
             for (pid_t pid : prot_pids) {
                 auto entry_opt = proc_table_.get_entry(pid);
@@ -287,6 +430,7 @@ void ProtectorDaemon::shaper_loop() {
             // If we just exited protection, restore all processes to original groups
             if (prev_state != SessionState::INACTIVE) {
                 ISP_LOG_INFO("Shaper: Restoring all processes to original cgroups and baseline weights...");
+                cgroup_mgr_.set_cpu_max(CgroupManager::GROUP_BACKGROUND, 0); // Restore full CPU bandwidth
                 cgroup_mgr_.restore_all();
                 for (pid_t pid : bg_pids) {
                     set_process_ioprio(pid, IoPriorityClass::BEST_EFFORT, 4, policy_.dry_run);
@@ -316,31 +460,74 @@ uint32_t ProtectorDaemon::get_current_bg_cpu_weight() const {
     return shaper_.get_background_cpu_weight();
 }
 
+void ProtectorDaemon::set_throttle_games_and_engines(bool enable) {
+    policy_.throttle_games_and_engines = enable;
+    proc_table_.set_throttle_games_and_engines(enable);
+}
+
+bool ProtectorDaemon::is_throttling_games_and_engines() const {
+    return policy_.throttle_games_and_engines;
+}
+
+void ProtectorDaemon::set_throttle_heavy_background(bool enable) {
+    policy_.throttle_heavy_background = enable;
+    proc_table_.set_throttle_heavy_background(enable);
+}
+
+bool ProtectorDaemon::is_throttling_heavy_background() const {
+    return policy_.throttle_heavy_background;
+}
+
 void ProtectorDaemon::write_status_file() {
-    if (policy_.status_file.empty()) {
-        return;
+    std::string status_file;
+    bool dry_run;
+    uint32_t starvation_floor_cpu_weight;
+    uint32_t poll_interval_ms;
+    std::string custom_game_patterns;
+    std::string custom_background_patterns;
+    bool throttle_games_and_engines;
+    bool throttle_heavy_background;
+    uint32_t background_cpu_max_percent;
+    std::vector<pid_t> prot_pids;
+    std::vector<pid_t> bg_pids;
+
+    {
+        std::lock_guard<std::mutex> lock(state_mutex_);
+        if (policy_.status_file.empty()) {
+            return;
+        }
+        status_file = policy_.status_file;
+        dry_run = policy_.dry_run;
+        starvation_floor_cpu_weight = policy_.starvation_floor_cpu_weight;
+        poll_interval_ms = policy_.poll_interval_ms;
+        custom_game_patterns = policy_.custom_game_patterns;
+        custom_background_patterns = policy_.custom_background_patterns;
+        throttle_games_and_engines = policy_.throttle_games_and_engines;
+        throttle_heavy_background = policy_.throttle_heavy_background;
+        background_cpu_max_percent = policy_.background_cpu_max_percent;
+        prot_pids = current_protected_pids_;
+        bg_pids = current_background_pids_;
     }
 
-    std::string tmp_path = policy_.status_file + ".tmp";
+    std::string tmp_path = status_file + ".tmp";
     std::ofstream out(tmp_path);
     if (!out.is_open()) {
         return;
     }
 
     out << "daemon_pid=" << getpid() << "\n";
-    out << "mode=" << (policy_.dry_run ? "DRY-RUN" : "REAL") << "\n";
+    out << "mode=" << (dry_run ? "DRY-RUN" : "REAL") << "\n";
     out << "state=" << to_string(shaper_.get_state()) << "\n";
     out << "bg_cpu_weight=" << shaper_.get_background_cpu_weight() << "\n";
     out << "prot_cpu_weight=" << shaper_.get_protected_cpu_weight() << "\n";
     out << "hysteresis_remaining_sec=" << shaper_.get_remaining_hysteresis_seconds() << "\n";
-
-    std::vector<pid_t> prot_pids;
-    std::vector<pid_t> bg_pids;
-    {
-        std::lock_guard<std::mutex> lock(state_mutex_);
-        prot_pids = current_protected_pids_;
-        bg_pids = current_background_pids_;
-    }
+    out << "throttle_games_and_engines=" << (throttle_games_and_engines ? "true" : "false") << "\n";
+    out << "throttle_heavy_background=" << (throttle_heavy_background ? "true" : "false") << "\n";
+    out << "background_cpu_max_percent=" << background_cpu_max_percent << "\n";
+    out << "starvation_floor_cpu_weight=" << starvation_floor_cpu_weight << "\n";
+    out << "poll_interval_ms=" << poll_interval_ms << "\n";
+    out << "custom_game_patterns=" << custom_game_patterns << "\n";
+    out << "custom_background_patterns=" << custom_background_patterns << "\n";
 
     out << "active_sessions_count=" << prot_pids.size() << "\n";
     out << "background_procs_count=" << bg_pids.size() << "\n";
@@ -363,7 +550,7 @@ void ProtectorDaemon::write_status_file() {
 
     out.close();
     std::error_code ec;
-    fs::rename(tmp_path, policy_.status_file, ec);
+    fs::rename(tmp_path, status_file, ec);
 }
 
 void ProtectorDaemon::remove_status_file() {

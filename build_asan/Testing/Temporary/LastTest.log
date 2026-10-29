@@ -1,0 +1,502 @@
+Start testing: Oct 29 09:59 IST
+----------------------------------------------------------
+1/1 Testing: ConfigUnitTests
+1/1 Test: ConfigUnitTests
+Command: "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build_asan/unit_tests"
+Directory: /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build_asan
+"ConfigUnitTests" start time: Oct 29 09:59 IST
+Output:
+----------------------------------------------------------
+[1;34m=== Running Unit Tests (71 tests) ===[0m
+
+  [ RUN      ] Config_BasicKeyValueParsing
+  [0;32m[       OK ][0m Config_BasicKeyValueParsing
+  [ RUN      ] Config_CommentsAndEmptyLines
+  [0;32m[       OK ][0m Config_CommentsAndEmptyLines
+  [ RUN      ] Config_TypeConversions
+  [0;32m[       OK ][0m Config_TypeConversions
+  [ RUN      ] Config_DefaultFallbacks
+  [0;32m[       OK ][0m Config_DefaultFallbacks
+  [ RUN      ] Config_SetAndHas
+  [0;32m[       OK ][0m Config_SetAndHas
+  [ RUN      ] Config_ToResourcePolicy
+  [0;32m[       OK ][0m Config_ToResourcePolicy
+  [ RUN      ] Config_LoadFromFile
+[33m[2026-10-29 09:59:37.067] [WARN ] [config.cpp:68] [0mUnable to open config file: non_existent_file_xyz.conf
+  [0;32m[       OK ][0m Config_LoadFromFile
+  [ RUN      ] Config_WorkloadThrottlingOptions
+  [0;32m[       OK ][0m Config_WorkloadThrottlingOptions
+  [ RUN      ] SessionDetector_DetectHoldingVideo10
+  [0;32m[       OK ][0m SessionDetector_DetectHoldingVideo10
+  [ RUN      ] SessionDetector_IgnoreProcessWithoutVideoDevice
+  [0;32m[       OK ][0m SessionDetector_IgnoreProcessWithoutVideoDevice
+  [ RUN      ] SessionDetector_MultipleProcessesMixed
+  [0;32m[       OK ][0m SessionDetector_MultipleProcessesMixed
+  [ RUN      ] SessionDetector_DisappearedProcessHandledSafely
+  [0;32m[       OK ][0m SessionDetector_DisappearedProcessHandledSafely
+  [ RUN      ] SessionDetector_NonExistentAndEmptyProcRoot
+  [0;32m[       OK ][0m SessionDetector_NonExistentAndEmptyProcRoot
+  [ RUN      ] SessionDetector_AudioCaptureDeviceDetection
+  [0;32m[       OK ][0m SessionDetector_AudioCaptureDeviceDetection
+  [ RUN      ] SessionDetector_PipeWireDumpParser
+  [0;32m[       OK ][0m SessionDetector_PipeWireDumpParser
+  [ RUN      ] SessionDetector_WildcardVideoPrefix
+  [0;32m[       OK ][0m SessionDetector_WildcardVideoPrefix
+  [ RUN      ] ProcTable_ProtectedProcess
+  [0;32m[       OK ][0m ProcTable_ProtectedProcess
+  [ RUN      ] ProcTable_AllowlistedProcess
+  [0;32m[       OK ][0m ProcTable_AllowlistedProcess
+  [ RUN      ] ProcTable_BackgroundProcess
+  [0;32m[       OK ][0m ProcTable_BackgroundProcess
+  [ RUN      ] ProcTable_NormalProcess
+  [0;32m[       OK ][0m ProcTable_NormalProcess
+  [ RUN      ] ProcTable_BrowserLikeProcessTree
+  [0;32m[       OK ][0m ProcTable_BrowserLikeProcessTree
+  [ RUN      ] ProcTable_ProcfsRefreshIntegration
+  [0;32m[       OK ][0m ProcTable_ProcfsRefreshIntegration
+  [ RUN      ] ProcTable_IdleBrowserIsNotProtected
+  [0;32m[       OK ][0m ProcTable_IdleBrowserIsNotProtected
+  [ RUN      ] ProcTable_AudioCaptureCallProtection
+  [0;32m[       OK ][0m ProcTable_AudioCaptureCallProtection
+  [ RUN      ] ProcTable_ForceProtectedProcess
+  [0;32m[       OK ][0m ProcTable_ForceProtectedProcess
+  [ RUN      ] ProcTable_ExcludesNonVideoCallAppsLikeUnityHub
+  [0;32m[       OK ][0m ProcTable_ExcludesNonVideoCallAppsLikeUnityHub
+  [ RUN      ] ProcTable_StopsSessionClimbAtApplicationBoundary
+  [0;32m[       OK ][0m ProcTable_StopsSessionClimbAtApplicationBoundary
+  [ RUN      ] ProcTable_ProtectsFullFirefoxProcessTree
+  [0;32m[       OK ][0m ProcTable_ProtectsFullFirefoxProcessTree
+  [ RUN      ] ProcTable_DoesNotMatchPathSubstrings
+  [0;32m[       OK ][0m ProcTable_DoesNotMatchPathSubstrings
+  [ RUN      ] ProcTable_ThrottleGameEnginesUnityAndUnreal
+  [0;32m[       OK ][0m ProcTable_ThrottleGameEnginesUnityAndUnreal
+  [ RUN      ] ProcTable_ThrottleGamesSteamAndWine
+  [0;32m[       OK ][0m ProcTable_ThrottleGamesSteamAndWine
+  [ RUN      ] ProcTable_ThrottleHeavyBackgroundTasks
+  [0;32m[       OK ][0m ProcTable_ThrottleHeavyBackgroundTasks
+  [ RUN      ] ProcTable_ConcurrentVideoCallAndUnityThrottling
+  [0;32m[       OK ][0m ProcTable_ConcurrentVideoCallAndUnityThrottling
+  [ RUN      ] CgroupManager_DryRunAuditing
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "+cpu +io +memory +pids" to /sys/fs/cgroup/protector.slice/cgroup.subtree_control
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.182] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/cpu.weight
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/io.weight
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "20" to /sys/fs/cgroup/protector.slice/background/cpu.weight
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "9537139507" to /sys/fs/cgroup/protector.slice/background/memory.high
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/cpu.weight
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/io.weight
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Move PID 1234 to /sys/fs/cgroup/protector.slice/protected/cgroup.procs (original: /user.slice/app.scope)
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Move PID 5678 to /sys/fs/cgroup/protector.slice/background/cgroup.procs (original: /user.slice/worker.scope)
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Restore PID 5678 to /user.slice/worker.scope (/sys/fs/cgroup/user.slice/worker.scope/cgroup.procs)
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Restore PID 1234 to /user.slice/app.scope (/sys/fs/cgroup/user.slice/app.scope/cgroup.procs)
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.183] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+  [0;32m[       OK ][0m CgroupManager_DryRunAuditing
+  [ RUN      ] CgroupManager_RealFilesystemMockOperations
+  [0;32m[       OK ][0m CgroupManager_RealFilesystemMockOperations
+  [ RUN      ] CgroupManager_SafetyAndGracefulErrors
+[33m[2026-10-29 09:59:37.185] [WARN ] [cgroup_manager.cpp:309] [0mCgroupManager: could not open /tmp/isp_cg_test_errors_safe/protector.slice/non_existent_group/cgroup.procs to migrate PID 9999
+  [0;32m[       OK ][0m CgroupManager_SafetyAndGracefulErrors
+  [ RUN      ] ResourceShaper_EnterProtectionOnSessionAppears
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:40] [0mResourceShaper: Entered ACTIVE session. Throttled background CPU weight to 20 (floor: 5), boosted protected CPU weight to 800
+  [0;32m[       OK ][0m ResourceShaper_EnterProtectionOnSessionAppears
+  [ RUN      ] ResourceShaper_StarvationFloorClamping
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:40] [0mResourceShaper: Entered ACTIVE session. Throttled background CPU weight to 10 (floor: 10), boosted protected CPU weight to 800
+  [0;32m[       OK ][0m ResourceShaper_StarvationFloorClamping
+  [ RUN      ] ResourceShaper_AgingProgression
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:40] [0mResourceShaper: Entered ACTIVE session. Throttled background CPU weight to 20 (floor: 5), boosted protected CPU weight to 800
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:78] [0mResourceShaper: [Aging Step 1] Background CPU weight increased to 30 (ceiling: 100)
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:78] [0mResourceShaper: [Aging Step 2] Background CPU weight increased to 40 (ceiling: 100)
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:78] [0mResourceShaper: [Aging Step 3] Background CPU weight increased to 50 (ceiling: 100)
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:78] [0mResourceShaper: [Aging Step 4] Background CPU weight increased to 60 (ceiling: 100)
+  [0;32m[       OK ][0m ResourceShaper_AgingProgression
+  [ RUN      ] ResourceShaper_AgingCeilingCapping
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:40] [0mResourceShaper: Entered ACTIVE session. Throttled background CPU weight to 20 (floor: 5), boosted protected CPU weight to 800
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:78] [0mResourceShaper: [Aging Step 1] Background CPU weight increased to 40 (ceiling: 50)
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:78] [0mResourceShaper: [Aging Step 2] Background CPU weight increased to 50 (ceiling: 50)
+  [0;32m[       OK ][0m ResourceShaper_AgingCeilingCapping
+  [ RUN      ] ResourceShaper_HysteresisCancellationOnSessionReopen
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:40] [0mResourceShaper: Entered ACTIVE session. Throttled background CPU weight to 20 (floor: 5), boosted protected CPU weight to 800
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:48] [0mResourceShaper: Interactive session absent. Entered IN_HYSTERESIS grace period (8s delay before restoring normal resources).
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:112] [0mResourceShaper: Session re-established during hysteresis. Pending restoration cancelled.
+  [0;32m[       OK ][0m ResourceShaper_HysteresisCancellationOnSessionReopen
+  [ RUN      ] ResourceShaper_FullHysteresisRestoration
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:40] [0mResourceShaper: Entered ACTIVE session. Throttled background CPU weight to 20 (floor: 5), boosted protected CPU weight to 800
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:48] [0mResourceShaper: Interactive session absent. Entered IN_HYSTERESIS grace period (8s delay before restoring normal resources).
+[32m[2026-10-29 09:59:37.185] [INFO ] [resource_shaper.cpp:58] [0mResourceShaper: Hysteresis expired. Transitioned to INACTIVE. Restored baseline weights (100).
+  [0;32m[       OK ][0m ResourceShaper_FullHysteresisRestoration
+  [ RUN      ] ResourceShaper_IoPrioritySupport
+  [0;32m[       OK ][0m ResourceShaper_IoPrioritySupport
+  [ RUN      ] Daemon_LifecycleAndPidfileLocking
+[32m[2026-10-29 09:59:37.186] [INFO ] [daemon.cpp:131] [0mChecking for and cleaning up any stale cgroups from prior runs...
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:37.186] [INFO ] [daemon.cpp:134] [0mInitializing cgroup hierarchy (mode: DRY-RUN)...
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.186] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "+cpu +io +memory +pids" to /sys/fs/cgroup/protector.slice/cgroup.subtree_control
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/cpu.weight
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/io.weight
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "20" to /sys/fs/cgroup/protector.slice/background/cpu.weight
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "9537139507" to /sys/fs/cgroup/protector.slice/background/memory.high
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/cpu.weight
+[32m[2026-10-29 09:59:37.187] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/io.weight
+[32m[2026-10-29 09:59:37.187] [INFO ] [daemon.cpp:151] [0mProtector daemon threads started successfully (poll: 50ms, hysteresis: 8s).
+[31m[2026-10-29 09:59:37.188] [ERROR] [daemon.cpp:91] [0mAnother instance of protector daemon is already running (locked /tmp/isp_test_pidfile_1.pid)
+[32m[2026-10-29 09:59:37.188] [INFO ] [daemon.cpp:162] [0mProtector daemon stopping...
+[32m[2026-10-29 09:59:37.532] [INFO ] [daemon.cpp:174] [0mRestoring all processes and cleaning cgroups...
+[32m[2026-10-29 09:59:37.532] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.532] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.532] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.532] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.533] [INFO ] [daemon.cpp:180] [0mProtector daemon shutdown complete.
+[32m[2026-10-29 09:59:37.533] [INFO ] [daemon.cpp:131] [0mChecking for and cleaning up any stale cgroups from prior runs...
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:37.533] [INFO ] [daemon.cpp:134] [0mInitializing cgroup hierarchy (mode: DRY-RUN)...
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.533] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "+cpu +io +memory +pids" to /sys/fs/cgroup/protector.slice/cgroup.subtree_control
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/cpu.weight
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/io.weight
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "20" to /sys/fs/cgroup/protector.slice/background/cpu.weight
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "9537139507" to /sys/fs/cgroup/protector.slice/background/memory.high
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/cpu.weight
+[32m[2026-10-29 09:59:37.534] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/io.weight
+[32m[2026-10-29 09:59:37.535] [INFO ] [daemon.cpp:151] [0mProtector daemon threads started successfully (poll: 50ms, hysteresis: 8s).
+[32m[2026-10-29 09:59:37.535] [INFO ] [daemon.cpp:162] [0mProtector daemon stopping...
+[32m[2026-10-29 09:59:37.535] [INFO ] [daemon.cpp:174] [0mRestoring all processes and cleaning cgroups...
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.535] [INFO ] [daemon.cpp:180] [0mProtector daemon shutdown complete.
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.535] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+  [0;32m[       OK ][0m Daemon_LifecycleAndPidfileLocking
+  [ RUN      ] Daemon_MonitorAndShaperCoordination
+[32m[2026-10-29 09:59:37.536] [INFO ] [daemon.cpp:131] [0mChecking for and cleaning up any stale cgroups from prior runs...
+[32m[2026-10-29 09:59:37.536] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:37.536] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.536] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.536] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.536] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.536] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.536] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:37.537] [INFO ] [daemon.cpp:134] [0mInitializing cgroup hierarchy (mode: DRY-RUN)...
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "+cpu +io +memory +pids" to /sys/fs/cgroup/protector.slice/cgroup.subtree_control
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/cpu.weight
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/io.weight
+[32m[2026-10-29 09:59:37.537] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "20" to /sys/fs/cgroup/protector.slice/background/cpu.weight
+[32m[2026-10-29 09:59:37.538] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "9537139507" to /sys/fs/cgroup/protector.slice/background/memory.high
+[32m[2026-10-29 09:59:37.538] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/cpu.weight
+[32m[2026-10-29 09:59:37.538] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/io.weight
+[32m[2026-10-29 09:59:37.538] [INFO ] [daemon.cpp:151] [0mProtector daemon threads started successfully (poll: 50ms, hysteresis: 2s).
+[32m[2026-10-29 09:59:37.539] [INFO ] [resource_shaper.cpp:40] [0mResourceShaper: Entered ACTIVE session. Throttled background CPU weight to 20 (floor: 5), boosted protected CPU weight to 800
+[32m[2026-10-29 09:59:37.540] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "20" to /sys/fs/cgroup/protector.slice/background/cpu.weight
+[32m[2026-10-29 09:59:37.540] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/cpu.weight
+[32m[2026-10-29 09:59:37.540] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Move PID 6001 to /sys/fs/cgroup/protector.slice/protected/cgroup.procs (original: /)
+[32m[2026-10-29 09:59:37.695] [INFO ] [resource_shaper.cpp:48] [0mResourceShaper: Interactive session absent. Entered IN_HYSTERESIS grace period (2s delay before restoring normal resources).
+[32m[2026-10-29 09:59:37.696] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "20" to /sys/fs/cgroup/protector.slice/background/cpu.weight
+[32m[2026-10-29 09:59:37.839] [INFO ] [daemon.cpp:162] [0mProtector daemon stopping...
+[32m[2026-10-29 09:59:37.840] [INFO ] [daemon.cpp:174] [0mRestoring all processes and cleaning cgroups...
+[32m[2026-10-29 09:59:37.841] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Restore PID 6001 to / (/sys/fs/cgroup/cgroup.procs)
+[32m[2026-10-29 09:59:37.841] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.841] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.841] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.841] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.841] [INFO ] [daemon.cpp:180] [0mProtector daemon shutdown complete.
+[32m[2026-10-29 09:59:37.841] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.841] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.841] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.841] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+  [0;32m[       OK ][0m Daemon_MonitorAndShaperCoordination
+  [ RUN      ] Daemon_ThrottlesGamesAndHeavyTasks
+[32m[2026-10-29 09:59:37.842] [INFO ] [daemon.cpp:131] [0mChecking for and cleaning up any stale cgroups from prior runs...
+[32m[2026-10-29 09:59:37.842] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:37.842] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.842] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.843] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.843] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.843] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.843] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.844] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.844] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:37.844] [INFO ] [daemon.cpp:134] [0mInitializing cgroup hierarchy (mode: DRY-RUN)...
+[32m[2026-10-29 09:59:37.844] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:37.844] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.844] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.844] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.844] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.844] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.845] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.845] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.845] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:37.845] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:37.845] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "+cpu +io +memory +pids" to /sys/fs/cgroup/protector.slice/cgroup.subtree_control
+[32m[2026-10-29 09:59:37.845] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:37.845] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:37.845] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:37.845] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/cpu.weight
+[32m[2026-10-29 09:59:37.845] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/io.weight
+[32m[2026-10-29 09:59:37.845] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "20" to /sys/fs/cgroup/protector.slice/background/cpu.weight
+[32m[2026-10-29 09:59:37.846] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "9537139507" to /sys/fs/cgroup/protector.slice/background/memory.high
+[32m[2026-10-29 09:59:37.846] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/cpu.weight
+[32m[2026-10-29 09:59:37.846] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/io.weight
+[32m[2026-10-29 09:59:37.846] [INFO ] [daemon.cpp:151] [0mProtector daemon threads started successfully (poll: 50ms, hysteresis: 2s).
+[32m[2026-10-29 09:59:37.851] [INFO ] [resource_shaper.cpp:40] [0mResourceShaper: Entered ACTIVE session. Throttled background CPU weight to 20 (floor: 5), boosted protected CPU weight to 800
+[32m[2026-10-29 09:59:37.851] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "20" to /sys/fs/cgroup/protector.slice/background/cpu.weight
+[32m[2026-10-29 09:59:37.852] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/cpu.weight
+[32m[2026-10-29 09:59:37.852] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Move PID 7001 to /sys/fs/cgroup/protector.slice/protected/cgroup.procs (original: /)
+[32m[2026-10-29 09:59:37.852] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Move PID 7002 to /sys/fs/cgroup/protector.slice/background/cgroup.procs (original: /)
+[32m[2026-10-29 09:59:37.853] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Move PID 7003 to /sys/fs/cgroup/protector.slice/background/cgroup.procs (original: /)
+[32m[2026-10-29 09:59:38.027] [INFO ] [daemon.cpp:162] [0mProtector daemon stopping...
+[32m[2026-10-29 09:59:38.028] [INFO ] [daemon.cpp:174] [0mRestoring all processes and cleaning cgroups...
+[32m[2026-10-29 09:59:38.028] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Restore PID 7003 to / (/sys/fs/cgroup/cgroup.procs)
+[32m[2026-10-29 09:59:38.028] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Restore PID 7002 to / (/sys/fs/cgroup/cgroup.procs)
+[32m[2026-10-29 09:59:38.029] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Restore PID 7001 to / (/sys/fs/cgroup/cgroup.procs)
+[32m[2026-10-29 09:59:38.029] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:38.029] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:38.029] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:38.029] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:38.029] [INFO ] [daemon.cpp:180] [0mProtector daemon shutdown complete.
+[32m[2026-10-29 09:59:38.029] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:38.029] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:38.029] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:38.029] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+  [0;32m[       OK ][0m Daemon_ThrottlesGamesAndHeavyTasks
+  [ RUN      ] FakeCall_DefaultConfig
+  [0;32m[       OK ][0m FakeCall_DefaultConfig
+  [ RUN      ] FakeCall_CustomConfig
+  [0;32m[       OK ][0m FakeCall_CustomConfig
+  [ RUN      ] FakeCall_MetricCalculationsAndDeadlines
+  [0;32m[       OK ][0m FakeCall_MetricCalculationsAndDeadlines
+  [ RUN      ] FakeCall_CsvExportFormat
+[32m[2026-10-29 09:59:38.032] [INFO ] [fake_call.cpp:256] [0mFakeCallApp: Exported 3 frame metrics to /tmp/test_fake_call_metrics_output.csv
+  [0;32m[       OK ][0m FakeCall_CsvExportFormat
+  [ RUN      ] FakeCall_DeviceLifecycleAndShortRun
+[32m[2026-10-29 09:59:38.033] [INFO ] [fake_call.cpp:51] [0mFakeCallApp: Successfully opened /tmp/dummy_fake_video.bin (fd: 12). Descriptor held open for session.
+[32m[2026-10-29 09:59:38.033] [INFO ] [fake_call.cpp:169] [0mFakeCallApp: Starting session (1s @ 30 FPS). Target frame interval: 33.3333ms (deadline limit: 40ms, expected frames: 30)...
+[32m[2026-10-29 09:59:39.033] [INFO ] [fake_call.cpp:231] [0mFakeCallApp: Session completed. Recorded 30 frames with 0 deadline misses (0%).
+[32m[2026-10-29 09:59:39.033] [INFO ] [fake_call.cpp:256] [0mFakeCallApp: Exported 30 frame metrics to /tmp/dummy_run_metrics.csv
+[32m[2026-10-29 09:59:39.033] [INFO ] [fake_call.cpp:91] [0mFakeCallApp: Closed webcam device /tmp/dummy_fake_video.bin
+  [0;32m[       OK ][0m FakeCall_DeviceLifecycleAndShortRun
+  [ RUN      ] BgWorkload_ConfigValidation
+  [0;32m[       OK ][0m BgWorkload_ConfigValidation
+  [ RUN      ] BgWorkload_ThrottledDetection
+  [0;32m[       OK ][0m BgWorkload_ThrottledDetection
+  [ RUN      ] BgWorkload_CurrentCgroupParsing
+  [0;32m[       OK ][0m BgWorkload_CurrentCgroupParsing
+  [ RUN      ] BgWorkload_SampleRecordingAndSummary
+  [0;32m[       OK ][0m BgWorkload_SampleRecordingAndSummary
+  [ RUN      ] BgWorkload_CsvExport
+  [0;32m[       OK ][0m BgWorkload_CsvExport
+  [ RUN      ] BgWorkload_ProcTableClassification
+  [0;32m[       OK ][0m BgWorkload_ProcTableClassification
+  [ RUN      ] BgWorkload_ExecutionLifecycle_CPU
+  [0;32m[       OK ][0m BgWorkload_ExecutionLifecycle_CPU
+  [ RUN      ] BgWorkload_ExecutionLifecycle_IO
+  [0;32m[       OK ][0m BgWorkload_ExecutionLifecycle_IO
+  [ RUN      ] Hardening_PidReuseProtection
+[33m[2026-10-29 09:59:41.043] [WARN ] [proc_table.cpp:73] [0mProcTable: detected recycled PID 4001 (start_time changed from 50000 to 75000). Resetting entry.
+  [0;32m[       OK ][0m Hardening_PidReuseProtection
+  [ RUN      ] Hardening_StaleCgroupCleanup
+[32m[2026-10-29 09:59:41.044] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /tmp/isp_hardening_stale_cg/sys_cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:41.044] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+  [0;32m[       OK ][0m Hardening_StaleCgroupCleanup
+  [ RUN      ] Hardening_CrashAndRestartRecovery
+[32m[2026-10-29 09:59:41.045] [INFO ] [daemon.cpp:131] [0mChecking for and cleaning up any stale cgroups from prior runs...
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:41.045] [INFO ] [daemon.cpp:134] [0mInitializing cgroup hierarchy (mode: DRY-RUN)...
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.045] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "+cpu +io +memory +pids" to /sys/fs/cgroup/protector.slice/cgroup.subtree_control
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/cpu.weight
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/io.weight
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "20" to /sys/fs/cgroup/protector.slice/background/cpu.weight
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "9537139507" to /sys/fs/cgroup/protector.slice/background/memory.high
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/cpu.weight
+[32m[2026-10-29 09:59:41.046] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/io.weight
+[32m[2026-10-29 09:59:41.046] [INFO ] [daemon.cpp:151] [0mProtector daemon threads started successfully (poll: 50ms, hysteresis: 8s).
+[32m[2026-10-29 09:59:41.046] [INFO ] [daemon.cpp:162] [0mProtector daemon stopping...
+[32m[2026-10-29 09:59:41.047] [INFO ] [daemon.cpp:174] [0mRestoring all processes and cleaning cgroups...
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:41.047] [INFO ] [daemon.cpp:180] [0mProtector daemon shutdown complete.
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+  [0;32m[       OK ][0m Hardening_CrashAndRestartRecovery
+  [ RUN      ] Hardening_RobustSignalHandling
+[32m[2026-10-29 09:59:41.047] [INFO ] [daemon.cpp:131] [0mChecking for and cleaning up any stale cgroups from prior runs...
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.047] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:41.048] [INFO ] [daemon.cpp:134] [0mInitializing cgroup hierarchy (mode: DRY-RUN)...
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:145] [0mCgroupManager: Found existing slice /sys/fs/cgroup/protector.slice. Cleaning up stale state...
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:41.048] [INFO ] [cgroup_manager.cpp:180] [0mCgroupManager: Stale cgroup cleanup completed.
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "+cpu +io +memory +pids" to /sys/fs/cgroup/protector.slice/cgroup.subtree_control
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Create directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/cpu.weight
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "800" to /sys/fs/cgroup/protector.slice/protected/io.weight
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "20" to /sys/fs/cgroup/protector.slice/background/cpu.weight
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "9537139507" to /sys/fs/cgroup/protector.slice/background/memory.high
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/cpu.weight
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Write "100" to /sys/fs/cgroup/protector.slice/normal/io.weight
+[32m[2026-10-29 09:59:41.049] [INFO ] [daemon.cpp:151] [0mProtector daemon threads started successfully (poll: 50ms, hysteresis: 8s).
+[32m[2026-10-29 09:59:41.049] [INFO ] [daemon.cpp:188] [0mCaught termination signal (15). Initiating graceful daemon shutdown...
+[32m[2026-10-29 09:59:41.049] [INFO ] [daemon.cpp:162] [0mProtector daemon stopping...
+[32m[2026-10-29 09:59:41.049] [INFO ] [daemon.cpp:174] [0mRestoring all processes and cleaning cgroups...
+[32m[2026-10-29 09:59:41.049] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.050] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.050] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.050] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+[32m[2026-10-29 09:59:41.050] [INFO ] [daemon.cpp:180] [0mProtector daemon shutdown complete.
+[32m[2026-10-29 09:59:41.050] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/protected
+[32m[2026-10-29 09:59:41.050] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/background
+[32m[2026-10-29 09:59:41.050] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice/normal
+[32m[2026-10-29 09:59:41.050] [INFO ] [cgroup_manager.cpp:55] [0m[DRY-RUN] Remove directory: /sys/fs/cgroup/protector.slice
+  [0;32m[       OK ][0m Hardening_RobustSignalHandling
+  [ RUN      ] Hardening_ConcurrentSafety_ProcTable
+  [0;32m[       OK ][0m Hardening_ConcurrentSafety_ProcTable
+  [ RUN      ] Overlay_ComputePercentages_ActiveCall
+  [0;32m[       OK ][0m Overlay_ComputePercentages_ActiveCall
+  [ RUN      ] Overlay_ComputePercentages_AgingProgression
+  [0;32m[       OK ][0m Overlay_ComputePercentages_AgingProgression
+  [ RUN      ] Overlay_ComputePercentages_HysteresisGrace
+  [0;32m[       OK ][0m Overlay_ComputePercentages_HysteresisGrace
+  [ RUN      ] Overlay_ComputePercentages_InactiveState
+  [0;32m[       OK ][0m Overlay_ComputePercentages_InactiveState
+  [ RUN      ] Overlay_ComputePercentages_StoppedDaemon
+  [0;32m[       OK ][0m Overlay_ComputePercentages_StoppedDaemon
+  [ RUN      ] Overlay_StatusReader_ParseStatusFile
+  [0;32m[       OK ][0m Overlay_StatusReader_ParseStatusFile
+  [ RUN      ] Overlay_StatusReader_MockSimulation
+  [0;32m[       OK ][0m Overlay_StatusReader_MockSimulation
+
+[1m=== Test Summary ===[0m
+  Total:  71
+  [0;32mPassed: 71[0m
+  [0;32mAll tests passed successfully![0m
+<end of output>
+Test time =   4.36 sec
+----------------------------------------------------------
+Test Passed.
+"ConfigUnitTests" end time: Oct 29 09:59 IST
+"ConfigUnitTests" time elapsed: 00:00:04
+----------------------------------------------------------
+
+End testing: Oct 29 09:59 IST

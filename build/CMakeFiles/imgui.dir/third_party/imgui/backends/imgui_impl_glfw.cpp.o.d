@@ -16,10 +16,7 @@ CMakeFiles/imgui.dir/third_party/imgui/backends/imgui_impl_glfw.cpp.o: \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
- /usr/include/strings.h \
- /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
- /usr/include/assert.h \
+ /usr/include/strings.h /usr/include/assert.h \
  /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/imgui/backends/imgui_impl_glfw.h \
  /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/include/GLFW/glfw3.h \
  /usr/lib/gcc/x86_64-linux-gnu/15/include/stdint.h /usr/include/stdint.h \
@@ -36,7 +33,5 @@ CMakeFiles/imgui.dir/third_party/imgui/backends/imgui_impl_glfw.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
- /usr/include/x86_64-linux-gnu/bits/unistd.h \
- /usr/include/x86_64-linux-gnu/bits/unistd-decl.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /usr/include/linux/close_range.h

@@ -42,7 +42,7 @@ Protected Session (Low latency, 0% frame deadline misses)
   - Synthetic stress workloads (`stress-ng`, `tar`, `dd`) & Python analysis suite
 - [x] **Phase 1: Build & Foundation (CMake, CLI, Logging)**
   - Clean modular architecture (`include/`, `src/`, `tests/`)
-  - Targets: `protector`, `fake_call`, `unit_tests`
+  - Targets: `protector`, `fake_call`, `bg_workload`, `isp_overlay`, `unit_tests`
   - Zero-dependency key=value configuration parser
 - [x] **Phase 2: Session Detection (`/dev/video*` procfs scanner)**
   - Injectable `procRoot` support for testing
@@ -127,6 +127,12 @@ Protected Session (Low latency, 0% frame deadline misses)
     - **Critical / Normal Processes**: Core OS, kernel workers, display compositor, and audio daemon (e.g. 10.8% CPU shares, `cpu.weight=100`).
   - **Live Process Telemetry**: Lists active protected meeting applications (PIDs and process names) and clamped background tasks in real time.
   - **Draggable & Configurable**: Draggable across monitors, opacity slider, always-on-top toggle, and headless mock simulation mode (`isp_overlay --mock`).
+- [x] **Phase 14: Game Engine, Game, and Heavy Background Throttling**
+  - **Game Engine Throttling**: Automatically classifies and throttles game engines (Unity, Unreal Engine, Godot, CryEngine) and their child worker / shader compiler processes (`UnityHelper`, `ShaderCompileWorker`) during active calls.
+  - **Game and Launcher Throttling**: Intercepts gaming platforms (Steam, Lutris, Wine, Proton, Gamescope) and their launched game binaries, clamping them to background priority.
+  - **Heavy Task Throttling**: Throttles compilers/build systems (`clang`, `gcc`, `cargo`, `rustc`, `mvn`), 3D renderers (`blender`), archivers (`7z`, `zstd`), video transcoders (`handbrake`), and background compute/torrents (`qbittorrent`, `xmrig`).
+  - **Configurable Controls**: Managed via `config/protector.conf` (`throttle_games_and_engines`, `throttle_heavy_background`, custom pattern lists) or CLI flags (`--throttle-games` / `--no-throttle-games`).
+  - **HUD and CLI Telemetry**: Live policy and throttled task reporting in `protector --status` and `isp_overlay`.
 
 ---
 
@@ -153,6 +159,35 @@ Launch the floating overlay:
 
 ---
 
+## Synthetic Background Workload Generator (`bg_workload`)
+
+A high-intensity, multi-threaded synthetic workload generator and benchmark tool specifically designed to create real system contention (CPU, Disk I/O, Memory) and observe dynamic throttling in real time.
+
+```bash
+# High-intensity CPU contention (matrix math, hashing, ALU/FPU saturation)
+./build/bg_workload --mode cpu --threads 4 --duration 30
+
+# High-intensity Disk Direct/Buffered I/O churn with fdatasync
+./build/bg_workload --mode io --io-size 128 --duration 30
+
+# Memory churn and cache thrashing (tests cgroup memory.high)
+./build/bg_workload --mode memory --mem-size 256 --duration 30
+
+# Mixed mode: concurrent CPU + I/O + Memory contention with CSV export
+./build/bg_workload --mode mixed --duration 60 --output workload_metrics.csv
+```
+
+### Self-Monitoring Live Telemetry:
+`bg_workload` continuously inspects its own `/proc/self/cgroup` and Linux I/O scheduling class:
+```
+[00:03] [UNTHROTTLED] Compute: 421.3 Mops/s | Cgroup: /user.slice/... | IOPrio: BEST_EFFORT
+...
+[00:08] [THROTTLED]   Compute:  21.3 Mops/s (-94.9%) | Cgroup: protector.slice/background | IOPrio: IDLE
+```
+Upon completion, it outputs a full statistical breakdown comparing unthrottled baseline throughput vs. throttled throughput, total slowdown ratio, and time spent in the throttled state.
+
+---
+
 ## Quick Start & 10-Step Demo Workflow
 
 To run the complete 10-step demonstration workflow:
@@ -176,6 +211,39 @@ To run the complete 10-step demonstration workflow:
 
 ---
 
+## Interactive Dear ImGui Overlay HUD (`isp_overlay`)
+
+The interactive overlay HUD provides a hardware-accelerated, translucent floating dashboard for real-time QoS monitoring and live daemon configuration.
+
+```bash
+# Standalone execution (opens immediately on launch)
+./build/isp_overlay
+
+# Standalone interactive simulation & mock mode
+./build/isp_overlay --mock
+
+# Run daemon with auto-launched overlay HUD (default when $DISPLAY/$WAYLAND_DISPLAY is set)
+./build/protector -c config/protector.conf --real
+# or explicitly disable overlay if running headless:
+./build/protector -c config/protector.conf --no-overlay
+```
+
+### Features & Live Configuration Controls:
+- **Instant Launch Visibility**: Opens immediately on launch (`auto_hide_idle = false` by default) so users always have instant access to monitoring and controls.
+- **Dynamic QoS & Workload Configuration Panel**:
+  - **Throttling Toggles**: Checkboxes to toggle throttling of games (Steam, Wine, Lutris), game engines (Unity, Unreal, Godot), and heavy background workloads (compilers, archivers, torrents).
+  - **Interactive Sliders**: Fine-tune Call CPU Shares (100–1000), Background CPU Shares (5–200), Grace Delay (1–30s), Starvation Floor (5–50), and Polling Interval (100–2000ms).
+  - **Custom Pattern Filters**: Input fields for dynamically adding comma-separated game/engine and background task names.
+  - **Zero-Latency Daemon Synchronization**: Clicking `[Apply Settings to Daemon]` writes to `/tmp/protector.cmd`, persists updates to `config/protector.conf`, and signals the running daemon with `SIGHUP` for instant zero-restart reconfiguration.
+  - **One-Click Reset**: `[Reset Defaults]` restores recommended QoS values instantly.
+- **Visual Status Pill & Expanded Telemetry Dashboard**:
+  - Live resource allocation percentages (e.g. `87% Call | 2% BG | 11% Sys`).
+  - Active video call processes list with allocated shares.
+  - Throttled background processes list with clamped shares and `ioprio=IDLE`.
+  - Floating translucent window with opacity slider and always-on-top toggle.
+
+---
+
 ## Build and Test Suite
 
 ### 1. Standard Build
@@ -184,7 +252,7 @@ To run the complete 10-step demonstration workflow:
 cmake -B build -S .
 cmake --build build
 
-# Run all 53 unit tests
+# Run all 65 unit tests
 ./build/unit_tests
 ```
 

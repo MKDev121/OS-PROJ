@@ -45,9 +45,6 @@ third_party/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
- /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
- /usr/include/x86_64-linux-gnu/bits/stdio.h \
- /usr/include/x86_64-linux-gnu/bits/stdio2.h \
  /usr/include/xkbcommon/xkbcommon-names.h \
  /usr/include/xkbcommon/xkbcommon-keysyms.h \
  /usr/include/xkbcommon/xkbcommon-compat.h \
@@ -56,15 +53,12 @@ third_party/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o: \
  /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/posix_poll.h \
  /usr/include/poll.h /usr/include/x86_64-linux-gnu/sys/poll.h \
  /usr/include/x86_64-linux-gnu/bits/poll.h \
- /usr/include/x86_64-linux-gnu/bits/poll2.h \
  /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/x11_platform.h \
  /usr/include/unistd.h /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
  /usr/include/x86_64-linux-gnu/bits/environments.h \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
- /usr/include/x86_64-linux-gnu/bits/unistd.h \
- /usr/include/x86_64-linux-gnu/bits/unistd-decl.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h /usr/include/signal.h \
  /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
  /usr/include/x86_64-linux-gnu/bits/signum-arch.h \
@@ -107,13 +101,11 @@ third_party/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o: \
  /usr/include/x86_64-linux-gnu/sys/select.h \
  /usr/include/x86_64-linux-gnu/bits/select.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
- /usr/include/x86_64-linux-gnu/bits/select2.h \
- /usr/include/x86_64-linux-gnu/bits/select-decl.h /usr/include/X11/X.h \
- /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h \
- /usr/include/X11/keysym.h /usr/include/X11/keysymdef.h \
- /usr/include/X11/Xatom.h /usr/include/X11/Xresource.h \
- /usr/include/X11/Xcursor/Xcursor.h /usr/include/X11/extensions/Xrandr.h \
- /usr/include/X11/extensions/randr.h \
+ /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h \
+ /usr/include/X11/Xosdefs.h /usr/include/X11/keysym.h \
+ /usr/include/X11/keysymdef.h /usr/include/X11/Xatom.h \
+ /usr/include/X11/Xresource.h /usr/include/X11/Xcursor/Xcursor.h \
+ /usr/include/X11/extensions/Xrandr.h /usr/include/X11/extensions/randr.h \
  /usr/include/X11/extensions/Xrender.h /usr/include/X11/Xutil.h \
  /usr/include/X11/extensions/render.h /usr/include/X11/Xdefs.h \
  /usr/include/X11/XKBlib.h /usr/include/X11/extensions/XKBstr.h \
@@ -164,9 +156,5 @@ third_party/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o: \
  /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/third_party/glfw/src/../include/GLFW/glfw3native.h \
  /usr/include/stdlib.h /usr/include/x86_64-linux-gnu/bits/waitflags.h \
  /usr/include/x86_64-linux-gnu/bits/waitstatus.h /usr/include/alloca.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib.h /usr/include/string.h \
- /usr/include/strings.h \
- /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h
+ /usr/include/x86_64-linux-gnu/bits/stdlib-float.h /usr/include/string.h \
+ /usr/include/strings.h

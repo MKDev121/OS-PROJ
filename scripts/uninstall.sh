@@ -28,11 +28,12 @@ if [ -f /etc/systemd/system/isp.service ]; then
     systemctl daemon-reload
 fi
 
-# Remove binaries
+# Remove binaries and autostart entry
 rm -f /usr/local/bin/protector
 rm -f /usr/local/bin/isp_overlay
+rm -f /etc/xdg/autostart/isp_overlay.desktop
 
-echo "Removed binaries and service."
+echo "Removed binaries, autostart entries, and service."
 echo "Note: Configuration directory /etc/isp was preserved."
 echo "To completely purge configurations, run: sudo rm -rf /etc/isp"
 echo "=== Uninstallation complete ==="

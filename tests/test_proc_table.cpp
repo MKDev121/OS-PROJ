@@ -459,3 +459,265 @@ TEST_CASE(ProcTable_DoesNotMatchPathSubstrings) {
     ASSERT_EQ(table.classify_process(88888), isp::ProcessClass::NORMAL);
 }
 
+TEST_CASE(ProcTable_ThrottleGameEnginesUnityAndUnreal) {
+    isp::ProcTable table;
+
+    // 1. Unity Editor and its child worker processes
+    isp::ProcEntry unity_main;
+    unity_main.pid = 95000;
+    unity_main.ppid = 1;
+    unity_main.comm = "Unity";
+    unity_main.cmdline = "/opt/unity/Editor/Unity -projectPath /home/dev/GameProject";
+    table.upsert_entry(unity_main);
+
+    isp::ProcEntry unity_helper;
+    unity_helper.pid = 95001;
+    unity_helper.ppid = 95000; // Child of Unity
+    unity_helper.comm = "UnityHelper";
+    unity_helper.cmdline = "/opt/unity/Editor/Data/Tools/UnityHelper --mode=worker";
+    table.upsert_entry(unity_helper);
+
+    isp::ProcEntry unity_license;
+    unity_license.pid = 95002;
+    unity_license.ppid = 95000;
+    unity_license.comm = "Unity.Licensing.Client";
+    unity_license.cmdline = "/opt/unity/Editor/Data/Tools/Unity.Licensing.Client";
+    table.upsert_entry(unity_license);
+
+    // 2. Unreal Engine Editor and ShaderCompileWorker
+    isp::ProcEntry unreal_main;
+    unreal_main.pid = 95010;
+    unreal_main.ppid = 1;
+    unreal_main.comm = "UnrealEditor";
+    unreal_main.cmdline = "/opt/unreal/Engine/Binaries/Linux/UnrealEditor /project/Game.uproject";
+    table.upsert_entry(unreal_main);
+
+    isp::ProcEntry shader_worker;
+    shader_worker.pid = 95011;
+    shader_worker.ppid = 95010; // Child of UnrealEditor
+    shader_worker.comm = "ShaderCompileWorker";
+    shader_worker.cmdline = "/opt/unreal/Engine/Binaries/Linux/ShaderCompileWorker -worker=1";
+    table.upsert_entry(shader_worker);
+
+    // 3. Godot Engine
+    isp::ProcEntry godot_proc;
+    godot_proc.pid = 95020;
+    godot_proc.ppid = 1;
+    godot_proc.comm = "godot-bin";
+    godot_proc.cmdline = "/usr/bin/godot-bin --editor /home/dev/godot_proj";
+    table.upsert_entry(godot_proc);
+
+    // Before enabling game engine throttling: they are NORMAL
+    ASSERT_EQ(table.classify_process(95000), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(95001), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(95002), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(95010), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(95011), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(95020), isp::ProcessClass::NORMAL);
+
+    // Enable game and engine throttling capability
+    table.set_throttle_games_and_engines(true);
+    ASSERT_TRUE(table.is_throttling_games_and_engines());
+
+    // After enabling: ALL game engines and their child workers are classified as BACKGROUND
+    ASSERT_EQ(table.classify_process(95000), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(95001), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(95002), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(95010), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(95011), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(95020), isp::ProcessClass::BACKGROUND);
+
+    auto bg_list = table.get_by_class(isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(bg_list.size(), 6u);
+
+    // Toggle back off: they return to NORMAL
+    table.set_throttle_games_and_engines(false);
+    ASSERT_FALSE(table.is_throttling_games_and_engines());
+    ASSERT_EQ(table.classify_process(95000), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(95001), isp::ProcessClass::NORMAL);
+}
+
+TEST_CASE(ProcTable_ThrottleGamesSteamAndWine) {
+    isp::ProcTable table;
+    table.set_throttle_games_and_engines(true);
+
+    // Steam launcher
+    isp::ProcEntry steam_proc;
+    steam_proc.pid = 96000;
+    steam_proc.ppid = 1;
+    steam_proc.comm = "steam";
+    steam_proc.cmdline = "/usr/games/steam";
+    table.upsert_entry(steam_proc);
+
+    // Native Linux game spawned by Steam (custom game binary)
+    isp::ProcEntry game_proc;
+    game_proc.pid = 96001;
+    game_proc.ppid = 96000; // Child of steam
+    game_proc.comm = "space_sim_x64";
+    game_proc.cmdline = "/home/steam/steamapps/common/SpaceSim/space_sim_x64";
+    table.upsert_entry(game_proc);
+
+    // Wine / Proton Windows game
+    isp::ProcEntry wine_proc;
+    wine_proc.pid = 96010;
+    wine_proc.ppid = 1;
+    wine_proc.comm = "wine64-preloader";
+    wine_proc.cmdline = "/usr/bin/wine64 /games/rpg/game.exe";
+    table.upsert_entry(wine_proc);
+
+    isp::ProcEntry wineserver_proc;
+    wineserver_proc.pid = 96011;
+    wineserver_proc.ppid = 96010;
+    wineserver_proc.comm = "wineserver";
+    wineserver_proc.cmdline = "/usr/bin/wineserver -p";
+    table.upsert_entry(wineserver_proc);
+
+    // Lutris and Gamescope
+    isp::ProcEntry lutris_proc;
+    lutris_proc.pid = 96020;
+    lutris_proc.ppid = 1;
+    lutris_proc.comm = "lutris";
+    lutris_proc.cmdline = "/usr/bin/lutris";
+    table.upsert_entry(lutris_proc);
+
+    isp::ProcEntry gamescope_proc;
+    gamescope_proc.pid = 96030;
+    gamescope_proc.ppid = 1;
+    gamescope_proc.comm = "gamescope";
+    gamescope_proc.cmdline = "gamescope -w 1920 -h 1080 -- %command%";
+    table.upsert_entry(gamescope_proc);
+
+    // All games, launchers, and their spawned game binaries must be BACKGROUND
+    ASSERT_EQ(table.classify_process(96000), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(96001), isp::ProcessClass::BACKGROUND); // Propagated from Steam parent!
+    ASSERT_EQ(table.classify_process(96010), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(96011), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(96020), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(96030), isp::ProcessClass::BACKGROUND);
+}
+
+TEST_CASE(ProcTable_ThrottleHeavyBackgroundTasks) {
+    isp::ProcTable table;
+
+    // Compilers & build tools
+    isp::ProcEntry clang_proc;
+    clang_proc.pid = 97001;
+    clang_proc.ppid = 1;
+    clang_proc.comm = "clang++";
+    clang_proc.cmdline = "/usr/bin/clang++ -O3 -c main.cpp";
+    table.upsert_entry(clang_proc);
+
+    isp::ProcEntry cargo_proc;
+    cargo_proc.pid = 97002;
+    cargo_proc.ppid = 1;
+    cargo_proc.comm = "cargo";
+    cargo_proc.cmdline = "cargo build --release";
+    table.upsert_entry(cargo_proc);
+
+    // 3D rendering (Blender)
+    isp::ProcEntry blender_proc;
+    blender_proc.pid = 97003;
+    blender_proc.ppid = 1;
+    blender_proc.comm = "blender";
+    blender_proc.cmdline = "/usr/bin/blender -b scene.blend -f 1";
+    table.upsert_entry(blender_proc);
+
+    // Compression / archivers
+    isp::ProcEntry zstd_proc;
+    zstd_proc.pid = 97004;
+    zstd_proc.ppid = 1;
+    zstd_proc.comm = "zstd";
+    zstd_proc.cmdline = "zstd -T0 -19 hugefile.dat";
+    table.upsert_entry(zstd_proc);
+
+    isp::ProcEntry p7z_proc;
+    p7z_proc.pid = 97005;
+    p7z_proc.ppid = 1;
+    p7z_proc.comm = "7z";
+    p7z_proc.cmdline = "7z a archive.7z /data";
+    table.upsert_entry(p7z_proc);
+
+    // Background downloaders / compute
+    isp::ProcEntry torrent_proc;
+    torrent_proc.pid = 97006;
+    torrent_proc.ppid = 1;
+    torrent_proc.comm = "qbittorrent";
+    torrent_proc.cmdline = "qbittorrent-nox";
+    table.upsert_entry(torrent_proc);
+
+    isp::ProcEntry xmrig_proc;
+    xmrig_proc.pid = 97007;
+    xmrig_proc.ppid = 1;
+    xmrig_proc.comm = "xmrig";
+    xmrig_proc.cmdline = "./xmrig -o pool.example.com";
+    table.upsert_entry(xmrig_proc);
+
+    // Video conversion
+    isp::ProcEntry handbrake_proc;
+    handbrake_proc.pid = 97008;
+    handbrake_proc.ppid = 1;
+    handbrake_proc.comm = "HandBrakeCLI";
+    handbrake_proc.cmdline = "HandBrakeCLI -i input.mkv -o output.mp4";
+    table.upsert_entry(handbrake_proc);
+
+    // By default, throttle_heavy_background is true
+    ASSERT_TRUE(table.is_throttling_heavy_background());
+    ASSERT_EQ(table.classify_process(97001), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(97002), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(97003), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(97004), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(97005), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(97006), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(97007), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(97008), isp::ProcessClass::BACKGROUND);
+
+    // When disabled, they return to NORMAL
+    table.set_throttle_heavy_background(false);
+    ASSERT_FALSE(table.is_throttling_heavy_background());
+    ASSERT_EQ(table.classify_process(97001), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(97002), isp::ProcessClass::NORMAL);
+    ASSERT_EQ(table.classify_process(97003), isp::ProcessClass::NORMAL);
+}
+
+TEST_CASE(ProcTable_ConcurrentVideoCallAndUnityThrottling) {
+    isp::ProcTable table;
+    table.set_throttle_games_and_engines(true);
+
+    // Active video call (Zoom holding video device)
+    isp::ProcEntry zoom_call;
+    zoom_call.pid = 98000;
+    zoom_call.ppid = 1;
+    zoom_call.comm = "zoom";
+    zoom_call.cmdline = "/opt/zoom/zoom";
+    zoom_call.holds_video_device = true;
+    table.upsert_entry(zoom_call);
+
+    // Heavy game engine (Unity) compiling shaders in background
+    isp::ProcEntry unity;
+    unity.pid = 98010;
+    unity.ppid = 1;
+    unity.comm = "Unity";
+    unity.cmdline = "/opt/unity/Editor/Unity";
+    table.upsert_entry(unity);
+
+    isp::ProcEntry unity_worker;
+    unity_worker.pid = 98011;
+    unity_worker.ppid = 98010;
+    unity_worker.comm = "UnityHelper";
+    unity_worker.cmdline = "UnityHelper --worker";
+    table.upsert_entry(unity_worker);
+
+    // Zoom must be PROTECTED
+    ASSERT_EQ(table.classify_process(98000), isp::ProcessClass::PROTECTED);
+
+    // Unity and its worker MUST be throttled as BACKGROUND
+    ASSERT_EQ(table.classify_process(98010), isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(table.classify_process(98011), isp::ProcessClass::BACKGROUND);
+
+    auto protected_list = table.get_by_class(isp::ProcessClass::PROTECTED);
+    ASSERT_EQ(protected_list.size(), 1u);
+    ASSERT_EQ(protected_list[0].pid, 98000);
+
+    auto bg_list = table.get_by_class(isp::ProcessClass::BACKGROUND);
+    ASSERT_EQ(bg_list.size(), 2u);
+}

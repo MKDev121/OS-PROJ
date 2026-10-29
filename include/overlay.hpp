@@ -28,6 +28,13 @@ struct OverlayStatus {
     
     std::vector<ProcessItem> protected_procs;
     std::vector<ProcessItem> background_procs;
+    bool throttle_games_and_engines = true;
+    bool throttle_heavy_background = true;
+    uint32_t starvation_floor_cpu_weight = 5;
+    uint32_t poll_interval_ms = 1000;
+    uint32_t background_cpu_max_percent = 0;
+    std::string custom_game_patterns;
+    std::string custom_background_patterns;
 
     // Computed allocation percentages
     float video_call_pct = 0.0f;
@@ -59,11 +66,23 @@ private:
 struct OverlayConfig {
     bool expanded = false;
     bool auto_expand_on_call = true;
-    bool auto_hide_idle = true;
+    bool auto_hide_idle = false; // Open and stay visible on launch
     bool always_on_top = true;
     float window_alpha = 0.94f;
     int pos_x = -1;
     int pos_y = -1;
+
+    // Configurable parameters managed via overlay UI
+    bool throttle_games_and_engines = true;
+    bool throttle_heavy_background = true;
+    int prot_cpu_weight = 800;
+    int bg_cpu_weight = 20;
+    int hysteresis_delay_sec = 8;
+    int poll_interval_ms = 1000;
+    int starvation_floor = 5;
+    int background_cpu_max_percent = 0;
+    char custom_game_patterns[128] = "";
+    char custom_background_patterns[128] = "";
 };
 
 class OverlayRenderer {
@@ -78,12 +97,14 @@ public:
     void set_expanded(bool exp);
     void set_auto_hide_idle(bool hide) { config_.auto_hide_idle = hide; }
     bool is_auto_hide_idle() const { return config_.auto_hide_idle; }
+    OverlayConfig& get_config() { return config_; }
 
 private:
     void render_collapsed_pill(const OverlayStatus& status);
     void render_expanded_dashboard(const OverlayStatus& status);
     void handle_state_transitions(const OverlayStatus& status);
     void apply_window_size();
+    void apply_daemon_config();
 
     GLFWwindow* window_ = nullptr;
     StatusReader& reader_;
@@ -92,11 +113,14 @@ private:
     std::string prev_state_ = "INITIAL";
     bool should_close_ = false;
     float animation_time_ = 0.0f;
+    bool config_initialized_ = false;
+    std::string config_feedback_message_;
+    float config_feedback_timer_ = 0.0f;
 
     const int collapsed_width_ = 490;
     const int collapsed_height_ = 62;
-    const int expanded_width_ = 540;
-    const int expanded_height_ = 520;
+    const int expanded_width_ = 580;
+    const int expanded_height_ = 780;
 };
 
 } // namespace isp

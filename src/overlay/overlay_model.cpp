@@ -130,6 +130,27 @@ OverlayStatus StatusReader::poll() {
     if (kv.count("hysteresis_remaining_sec")) {
         try { status.hysteresis_remaining_sec = std::stoul(kv["hysteresis_remaining_sec"]); } catch (...) {}
     }
+    if (kv.count("throttle_games_and_engines")) {
+        status.throttle_games_and_engines = (kv["throttle_games_and_engines"] == "true");
+    }
+    if (kv.count("throttle_heavy_background")) {
+        status.throttle_heavy_background = (kv["throttle_heavy_background"] == "true");
+    }
+    if (kv.count("starvation_floor_cpu_weight")) {
+        try { status.starvation_floor_cpu_weight = std::stoul(kv["starvation_floor_cpu_weight"]); } catch (...) {}
+    }
+    if (kv.count("poll_interval_ms")) {
+        try { status.poll_interval_ms = std::stoul(kv["poll_interval_ms"]); } catch (...) {}
+    }
+    if (kv.count("custom_game_patterns")) {
+        status.custom_game_patterns = kv["custom_game_patterns"];
+    }
+    if (kv.count("custom_background_patterns")) {
+        status.custom_background_patterns = kv["custom_background_patterns"];
+    }
+    if (kv.count("background_cpu_max_percent")) {
+        try { status.background_cpu_max_percent = std::stoul(kv["background_cpu_max_percent"]); } catch (...) {}
+    }
 
     // Parse protected PIDs
     if (kv.count("protected_pids") && !kv["protected_pids"].empty()) {

@@ -31,10 +31,12 @@ public:
     // Direct access to key-value map
     const std::unordered_map<std::string, std::string>& get_all() const { return entries_; }
 
+    // Utilities
+    static std::string trim(const std::string& s);
+
 private:
     std::unordered_map<std::string, std::string> entries_;
 
-    static std::string trim(const std::string& s);
     static std::string strip_comment(const std::string& s);
     static bool parse_bool(const std::string& s, bool default_val);
 };

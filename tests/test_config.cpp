@@ -110,3 +110,22 @@ TEST_CASE(Config_LoadFromFile) {
     std::remove(tmp_filename.c_str());
     ASSERT_FALSE(cfg.load_from_file("non_existent_file_xyz.conf"));
 }
+
+TEST_CASE(Config_WorkloadThrottlingOptions) {
+    isp::Config cfg;
+    std::string data =
+        "throttle_games_and_engines = true\n"
+        "throttle_heavy_background = false\n"
+        "background_cpu_max_percent = 5\n"
+        "custom_game_patterns = my_custom_game, super_engine\n"
+        "custom_background_patterns = heavy_batch_runner\n";
+
+    ASSERT_TRUE(cfg.load_from_string(data));
+    isp::ResourcePolicy pol = cfg.to_resource_policy();
+
+    ASSERT_TRUE(pol.throttle_games_and_engines);
+    ASSERT_FALSE(pol.throttle_heavy_background);
+    ASSERT_EQ(pol.background_cpu_max_percent, 5u);
+    ASSERT_EQ(pol.custom_game_patterns, "my_custom_game, super_engine");
+    ASSERT_EQ(pol.custom_background_patterns, "heavy_batch_runner");
+}

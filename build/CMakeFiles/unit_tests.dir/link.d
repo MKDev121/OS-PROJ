@@ -10,6 +10,7 @@ unit_tests: \
   CMakeFiles/unit_tests.dir/tests/test_resource_shaper.cpp.o \
   CMakeFiles/unit_tests.dir/tests/test_daemon.cpp.o \
   CMakeFiles/unit_tests.dir/tests/test_fake_call.cpp.o \
+  CMakeFiles/unit_tests.dir/tests/test_bg_workload.cpp.o \
   CMakeFiles/unit_tests.dir/tests/test_hardening.cpp.o \
   CMakeFiles/unit_tests.dir/tests/test_overlay.cpp.o \
   libisp_core.a \
@@ -62,6 +63,8 @@ CMakeFiles/unit_tests.dir/tests/test_resource_shaper.cpp.o:
 CMakeFiles/unit_tests.dir/tests/test_daemon.cpp.o:
 
 CMakeFiles/unit_tests.dir/tests/test_fake_call.cpp.o:
+
+CMakeFiles/unit_tests.dir/tests/test_bg_workload.cpp.o:
 
 CMakeFiles/unit_tests.dir/tests/test_hardening.cpp.o:
 

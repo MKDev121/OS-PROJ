@@ -39,4 +39,27 @@ bool set_process_ioprio(pid_t pid, IoPriorityClass prio_class, int prio_data, bo
 #endif
 }
 
+#ifndef SYS_ioprio_get
+#define SYS_ioprio_get 252
+#endif
+
+bool get_process_ioprio(pid_t pid, IoPriorityClass& prio_class, int& prio_data) {
+#if defined(__linux__)
+    long rc = syscall(SYS_ioprio_get, IOPRIO_WHO_PROCESS, pid);
+    if (rc < 0) {
+        prio_class = IoPriorityClass::NONE;
+        prio_data = 0;
+        return false;
+    }
+    prio_class = static_cast<IoPriorityClass>((rc >> IOPRIO_CLASS_SHIFT) & 0x7);
+    prio_data = static_cast<int>(rc & 0x1fff);
+    return true;
+#else
+    (void)pid;
+    prio_class = IoPriorityClass::NONE;
+    prio_data = 0;
+    return false;
+#endif
+}
+
 } // namespace isp

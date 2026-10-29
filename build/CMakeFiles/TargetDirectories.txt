@@ -1,6 +1,7 @@
 /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles/isp_core.dir
 /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles/protector.dir
 /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles/fake_call.dir
+/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles/bg_workload.dir
 /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles/unit_tests.dir
 /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles/imgui.dir
 /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles/isp_overlay.dir

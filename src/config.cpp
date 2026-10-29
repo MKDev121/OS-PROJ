@@ -140,6 +140,11 @@ ResourcePolicy Config::to_resource_policy() const {
     p.cgroup_mount = get_string("cgroup_mount", p.cgroup_mount);
     p.proc_mount = get_string("proc_mount", p.proc_mount);
     p.dry_run = get_bool("dry_run", p.dry_run);
+    p.throttle_games_and_engines = get_bool("throttle_games_and_engines", p.throttle_games_and_engines);
+    p.throttle_heavy_background = get_bool("throttle_heavy_background", p.throttle_heavy_background);
+    p.custom_game_patterns = get_string("custom_game_patterns", p.custom_game_patterns);
+    p.custom_background_patterns = get_string("custom_background_patterns", p.custom_background_patterns);
+    p.background_cpu_max_percent = static_cast<uint32_t>(get_int("background_cpu_max_percent", p.background_cpu_max_percent));
     return p;
 }
 

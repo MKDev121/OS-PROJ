@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
     std::string pidfile = "/tmp/protector.pid";
     bool mock_mode = false;
     bool start_expanded = false;
-    bool show_always = false;
+    bool auto_hide = false; // Open and visible immediately on launch
     int target_fps = 30;
 
     for (int i = 1; i < argc; ++i) {
@@ -55,8 +55,10 @@ int main(int argc, char* argv[]) {
             mock_mode = true;
         } else if (arg == "-e" || arg == "--expanded") {
             start_expanded = true;
+        } else if (arg == "--auto-hide") {
+            auto_hide = true;
         } else if (arg == "--show-always" || arg == "--show") {
-            show_always = true;
+            auto_hide = false;
         } else if (arg == "--fps") {
             if (i + 1 < argc) target_fps = std::max(5, std::stoi(argv[++i]));
         } else {
@@ -83,13 +85,11 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    bool auto_hide = !show_always && !mock_mode;
     isp::StatusReader initial_reader(pidfile, status_file);
     if (mock_mode) {
         initial_reader.set_mock_mode(true, "ACTIVE");
     }
-    auto init_status = initial_reader.poll();
-    bool initially_visible = !auto_hide || (init_status.state == "ACTIVE" || init_status.state == "IN_HYSTERESIS");
+    bool initially_visible = true;
 
     // Configure window hints for floating translucent HUD
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -101,8 +101,8 @@ int main(int argc, char* argv[]) {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     glfwWindowHint(GLFW_VISIBLE, initially_visible ? GLFW_TRUE : GLFW_FALSE);
 
-    int initial_w = start_expanded ? 540 : 490;
-    int initial_h = start_expanded ? 520 : 62;
+    int initial_w = start_expanded ? 580 : 490;
+    int initial_h = start_expanded ? 720 : 62;
 
     GLFWwindow* window = glfwCreateWindow(initial_w, initial_h, "ISP Session Shield", nullptr, nullptr);
     if (!window) {

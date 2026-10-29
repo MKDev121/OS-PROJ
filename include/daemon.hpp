@@ -44,6 +44,19 @@ public:
     size_t get_background_procs_count() const;
     uint32_t get_current_bg_cpu_weight() const;
 
+    // Throttling configuration
+    void set_throttle_games_and_engines(bool enable);
+    bool is_throttling_games_and_engines() const;
+    void set_throttle_heavy_background(bool enable);
+    bool is_throttling_heavy_background() const;
+
+    // Dynamic policy & configuration management
+    void apply_policy(const ResourcePolicy& new_policy);
+    bool reload_config(const std::string& custom_path = "");
+    void set_config_file_path(const std::string& path) { config_file_path_ = path; }
+    const std::string& get_config_file_path() const { return config_file_path_; }
+    void check_and_apply_commands();
+
     // Component accessors (useful for testing and monitoring)
     ProcTable& get_proc_table() { return proc_table_; }
     CgroupManager& get_cgroup_manager() { return cgroup_mgr_; }
@@ -52,6 +65,7 @@ public:
 private:
     ResourcePolicy policy_;
     std::string pidfile_path_;
+    std::string config_file_path_{"config/protector.conf"};
     int pidfile_fd_{-1};
     std::shared_ptr<IClock> clock_;
 

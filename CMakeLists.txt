@@ -50,6 +50,7 @@ add_library(isp_core STATIC
     src/resource_shaper.cpp
     src/daemon.cpp
     src/fake_call.cpp
+    src/bg_workload.cpp
     src/overlay/overlay_model.cpp
 )
 
@@ -77,7 +78,15 @@ add_executable(fake_call
 target_link_libraries(fake_call PRIVATE isp_core)
 
 # ------------------------------------------------------------------------------
-# Target 3: unit_tests (Unit test suite)
+# Target 3: bg_workload (Synthetic background workload generator & benchmark)
+# ------------------------------------------------------------------------------
+add_executable(bg_workload
+    src/bg_workload_main.cpp
+)
+target_link_libraries(bg_workload PRIVATE isp_core)
+
+# ------------------------------------------------------------------------------
+# Target 4: unit_tests (Unit test suite)
 # ------------------------------------------------------------------------------
 add_executable(unit_tests
     tests/test_main.cpp
@@ -88,6 +97,7 @@ add_executable(unit_tests
     tests/test_resource_shaper.cpp
     tests/test_daemon.cpp
     tests/test_fake_call.cpp
+    tests/test_bg_workload.cpp
     tests/test_hardening.cpp
     tests/test_overlay.cpp
 )
@@ -101,7 +111,7 @@ enable_testing()
 add_test(NAME ConfigUnitTests COMMAND unit_tests)
 
 # ------------------------------------------------------------------------------
-# Target 4: isp_overlay (Dear ImGui Dynamic HUD)
+# Target 5: isp_overlay (Dear ImGui Dynamic HUD)
 # ------------------------------------------------------------------------------
 find_package(OpenGL REQUIRED)
 
@@ -141,6 +151,7 @@ target_include_directories(isp_overlay PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/include
 )
 target_link_libraries(isp_overlay PRIVATE
+    isp_core
     imgui
     glfw
     OpenGL::GL

@@ -1,10 +1,14 @@
 #include "overlay.hpp"
+#include "config.hpp"
 #include <imgui.h>
 #include <GLFW/glfw3.h>
 
 #include <cmath>
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <filesystem>
+#include <csignal>
 
 namespace isp {
 
@@ -89,8 +93,11 @@ void OverlayRenderer::handle_state_transitions(const OverlayStatus& status) {
             } else {
                 glfwHideWindow(window_);
             }
-        } else if (config_.auto_expand_on_call && (status.state == "ACTIVE" || status.state == "IN_HYSTERESIS")) {
-            set_expanded(true);
+        } else {
+            glfwShowWindow(window_);
+            if (config_.auto_expand_on_call && (status.state == "ACTIVE" || status.state == "IN_HYSTERESIS")) {
+                set_expanded(true);
+            }
         }
         return;
     }
@@ -116,7 +123,28 @@ void OverlayRenderer::handle_state_transitions(const OverlayStatus& status) {
 
 void OverlayRenderer::render(float delta_time) {
     animation_time_ += delta_time;
+    if (config_feedback_timer_ > 0.0f) {
+        config_feedback_timer_ -= delta_time;
+    }
     current_status_ = reader_.poll();
+
+    // Synchronize initial configuration from live status
+    if (!config_initialized_ && current_status_.daemon_running) {
+        config_.prot_cpu_weight = static_cast<int>(current_status_.prot_cpu_weight);
+        config_.bg_cpu_weight = static_cast<int>(current_status_.bg_cpu_weight);
+        config_.throttle_games_and_engines = current_status_.throttle_games_and_engines;
+        config_.throttle_heavy_background = current_status_.throttle_heavy_background;
+        config_.poll_interval_ms = static_cast<int>(current_status_.poll_interval_ms);
+        config_.starvation_floor = static_cast<int>(current_status_.starvation_floor_cpu_weight);
+        config_.background_cpu_max_percent = static_cast<int>(current_status_.background_cpu_max_percent);
+        if (!current_status_.custom_game_patterns.empty()) {
+            std::snprintf(config_.custom_game_patterns, sizeof(config_.custom_game_patterns), "%s", current_status_.custom_game_patterns.c_str());
+        }
+        if (!current_status_.custom_background_patterns.empty()) {
+            std::snprintf(config_.custom_background_patterns, sizeof(config_.custom_background_patterns), "%s", current_status_.custom_background_patterns.c_str());
+        }
+        config_initialized_ = true;
+    }
 
     handle_state_transitions(current_status_);
 
@@ -391,13 +419,21 @@ void OverlayRenderer::render_expanded_dashboard(const OverlayStatus& status) {
 
     // Throttled Workloads
     ImGui::TextColored(ImVec4(0.96f, 0.62f, 0.12f, 1.0f), "[-] Throttled Background Workloads (%zu)", status.background_procs.size());
+    if (status.throttle_games_and_engines) {
+        ImGui::SameLine();
+        ImGui::TextColored(ImVec4(0.06f, 0.76f, 0.54f, 1.0f), "[Games/Engines: Throttled]");
+    }
     if (status.background_procs.empty()) {
         ImGui::TextDisabled("    (No heavy background batch workloads active)");
     } else {
         for (const auto& proc : status.background_procs) {
             ImGui::TextColored(ImVec4(0.95f, 0.96f, 0.98f, 1.0f), "  * PID %d: %s", proc.pid, proc.name.c_str());
             ImGui::SameLine();
-            ImGui::TextColored(ImVec4(0.96f, 0.62f, 0.12f, 1.0f), "[Clamped to %u shares, ioprio=IDLE]", status.bg_cpu_weight);
+            if (status.background_cpu_max_percent > 0) {
+                ImGui::TextColored(ImVec4(0.96f, 0.35f, 0.35f, 1.0f), "[Hard Cap: %u%% of 1 core, ioprio=IDLE]", status.background_cpu_max_percent);
+            } else {
+                ImGui::TextColored(ImVec4(0.96f, 0.62f, 0.12f, 1.0f), "[Clamped to %u shares, ioprio=IDLE]", status.bg_cpu_weight);
+            }
         }
     }
 
@@ -408,23 +444,103 @@ void OverlayRenderer::render_expanded_dashboard(const OverlayStatus& status) {
     ImGui::Spacing();
 
     // -------------------------------------------------------------------------
-    // Card 3: USER PREFERENCES & CONTROLS
+    // Card 3: LIVE DAEMON & WORKLOAD CONFIGURATION
     // -------------------------------------------------------------------------
-    ImGui::TextColored(ImVec4(0.70f, 0.78f, 0.90f, 1.0f), "OVERLAY SETTINGS");
+    ImGui::TextColored(ImVec4(0.70f, 0.78f, 0.90f, 1.0f), "DYNAMIC QOS & WORKLOAD CONFIGURATION");
 
-    ImGui::Checkbox("Auto-expand when video call joined", &config_.auto_expand_on_call);
+    ImGui::BeginChild("ConfigCard", ImVec2(0, 240), true);
+
+    // Throttling Toggles
+    ImGui::TextColored(ImVec4(0.95f, 0.96f, 0.98f, 1.0f), "Background Throttling Rules:");
+    ImGui::Checkbox("Throttle Games (Steam, Wine, Lutris)", &config_.throttle_games_and_engines);
     ImGui::SameLine(290.0f);
-    
+    ImGui::Checkbox("Heavy Tasks (Compilers, Torrents)", &config_.throttle_heavy_background);
+
+    ImGui::Spacing();
+
+    // Shaping Sliders
+    ImGui::SetNextItemWidth(160.0f);
+    ImGui::SliderInt("Call Shares", &config_.prot_cpu_weight, 100, 1000);
+    ImGui::SameLine(290.0f);
+    ImGui::SetNextItemWidth(160.0f);
+    ImGui::SliderInt("BG Shares", &config_.bg_cpu_weight, 5, 200);
+
+    ImGui::SetNextItemWidth(160.0f);
+    ImGui::SliderInt("Grace (s)", &config_.hysteresis_delay_sec, 1, 30);
+    ImGui::SameLine(290.0f);
+    ImGui::SetNextItemWidth(160.0f);
+    ImGui::SliderInt("Starvation Floor", &config_.starvation_floor, 5, 50);
+
+    ImGui::SetNextItemWidth(160.0f);
+    ImGui::SliderInt("Poll (ms)", &config_.poll_interval_ms, 100, 2000);
+    ImGui::SameLine(290.0f);
+    ImGui::SetNextItemWidth(160.0f);
+    ImGui::SliderInt("Hard CPU Cap", &config_.background_cpu_max_percent, 0, 100, "%d%% (0=Off)");
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Absolute CFS quota (cpu.max) across ALL background threads.\n"
+                          "e.g., 5%% caps background tasks to 5%% of ONE core,\n"
+                          "making Unity/games visibly crawl even on 14+ core CPUs.");
+    }
+
+    ImGui::Spacing();
+
+    // Custom pattern filters
+    ImGui::SetNextItemWidth(180.0f);
+    ImGui::InputText("Extra Games", config_.custom_game_patterns, sizeof(config_.custom_game_patterns));
+    ImGui::SameLine(290.0f);
+    ImGui::SetNextItemWidth(170.0f);
+    ImGui::InputText("Extra Heavy", config_.custom_background_patterns, sizeof(config_.custom_background_patterns));
+
+    ImGui::Spacing();
+
+    if (ImGui::Button("[Apply Settings to Daemon]", ImVec2(210.0f, 26.0f))) {
+        apply_daemon_config();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("[Reset Defaults]", ImVec2(130.0f, 26.0f))) {
+        config_.throttle_games_and_engines = true;
+        config_.throttle_heavy_background = true;
+        config_.prot_cpu_weight = 800;
+        config_.bg_cpu_weight = 20;
+        config_.hysteresis_delay_sec = 8;
+        config_.poll_interval_ms = 1000;
+        config_.starvation_floor = 5;
+        config_.background_cpu_max_percent = 5;
+        config_.custom_game_patterns[0] = '\0';
+        config_.custom_background_patterns[0] = '\0';
+        apply_daemon_config();
+    }
+
+    if (config_feedback_timer_ > 0.0f) {
+        ImGui::Spacing();
+        ImGui::TextColored(ImVec4(0.06f, 0.76f, 0.54f, 1.0f), "[OK] %s", config_feedback_message_.c_str());
+    }
+
+    ImGui::EndChild();
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    // -------------------------------------------------------------------------
+    // Card 4: OVERLAY DISPLAY & HUD PREFERENCES
+    // -------------------------------------------------------------------------
+    ImGui::TextColored(ImVec4(0.70f, 0.78f, 0.90f, 1.0f), "OVERLAY DISPLAY SETTINGS");
+
+    ImGui::Checkbox("Auto-hide when idle", &config_.auto_hide_idle);
+    ImGui::SameLine(290.0f);
+    ImGui::Checkbox("Auto-expand on call", &config_.auto_expand_on_call);
+
     if (ImGui::Checkbox("Always on top", &config_.always_on_top)) {
         glfwSetWindowAttrib(window_, GLFW_FLOATING, config_.always_on_top ? GLFW_TRUE : GLFW_FALSE);
     }
-
+    ImGui::SameLine(290.0f);
     ImGui::SetNextItemWidth(160.0f);
     ImGui::SliderFloat("Opacity", &config_.window_alpha, 0.40f, 1.00f, "%.2f");
-    
-    ImGui::SameLine(290.0f);
+
+    ImGui::Spacing();
     if (reader_.is_mock_mode()) {
-        if (ImGui::Button("Cycle State")) {
+        if (ImGui::Button("Cycle State (Mock)")) {
             if (status.state == "ACTIVE") {
                 reader_.set_mock_mode(true, "IN_HYSTERESIS");
             } else if (status.state == "IN_HYSTERESIS") {
@@ -434,8 +550,79 @@ void OverlayRenderer::render_expanded_dashboard(const OverlayStatus& status) {
             }
         }
     } else {
-        ImGui::TextDisabled("Daemon PID: %d (%s)", status.daemon_pid, status.mode.c_str());
+        ImGui::TextDisabled("Daemon Status: %s | PID: %d (%s) | Status: /tmp/protector.status",
+                            status.state.c_str(), status.daemon_pid, status.mode.c_str());
     }
+}
+
+void OverlayRenderer::apply_daemon_config() {
+    // 1. Write runtime command file for instant daemon polling
+    std::ofstream cmd_file("/tmp/protector.cmd");
+    if (cmd_file.is_open()) {
+        cmd_file << "throttle_games_and_engines=" << (config_.throttle_games_and_engines ? "true" : "false") << "\n";
+        cmd_file << "throttle_heavy_background=" << (config_.throttle_heavy_background ? "true" : "false") << "\n";
+        cmd_file << "protected_cpu_weight=" << config_.prot_cpu_weight << "\n";
+        cmd_file << "background_cpu_weight=" << config_.bg_cpu_weight << "\n";
+        cmd_file << "hysteresis_delay_sec=" << config_.hysteresis_delay_sec << "\n";
+        cmd_file << "starvation_floor_cpu_weight=" << config_.starvation_floor << "\n";
+        cmd_file << "poll_interval_ms=" << config_.poll_interval_ms << "\n";
+        cmd_file << "background_cpu_max_percent=" << config_.background_cpu_max_percent << "\n";
+        cmd_file << "custom_game_patterns=" << config_.custom_game_patterns << "\n";
+        cmd_file << "custom_background_patterns=" << config_.custom_background_patterns << "\n";
+        cmd_file.close();
+    }
+
+    // 2. Persist to configuration file if exists
+    std::vector<std::string> conf_paths = { "config/protector.conf", "/etc/isp/protector.conf" };
+    for (const auto& path : conf_paths) {
+        std::error_code ec;
+        if (std::filesystem::exists(path, ec)) {
+            Config cfg;
+            if (cfg.load_from_file(path)) {
+                cfg.set("throttle_games_and_engines", config_.throttle_games_and_engines ? "true" : "false");
+                cfg.set("throttle_heavy_background", config_.throttle_heavy_background ? "true" : "false");
+                cfg.set("protected_cpu_weight", std::to_string(config_.prot_cpu_weight));
+                cfg.set("background_cpu_weight", std::to_string(config_.bg_cpu_weight));
+                cfg.set("hysteresis_delay_sec", std::to_string(config_.hysteresis_delay_sec));
+                cfg.set("starvation_floor_cpu_weight", std::to_string(config_.starvation_floor));
+                cfg.set("poll_interval_ms", std::to_string(config_.poll_interval_ms));
+                cfg.set("background_cpu_max_percent", std::to_string(config_.background_cpu_max_percent));
+                cfg.set("custom_game_patterns", config_.custom_game_patterns);
+                cfg.set("custom_background_patterns", config_.custom_background_patterns);
+
+                std::ofstream out(path);
+                if (out.is_open()) {
+                    for (const auto& [k, v] : cfg.get_all()) {
+                        out << k << " = " << v << "\n";
+                    }
+                }
+            }
+        }
+    }
+
+    // 3. Send SIGHUP to running daemon for instant zero-latency reload
+    if (current_status_.daemon_running && current_status_.daemon_pid > 0) {
+        kill(current_status_.daemon_pid, SIGHUP);
+        config_feedback_message_ = "Settings applied to daemon (PID " + std::to_string(current_status_.daemon_pid) + ")!";
+    } else {
+        config_feedback_message_ = "Settings saved to config file successfully.";
+    }
+
+    if (reader_.is_mock_mode()) {
+        current_status_.prot_cpu_weight = static_cast<uint32_t>(config_.prot_cpu_weight);
+        current_status_.bg_cpu_weight = static_cast<uint32_t>(config_.bg_cpu_weight);
+        current_status_.throttle_games_and_engines = config_.throttle_games_and_engines;
+        current_status_.throttle_heavy_background = config_.throttle_heavy_background;
+        current_status_.starvation_floor_cpu_weight = static_cast<uint32_t>(config_.starvation_floor);
+        current_status_.poll_interval_ms = static_cast<uint32_t>(config_.poll_interval_ms);
+        current_status_.background_cpu_max_percent = static_cast<uint32_t>(config_.background_cpu_max_percent);
+        current_status_.custom_game_patterns = config_.custom_game_patterns;
+        current_status_.custom_background_patterns = config_.custom_background_patterns;
+        current_status_.compute_percentages();
+        config_feedback_message_ = "Settings applied in mock simulation mode!";
+    }
+
+    config_feedback_timer_ = 3.5f;
 }
 
 } // namespace isp

@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/isp_core.dir/src/bg_workload.cpp.o"
+  "CMakeFiles/isp_core.dir/src/bg_workload.cpp.o.d"
   "CMakeFiles/isp_core.dir/src/cgroup_manager.cpp.o"
   "CMakeFiles/isp_core.dir/src/cgroup_manager.cpp.o.d"
   "CMakeFiles/isp_core.dir/src/config.cpp.o"
@@ -11,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/isp_core.dir/src/ioprio.cpp.o.d"
   "CMakeFiles/isp_core.dir/src/logger.cpp.o"
   "CMakeFiles/isp_core.dir/src/logger.cpp.o.d"
+  "CMakeFiles/isp_core.dir/src/overlay/overlay_model.cpp.o"
+  "CMakeFiles/isp_core.dir/src/overlay/overlay_model.cpp.o.d"
   "CMakeFiles/isp_core.dir/src/proc_table.cpp.o"
   "CMakeFiles/isp_core.dir/src/proc_table.cpp.o.d"
   "CMakeFiles/isp_core.dir/src/resource_shaper.cpp.o"

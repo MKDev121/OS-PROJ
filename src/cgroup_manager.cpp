@@ -217,6 +217,18 @@ bool CgroupManager::set_cpu_weight(const std::string& group_name, uint32_t weigh
     return write_file(path, std::to_string(clamped));
 }
 
+bool CgroupManager::set_cpu_max(const std::string& group_name, uint32_t max_percent, uint32_t period_us) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    fs::path path = fs::path(get_group_path(group_name)) / "cpu.max";
+    if (max_percent == 0 || max_percent >= 10000) {
+        return write_file(path, "max " + std::to_string(period_us));
+    }
+    uint64_t quota_us = (static_cast<uint64_t>(period_us) * max_percent) / 100;
+    if (quota_us < 1000) quota_us = 1000; // minimum 1ms (1% of period)
+    std::string val = std::to_string(quota_us) + " " + std::to_string(period_us);
+    return write_file(path, val);
+}
+
 bool CgroupManager::set_io_weight(const std::string& group_name, uint32_t weight) {
     std::lock_guard<std::mutex> lock(mutex_);
     // Linux cgroups v2 io.weight range is 1..10000
@@ -246,6 +258,7 @@ bool CgroupManager::apply_policy(const ResourcePolicy& policy) {
 
     // Set background weights & memory throttling limit
     ok &= set_cpu_weight(GROUP_BACKGROUND, policy.background_cpu_weight);
+    ok &= set_cpu_max(GROUP_BACKGROUND, policy.background_cpu_max_percent);
     ok &= set_memory_high_percent(GROUP_BACKGROUND, policy.background_memory_high_percent);
 
     // Set normal baseline weights (standard Linux default is 100)
@@ -345,8 +358,23 @@ bool CgroupManager::restore_process(pid_t pid) {
         }
     }
 
-    // Format path to original cgroup.procs
-    fs::path orig_rel = orig_cg;
+    // Format path to original cgroup.procs, decoding any \xHH escapes
+    std::string decoded_cg;
+    for (size_t i = 0; i < orig_cg.size(); ++i) {
+        if (orig_cg[i] == '\\' && i + 3 < orig_cg.size() && orig_cg[i + 1] == 'x') {
+            int hex_ch = 0;
+            std::stringstream ss;
+            ss << std::hex << orig_cg.substr(i + 2, 2);
+            if (ss >> hex_ch) {
+                decoded_cg.push_back(static_cast<char>(hex_ch));
+                i += 3;
+                continue;
+            }
+        }
+        decoded_cg.push_back(orig_cg[i]);
+    }
+
+    fs::path orig_rel = decoded_cg;
     if (!orig_rel.empty() && orig_rel.string().front() == '/') {
         orig_rel = orig_rel.string().substr(1);
     }
@@ -358,11 +386,22 @@ bool CgroupManager::restore_process(pid_t pid) {
         return true;
     }
 
+    bool wrote_procs = false;
     std::ofstream procs_file(target_procs);
     if (procs_file.is_open()) {
         procs_file << pid;
+        wrote_procs = procs_file.good();
     }
-    // Regardless of whether write succeeded (process may have died), erase from tracked list
+
+    // Fallback: If original slice/scope disappeared or failed, evacuate to root cgroup
+    if (!wrote_procs) {
+        fs::path root_procs = fs::path(cgroup_root_) / "cgroup.procs";
+        std::ofstream root_file(root_procs);
+        if (root_file.is_open()) {
+            root_file << pid;
+        }
+    }
+
     log_action("Restored PID " + std::to_string(pid) + " to " + orig_cg);
     original_cgroups_.erase(it);
     return true;
@@ -389,14 +428,37 @@ bool CgroupManager::cleanup() {
 
     std::lock_guard<std::mutex> lock(mutex_);
     fs::path slice_path = fs::path(cgroup_root_) / SLICE_NAME;
+    std::error_code ec;
 
-    // 2. Remove child cgroups
-    std::vector<std::string> groups = {GROUP_PROTECTED, GROUP_BACKGROUND, GROUP_NORMAL};
-    for (const auto& grp : groups) {
-        remove_dir(slice_path / grp);
+    // 2. Ensure cpu.max is restored to unlimited
+    if (!dry_run_) {
+        fs::path bg_cpu_max = slice_path / GROUP_BACKGROUND / "cpu.max";
+        if (fs::exists(bg_cpu_max, ec)) {
+            std::ofstream f(bg_cpu_max);
+            if (f.is_open()) f << "max 100000\n";
+        }
     }
 
-    // 3. Remove slice directory
+    // 3. Evacuate any stranded child PIDs before removing directories
+    fs::path root_procs = fs::path(cgroup_root_) / "cgroup.procs";
+    std::vector<std::string> groups = {GROUP_PROTECTED, GROUP_BACKGROUND, GROUP_NORMAL};
+    for (const auto& grp : groups) {
+        fs::path grp_path = slice_path / grp;
+        fs::path procs_file = grp_path / "cgroup.procs";
+        if (!dry_run_ && fs::exists(procs_file, ec)) {
+            std::ifstream in(procs_file);
+            std::string pid_str;
+            while (in >> pid_str) {
+                if (!pid_str.empty()) {
+                    std::ofstream out(root_procs, std::ios_base::app);
+                    if (out.is_open()) out << pid_str << "\n";
+                }
+            }
+        }
+        remove_dir(grp_path);
+    }
+
+    // 4. Remove slice directory
     remove_dir(slice_path);
 
     return true;

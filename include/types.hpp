@@ -66,6 +66,11 @@ struct ResourcePolicy {
     std::string cgroup_mount{"/sys/fs/cgroup"};
     std::string proc_mount{"/proc"};
     bool dry_run{false};
+    bool throttle_games_and_engines{true};
+    bool throttle_heavy_background{true};
+    std::string custom_game_patterns{""};
+    std::string custom_background_patterns{""};
+    uint32_t background_cpu_max_percent{0}; // 0 = CFS relative share, 1..100 = hard bandwidth cap (% of 1 core)
 };
 
 // Process snapshot representation

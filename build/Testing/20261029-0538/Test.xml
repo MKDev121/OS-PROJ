@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20261029-0538-Experimental"
+	Name="(empty)"
+	Generator="ctest-4.2.3"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Linux"
+	Hostname="meet-kareliya-Dell-G15-5530"
+	OSRelease="7.0.0-38-generic"
+	OSVersion="#38-Ubuntu SMP PREEMPT_DYNAMIC Fri Sep  4 09:10:14 UTC 2026"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="183"
+	ModelName="13th Gen Intel(R) Core(TM) i5-13450HX"
+	ProcessorCacheSize="20480"
+	NumberOfLogicalCPU="16"
+	NumberOfPhysicalCPU="10"
+	TotalVirtualMemory="4095"
+	TotalPhysicalMemory="15158"
+	LogicalProcessorsPerPhysical="1"
+	ProcessorClockFrequency="799.745"
+	>
+	<Testing>
+		<StartDateTime>Oct 29 11:10 IST</StartDateTime>
+		<StartTestTime>1793252407</StartTestTime>
+		<TestList/>
+		<EndDateTime>Oct 29 11:10 IST</EndDateTime>
+		<EndTestTime>1793252407</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

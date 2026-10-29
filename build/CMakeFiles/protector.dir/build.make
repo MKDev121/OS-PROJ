@@ -76,15 +76,15 @@ CMakeFiles/protector.dir/src/protector_main.cpp.o: CMakeFiles/protector.dir/flag
 CMakeFiles/protector.dir/src/protector_main.cpp.o: /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/protector_main.cpp
 CMakeFiles/protector.dir/src/protector_main.cpp.o: CMakeFiles/protector.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/protector.dir/src/protector_main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/protector.dir/src/protector_main.cpp.o -MF CMakeFiles/protector.dir/src/protector_main.cpp.o.d -o CMakeFiles/protector.dir/src/protector_main.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/protector_main.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/protector.dir/src/protector_main.cpp.o -MF CMakeFiles/protector.dir/src/protector_main.cpp.o.d -o CMakeFiles/protector.dir/src/protector_main.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/protector_main.cpp
 
 CMakeFiles/protector.dir/src/protector_main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/protector.dir/src/protector_main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/protector_main.cpp > CMakeFiles/protector.dir/src/protector_main.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/protector_main.cpp > CMakeFiles/protector.dir/src/protector_main.cpp.i
 
 CMakeFiles/protector.dir/src/protector_main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/protector.dir/src/protector_main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/protector_main.cpp -o CMakeFiles/protector.dir/src/protector_main.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/protector_main.cpp -o CMakeFiles/protector.dir/src/protector_main.cpp.s
 
 # Object files for target protector
 protector_OBJECTS = \

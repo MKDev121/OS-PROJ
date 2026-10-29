@@ -18,6 +18,7 @@ TEST_CASE(FakeCall_DefaultConfig) {
     ASSERT_EQ(cfg.output_csv, "fake_call_metrics.csv");
     ASSERT_NEAR(cfg.deadline_tolerance_ratio, 1.2, 0.001);
     ASSERT_TRUE(cfg.simulate_cpu_load);
+    ASSERT_NEAR(cfg.load_ms, 14.0, 0.001);
 }
 
 TEST_CASE(FakeCall_CustomConfig) {

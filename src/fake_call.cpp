@@ -80,6 +80,20 @@ bool FakeCallApp::init() {
     }
 #endif
 
+    if (ops_per_ms_ == 0 && config_.simulate_cpu_load && config_.load_ms > 0.0) {
+        auto t0 = std::chrono::steady_clock::now();
+        uint64_t count = 0;
+        volatile uint32_t acc = 0x12345;
+        while (std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count() < 5.0) {
+            for (int i = 0; i < 1000; ++i) {
+                acc = (acc * 1664525 + 1013904223) ^ (acc >> 13);
+            }
+            count += 1000;
+        }
+        double elapsed_ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count();
+        ops_per_ms_ = (elapsed_ms > 0.0) ? static_cast<uint64_t>(count / elapsed_ms) : 1000000ULL;
+    }
+
     return true;
 }
 
@@ -106,14 +120,16 @@ void FakeCallApp::read_video_frame() {
 }
 
 void FakeCallApp::process_simulated_frame() {
-    if (!config_.simulate_cpu_load) {
+    if (!config_.simulate_cpu_load || config_.load_ms <= 0.0) {
         return;
     }
 
-    // Simulate light video decode/rendering workload (~0.5ms of user CPU activity)
-    volatile uint32_t acc = 0;
-    for (int i = 0; i < 4096; ++i) {
-        acc += (i * 31) ^ (i >> 2);
+    uint64_t target_ops = ops_per_ms_ * static_cast<uint64_t>(config_.load_ms);
+    if (target_ops == 0) target_ops = 50000;
+
+    volatile uint32_t acc = 0x54321;
+    for (uint64_t i = 0; i < target_ops; ++i) {
+        acc = (acc * 1664525 + 1013904223) ^ (acc >> 13);
     }
     (void)acc;
 }
@@ -223,6 +239,29 @@ void FakeCallApp::run() {
         // Pacing sleep until next frame boundary
         if (target_next_frame > std::chrono::steady_clock::now()) {
             std::this_thread::sleep_until(target_next_frame);
+        }
+
+        // Live progress telemetry every ~1 second (target_fps frames)
+        uint32_t interval_frames = static_cast<uint32_t>(config_.target_fps);
+        if (interval_frames == 0) interval_frames = 30;
+        if (frame_count % interval_frames == 0 || frame_count == 1) {
+            double current_miss_rate = get_deadline_miss_rate();
+            int secs = static_cast<int>(timestamp_sec);
+            int mins = secs / 60;
+            secs %= 60;
+
+            std::cout << "  [" << std::setfill('0') << std::setw(2) << mins << ":"
+                      << std::setfill('0') << std::setw(2) << secs << "] "
+                      << "Frame #" << std::setw(4) << frame_count
+                      << " | Interval: " << std::fixed << std::setprecision(1) << interval_ms << "ms"
+                      << " | Drops: " << deadline_misses_ << " (" << std::setprecision(1) << current_miss_rate << "%)";
+
+            if (missed || current_miss_rate > 10.0) {
+                std::cout << " \033[1;31m[LAG / STUTTERING]\033[0m\n";
+            } else {
+                std::cout << " \033[1;32m[SMOOTH / PROTECTED]\033[0m\n";
+            }
+            std::cout.flush();
         }
     }
 

@@ -25,6 +25,8 @@ void print_usage(const char* prog_name) {
               << "  -f, --fps <val>         Target frames per second (default: 30.0)\n"
               << "  -t, --duration <sec>    Run duration in seconds (default: 60)\n"
               << "  -o, --output <file>     Path to output CSV metrics file (default: fake_call_metrics.csv)\n"
+              << "      --load-ms <ms>      Target frame encode work in ms [default: 12.0ms]\n"
+              << "      --heavy             Realistic heavy video encode workload (15.0ms/frame)\n"
               << "      --tolerance <ratio> Deadline miss tolerance ratio (default: 1.2)\n"
               << "      --no-cpu-load       Disable simulated video encode CPU workload\n"
               << "  -h, --help              Show this help message and exit\n";
@@ -38,6 +40,7 @@ int main(int argc, char* argv[]) {
     config.output_csv = "fake_call_metrics.csv";
     config.deadline_tolerance_ratio = 1.2;
     config.simulate_cpu_load = true;
+    config.load_ms = 14.0;
 
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
@@ -82,6 +85,17 @@ int main(int argc, char* argv[]) {
                     return 1;
                 }
             }
+        } else if (arg == "--load-ms") {
+            if (i + 1 < argc) {
+                try {
+                    config.load_ms = std::stod(argv[++i]);
+                } catch (...) {
+                    std::cerr << "Error: Invalid load-ms value\n";
+                    return 1;
+                }
+            }
+        } else if (arg == "--heavy") {
+            config.load_ms = 22.0;
         } else if (arg == "--no-cpu-load") {
             config.simulate_cpu_load = false;
         } else {

@@ -183,3 +183,32 @@ TEST_CASE(CgroupManager_SafetyAndGracefulErrors) {
     // Restoring an untracked PID should return true (noop)
     ASSERT_TRUE(mgr.restore_process(8888));
 }
+
+TEST_CASE(CgroupManager_SetCpuMaxQuota) {
+    FakeCgroupFixture fixture("cpu_max_test");
+    isp::CgroupManager mgr(fixture.str(), /*dry_run=*/false);
+    ASSERT_TRUE(mgr.init_hierarchy());
+
+    fs::path bg_dir = fixture.path() / "protector.slice" / "background";
+    fs::path cpu_max_file = bg_dir / "cpu.max";
+
+    // Test capping to 5% (5000us per 100000us period)
+    ASSERT_TRUE(mgr.set_cpu_max("background", 5, 100000));
+    {
+        std::ifstream in(cpu_max_file);
+        std::string content;
+        std::getline(in, content);
+        ASSERT_EQ(content, "5000 100000");
+    }
+
+    // Test resetting to unlimited (0% -> "max 100000")
+    ASSERT_TRUE(mgr.set_cpu_max("background", 0, 100000));
+    {
+        std::ifstream in(cpu_max_file);
+        std::string content;
+        std::getline(in, content);
+        ASSERT_EQ(content, "max 100000");
+    }
+
+    ASSERT_TRUE(mgr.cleanup());
+}

@@ -35,6 +35,7 @@ public:
 
     // Resource control setters
     bool set_cpu_weight(const std::string& group_name, uint32_t weight);
+    bool set_cpu_max(const std::string& group_name, uint32_t max_percent, uint32_t period_us = 100000);
     bool set_io_weight(const std::string& group_name, uint32_t weight);
     bool set_memory_high_bytes(const std::string& group_name, uint64_t bytes);
     bool set_memory_high_percent(const std::string& group_name, uint32_t percent);

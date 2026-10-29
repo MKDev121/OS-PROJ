@@ -215,9 +215,31 @@ bool ProcTable::is_background_locked(const ProcEntry& entry) const {
     if (entry.allowlisted) {
         return false;
     }
+    // 1. Core background patterns
     for (const auto& pattern : rules_.background_patterns) {
         if (matches_pattern(entry.comm, pattern) || matches_pattern(entry.cmdline, pattern)) {
             return true;
+        }
+    }
+    // 2. Heavy background tasks (compilers, build systems, 3D renderers, archivers, torrents, compute)
+    if (rules_.throttle_heavy_background) {
+        for (const auto& pattern : rules_.heavy_background_patterns) {
+            if (matches_pattern(entry.comm, pattern) || matches_pattern(entry.cmdline, pattern)) {
+                return true;
+            }
+        }
+    }
+    // 3. Games and Game Engines (Unity, Unreal, Godot, Steam, Lutris, Wine, etc.)
+    if (rules_.throttle_games_and_engines) {
+        for (const auto& pattern : rules_.game_engine_patterns) {
+            if (matches_pattern(entry.comm, pattern) || matches_pattern(entry.cmdline, pattern)) {
+                return true;
+            }
+        }
+        for (const auto& pattern : rules_.game_patterns) {
+            if (matches_pattern(entry.comm, pattern) || matches_pattern(entry.cmdline, pattern)) {
+                return true;
+            }
         }
     }
     return false;
@@ -229,6 +251,16 @@ bool ProcTable::has_active_media_locked(const ProcEntry& entry) const {
 
 bool ProcTable::is_excluded_from_protection_locked(const ProcEntry& entry) const {
     for (const auto& pattern : rules_.excluded_patterns) {
+        if (matches_pattern(entry.comm, pattern) || matches_pattern(entry.cmdline, pattern)) {
+            return true;
+        }
+    }
+    for (const auto& pattern : rules_.game_engine_patterns) {
+        if (matches_pattern(entry.comm, pattern) || matches_pattern(entry.cmdline, pattern)) {
+            return true;
+        }
+    }
+    for (const auto& pattern : rules_.game_patterns) {
         if (matches_pattern(entry.comm, pattern) || matches_pattern(entry.cmdline, pattern)) {
             return true;
         }
@@ -581,6 +613,46 @@ void ProcTable::add_excluded_pattern(const std::string& pattern) {
     std::lock_guard<std::mutex> lock(mutex_);
     rules_.excluded_patterns.push_back(pattern);
     classify_all_locked();
+}
+
+void ProcTable::add_game_engine_pattern(const std::string& pattern) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    rules_.game_engine_patterns.push_back(pattern);
+    classify_all_locked();
+}
+
+void ProcTable::add_game_pattern(const std::string& pattern) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    rules_.game_patterns.push_back(pattern);
+    classify_all_locked();
+}
+
+void ProcTable::add_heavy_background_pattern(const std::string& pattern) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    rules_.heavy_background_patterns.push_back(pattern);
+    classify_all_locked();
+}
+
+void ProcTable::set_throttle_games_and_engines(bool enable) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    rules_.throttle_games_and_engines = enable;
+    classify_all_locked();
+}
+
+bool ProcTable::is_throttling_games_and_engines() const {
+    std::lock_guard<std::mutex> lock(mutex_);
+    return rules_.throttle_games_and_engines;
+}
+
+void ProcTable::set_throttle_heavy_background(bool enable) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    rules_.throttle_heavy_background = enable;
+    classify_all_locked();
+}
+
+bool ProcTable::is_throttling_heavy_background() const {
+    std::lock_guard<std::mutex> lock(mutex_);
+    return rules_.throttle_heavy_background;
 }
 
 void ProcTable::upsert_entry(const ProcEntry& entry) {

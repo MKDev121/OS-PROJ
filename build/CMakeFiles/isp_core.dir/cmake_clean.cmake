@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/isp_core.dir/src/bg_workload.cpp.o"
+  "CMakeFiles/isp_core.dir/src/bg_workload.cpp.o.d"
   "CMakeFiles/isp_core.dir/src/cgroup_manager.cpp.o"
   "CMakeFiles/isp_core.dir/src/cgroup_manager.cpp.o.d"
   "CMakeFiles/isp_core.dir/src/config.cpp.o"

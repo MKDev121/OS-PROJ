@@ -88,6 +88,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/isp_core.dir/DependInfo.cmake"
   "CMakeFiles/protector.dir/DependInfo.cmake"
   "CMakeFiles/fake_call.dir/DependInfo.cmake"
+  "CMakeFiles/bg_workload.dir/DependInfo.cmake"
   "CMakeFiles/unit_tests.dir/DependInfo.cmake"
   "CMakeFiles/imgui.dir/DependInfo.cmake"
   "CMakeFiles/isp_overlay.dir/DependInfo.cmake"

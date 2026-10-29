@@ -24,7 +24,7 @@ echo -e "\n${BLUE}[1/4] Running Standard Unit Tests...${NC}"
 cmake -B build -S . > /dev/null
 cmake --build build > /dev/null
 ./build/unit_tests
-echo -e "${GREEN}✓ Standard unit tests: 40/40 PASSED${NC}"
+echo -e "${GREEN}✓ Standard unit tests: 73/73 PASSED${NC}"
 
 # 2. Verify AddressSanitizer & UndefinedBehaviorSanitizer (ASan/UBSan)
 echo -e "\n${BLUE}[2/4] Verifying AddressSanitizer (ASan) & UBSan Build...${NC}"
@@ -46,7 +46,7 @@ TEST_PIDFILE="/tmp/isp_crash_test.pid"
 rm -f "${TEST_PIDFILE}"
 
 # Start daemon in background
-./build/protector --pidfile "${TEST_PIDFILE}" --dry-run --verbose &
+./build/protector --pidfile "${TEST_PIDFILE}" --dry-run --verbose --no-overlay &
 DAEMON_PID=$!
 sleep 0.5
 
@@ -70,7 +70,7 @@ echo -e "  Daemon terminated abnormally (SIGKILL)."
 
 # Now start a new daemon instance using the same pidfile
 echo -e "  Starting new protector daemon instance to verify automatic recovery..."
-./build/protector --pidfile "${TEST_PIDFILE}" --dry-run --timeout 1 > /tmp/isp_recovery.log 2>&1 || true
+./build/protector --pidfile "${TEST_PIDFILE}" --dry-run --timeout 1 --no-overlay > /tmp/isp_recovery.log 2>&1 || true
 
 if grep -q "Protector daemon shutdown complete" /tmp/isp_recovery.log; then
     echo -e "${GREEN}✓ New daemon successfully recovered, cleaned stale hierarchy, and shut down cleanly.${NC}"

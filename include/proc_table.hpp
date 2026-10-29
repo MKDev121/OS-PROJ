@@ -36,7 +36,7 @@ struct ClassificationRules {
     };
     std::vector<std::string> background_patterns{
         "stress-ng", "tar", "dd", "gzip", "bzip2", "xz", "cc1", "cc1plus",
-        "make", "ninja", "rustc", "ffmpeg"
+        "make", "ninja", "rustc", "ffmpeg", "bg_workload", "stress_workload", "isp_workload"
     };
     std::vector<std::string> protected_patterns{
         "fake_call", "zoom", "teams", "skype", "slack", "discord", "webex", "jitsi", "meet",
@@ -48,6 +48,23 @@ struct ClassificationRules {
         "unreal", "godot", "blender", "code", "cursor", "pycharm", "idea", "clion",
         "steam", "lutris", "wine", "crashpad_handler"
     };
+    std::vector<std::string> game_engine_patterns{
+        "unity", "unityhub", "unityhub-bin", "UnityHelper", "Unity.Licensing.Client", "UnityPlayer",
+        "unreal", "UnrealEditor", "UE4Editor", "UE5Editor", "ShaderCompileWorker",
+        "godot", "godot-bin", "cryengine"
+    };
+    std::vector<std::string> game_patterns{
+        "steam", "steamwebhelper", "lutris", "wine", "wine64", "wineserver",
+        "proton", "gamescope", "heroic"
+    };
+    std::vector<std::string> heavy_background_patterns{
+        "clang", "clang++", "gcc", "g++", "ld", "ld.lld", "ld.bfd", "lld", "cargo",
+        "java", "javac", "mvn", "gradle", "blender", "7z", "zstd", "lz4", "pigz", "pixz",
+        "boinc", "foldingathome", "xmrig", "qbittorrent", "transmission-daemon", "deluge",
+        "handbrake", "optipng", "pngquant"
+    };
+    bool throttle_games_and_engines{false};
+    bool throttle_heavy_background{true};
 };
 
 class ProcTable {
@@ -84,6 +101,13 @@ public:
     void add_protected_pattern(const std::string& pattern);
     void add_force_protected_pattern(const std::string& pattern);
     void add_excluded_pattern(const std::string& pattern);
+    void add_game_engine_pattern(const std::string& pattern);
+    void add_game_pattern(const std::string& pattern);
+    void add_heavy_background_pattern(const std::string& pattern);
+    void set_throttle_games_and_engines(bool enable);
+    bool is_throttling_games_and_engines() const;
+    void set_throttle_heavy_background(bool enable);
+    bool is_throttling_heavy_background() const;
 
     // Direct manual insertion for testbeds
     void upsert_entry(const ProcEntry& entry);

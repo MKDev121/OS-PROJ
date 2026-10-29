@@ -76,15 +76,15 @@ CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o: CMakeFiles/fake_call.dir/flag
 CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o: /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call_main.cpp
 CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o: CMakeFiles/fake_call.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o -MF CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o.d -o CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call_main.cpp
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o -MF CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o.d -o CMakeFiles/fake_call.dir/src/fake_call_main.cpp.o -c /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call_main.cpp
 
 CMakeFiles/fake_call.dir/src/fake_call_main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/fake_call.dir/src/fake_call_main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call_main.cpp > CMakeFiles/fake_call.dir/src/fake_call_main.cpp.i
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call_main.cpp > CMakeFiles/fake_call.dir/src/fake_call_main.cpp.i
 
 CMakeFiles/fake_call.dir/src/fake_call_main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/fake_call.dir/src/fake_call_main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call_main.cpp -o CMakeFiles/fake_call.dir/src/fake_call_main.cpp.s
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/src/fake_call_main.cpp -o CMakeFiles/fake_call.dir/src/fake_call_main.cpp.s
 
 # Object files for target fake_call
 fake_call_OBJECTS = \

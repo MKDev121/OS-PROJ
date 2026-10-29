@@ -1,0 +1,556 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "Fontconfig::Fontconfig::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-Fontconfig__Fontconfig-Debug-333b905f9f8316d18f08.json",
+					"name" : "Fontconfig::Fontconfig",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "Freetype::Freetype::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-Freetype__Freetype-Debug-49126ded54cb2ff86e29.json",
+					"name" : "Freetype::Freetype",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "OpenGL::EGL::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-OpenGL__EGL-Debug-1550c624548d571587c8.json",
+					"name" : "OpenGL::EGL",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "OpenGL::GL::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-OpenGL__GL-Debug-31eee75ab55f62a3d9b8.json",
+					"name" : "OpenGL::GL",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "OpenGL::GLES2::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-OpenGL__GLES2-Debug-36af7835f8bcb512a709.json",
+					"name" : "OpenGL::GLES2",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "OpenGL::GLES3::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-OpenGL__GLES3-Debug-88ee738792aa5fc4b029.json",
+					"name" : "OpenGL::GLES3",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "OpenGL::GLU::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-OpenGL__GLU-Debug-4f9242dc7194a2f41e30.json",
+					"name" : "OpenGL::GLU",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "OpenGL::GLX::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-OpenGL__GLX-Debug-1f4d98a6f528da1fba86.json",
+					"name" : "OpenGL::GLX",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "OpenGL::OpenGL::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-OpenGL__OpenGL-Debug-694a376b42469542edf9.json",
+					"name" : "OpenGL::OpenGL",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Threads::Threads::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Threads__Threads-Debug-4ac5912401bb177034ac.json",
+					"name" : "Threads::Threads",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::ICE::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__ICE-Debug-4498091eebe038dd5b9c.json",
+					"name" : "X11::ICE",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::SM::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__SM-Debug-1d0d9ab18d6fa5ae24eb.json",
+					"name" : "X11::SM",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::X11::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__X11-Debug-d29fc6fec74182fb8371.json",
+					"name" : "X11::X11",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::XRes::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__XRes-Debug-904c6a38d4143830827f.json",
+					"name" : "X11::XRes",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xau::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xau-Debug-f69eb2ce057765352687.json",
+					"name" : "X11::Xau",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xaw::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xaw-Debug-848e3301bc5e8be07834.json",
+					"name" : "X11::Xaw",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xcomposite::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xcomposite-Debug-82661e3ccd405360084c.json",
+					"name" : "X11::Xcomposite",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xcursor::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xcursor-Debug-bb60aec66f4fb5fc6011.json",
+					"name" : "X11::Xcursor",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xdamage::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xdamage-Debug-85d3f3a0f9c4cb8af01a.json",
+					"name" : "X11::Xdamage",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xdmcp::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xdmcp-Debug-5d777c7025b2fea13764.json",
+					"name" : "X11::Xdmcp",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xext::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xext-Debug-ef9bc973aa20915b7a5e.json",
+					"name" : "X11::Xext",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xfixes::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xfixes-Debug-c1faa6c0738fc5d50597.json",
+					"name" : "X11::Xfixes",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xft::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xft-Debug-f7e57a8392672bac3cd6.json",
+					"name" : "X11::Xft",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xi::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xi-Debug-8507aacd040ddea99fe8.json",
+					"name" : "X11::Xi",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xinerama::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xinerama-Debug-9b59a25ef38dc4f86bc3.json",
+					"name" : "X11::Xinerama",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xkb::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xkb-Debug-f3509afd19f525e9644b.json",
+					"name" : "X11::Xkb",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xmu::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xmu-Debug-e5bbb78d8f58e485a280.json",
+					"name" : "X11::Xmu",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xpm::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xpm-Debug-3062984a1281b2217131.json",
+					"name" : "X11::Xpm",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xrandr::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xrandr-Debug-1559b3427ff8722045f8.json",
+					"name" : "X11::Xrandr",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xrender::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xrender-Debug-dc4df951819d0e97da2d.json",
+					"name" : "X11::Xrender",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xss::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xss-Debug-d3a44492000348b4578d.json",
+					"name" : "X11::Xss",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xt::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xt-Debug-68af65cbf9ae2cc75beb.json",
+					"name" : "X11::Xt",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xtst::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xtst-Debug-12c6c41636cab276b0d7.json",
+					"name" : "X11::Xtst",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xutil::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xutil-Debug-552f3f73648daad204b4.json",
+					"name" : "X11::Xutil",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xv::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xv-Debug-5b7e5721bc5de06dd34b.json",
+					"name" : "X11::Xv",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::Xxf86vm::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__Xxf86vm-Debug-1726675aecdeda308b13.json",
+					"name" : "X11::Xxf86vm",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::xcb::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__xcb-Debug-01c4006ac81118210f87.json",
+					"name" : "X11::xcb",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::xcb_xinerama::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__xcb_xinerama-Debug-660ecb510b23448f0cb4.json",
+					"name" : "X11::xcb_xinerama",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::xkbcommon::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__xkbcommon-Debug-6ab93d1672da38b679a8.json",
+					"name" : "X11::xkbcommon",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "X11::xkbfile::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-X11__xkbfile-Debug-f158b227dfd9c92fbbc2.json",
+					"name" : "X11::xkbfile",
+					"projectIndex" : 1
+				}
+			],
+			"directories" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					],
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-9ad1a58d4644cf6543fa.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						3,
+						4,
+						5,
+						6,
+						7
+					]
+				},
+				{
+					"build" : "third_party/glfw",
+					"childIndexes" : 
+					[
+						2
+					],
+					"jsonFile" : "directory-third_party.glfw-Debug-9de20e3e8cf32b7d1df1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "third_party/glfw"
+				},
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22,
+						23,
+						24,
+						25,
+						26,
+						27,
+						28,
+						29,
+						30,
+						31,
+						32,
+						33,
+						34,
+						35,
+						36,
+						37,
+						38,
+						39
+					],
+					"build" : "third_party/glfw/src",
+					"jsonFile" : "directory-third_party.glfw.src-Debug-7e679facc7a207b4009b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "third_party/glfw/src",
+					"targetIndexes" : 
+					[
+						2,
+						8
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					],
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "interactive_session_protector",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						3,
+						4,
+						5,
+						6,
+						7
+					]
+				},
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22,
+						23,
+						24,
+						25,
+						26,
+						27,
+						28,
+						29,
+						30,
+						31,
+						32,
+						33,
+						34,
+						35,
+						36,
+						37,
+						38,
+						39
+					],
+					"directoryIndexes" : 
+					[
+						1,
+						2
+					],
+					"name" : "GLFW",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2,
+						8
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "bg_workload::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bg_workload-Debug-cf77cd3527c2b15e6798.json",
+					"name" : "bg_workload",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fake_call::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fake_call-Debug-7dea53abd9fb2055e71d.json",
+					"name" : "fake_call",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "glfw::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-glfw-Debug-49de096d4e15e925bdc3.json",
+					"name" : "glfw",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "imgui::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-imgui-Debug-2630c5559037e3d224c8.json",
+					"name" : "imgui",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "isp_core::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-isp_core-Debug-3d9cdb952dfda09d3129.json",
+					"name" : "isp_core",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "isp_overlay::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-isp_overlay-Debug-ad8ee59b2ffeb5e00cbf.json",
+					"name" : "isp_overlay",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "protector::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-protector-Debug-d4f568c5ffa5d1739bf6.json",
+					"name" : "protector",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "unit_tests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-unit_tests-Debug-fb736cc11af07e0f9e2e.json",
+					"name" : "unit_tests",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "update_mappings::@d5fdcda1ec52eb23cf38",
+					"jsonFile" : "target-update_mappings-Debug-9033d2ed378af1b4b181.json",
+					"name" : "update_mappings",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ/build",
+		"source" : "/home/meet-kareliya/Meet/Academics/os/project/OS-PROJ"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	}
+}

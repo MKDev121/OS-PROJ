@@ -1,5 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/unit_tests.dir/link.d"
+  "CMakeFiles/unit_tests.dir/tests/test_bg_workload.cpp.o"
+  "CMakeFiles/unit_tests.dir/tests/test_bg_workload.cpp.o.d"
   "CMakeFiles/unit_tests.dir/tests/test_cgroup_manager.cpp.o"
   "CMakeFiles/unit_tests.dir/tests/test_cgroup_manager.cpp.o.d"
   "CMakeFiles/unit_tests.dir/tests/test_config.cpp.o"

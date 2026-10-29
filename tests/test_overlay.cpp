@@ -152,3 +152,57 @@ TEST_CASE(Overlay_StatusReader_MockSimulation) {
     ASSERT_TRUE(status.protected_procs.size() > 0u);
     ASSERT_TRUE(status.background_procs.size() > 0u);
 }
+
+TEST_CASE(Overlay_StatusReader_ParseWorkloadThrottlingAndCustomPatterns) {
+    std::string test_pidfile = "/tmp/test_isp_overlay_throttle.pid";
+    std::string test_statusfile = "/tmp/test_isp_overlay_throttle.status";
+
+    {
+        std::ofstream pf(test_pidfile);
+        pf << getpid() << "\n";
+    }
+
+    {
+        std::ofstream sf(test_statusfile);
+        sf << "daemon_pid=" << getpid() << "\n";
+        sf << "mode=REAL\n";
+        sf << "state=ACTIVE\n";
+        sf << "bg_cpu_weight=25\n";
+        sf << "prot_cpu_weight=850\n";
+        sf << "hysteresis_remaining_sec=3\n";
+        sf << "throttle_games_and_engines=true\n";
+        sf << "throttle_heavy_background=false\n";
+        sf << "starvation_floor_cpu_weight=15\n";
+        sf << "poll_interval_ms=500\n";
+        sf << "custom_game_patterns=supergame,epicengine\n";
+        sf << "custom_background_patterns=myindexer,backuptool\n";
+    }
+
+    isp::StatusReader reader(test_pidfile, test_statusfile);
+    isp::OverlayStatus status = reader.poll();
+
+    ASSERT_TRUE(status.daemon_running);
+    ASSERT_TRUE(status.throttle_games_and_engines);
+    ASSERT_FALSE(status.throttle_heavy_background);
+    ASSERT_EQ(status.starvation_floor_cpu_weight, 15u);
+    ASSERT_EQ(status.poll_interval_ms, 500u);
+    ASSERT_EQ(status.custom_game_patterns, "supergame,epicengine");
+    ASSERT_EQ(status.custom_background_patterns, "myindexer,backuptool");
+
+    fs::remove(test_pidfile);
+    fs::remove(test_statusfile);
+}
+
+TEST_CASE(Overlay_DefaultConfig_OpenOnLaunch) {
+    isp::OverlayConfig config;
+    // Overlay should NOT auto-hide by default, so it opens immediately on application launch
+    ASSERT_FALSE(config.auto_hide_idle);
+    ASSERT_TRUE(config.auto_expand_on_call);
+    ASSERT_TRUE(config.throttle_games_and_engines);
+    ASSERT_TRUE(config.throttle_heavy_background);
+    ASSERT_EQ(config.prot_cpu_weight, 800);
+    ASSERT_EQ(config.bg_cpu_weight, 20);
+    ASSERT_EQ(config.hysteresis_delay_sec, 8);
+    ASSERT_EQ(config.starvation_floor, 5);
+    ASSERT_EQ(config.poll_interval_ms, 1000);
+}

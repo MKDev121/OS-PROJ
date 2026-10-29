@@ -5,6 +5,7 @@ isp_overlay: \
   CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o \
   CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o \
   CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o \
+  libisp_core.a \
   libimgui.a \
   third_party/glfw/src/libglfw3.a \
   /usr/lib/x86_64-linux-gnu/librt.a \
@@ -51,6 +52,8 @@ CMakeFiles/isp_overlay.dir/src/overlay/overlay_model.cpp.o:
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_ui.cpp.o:
 
 CMakeFiles/isp_overlay.dir/src/overlay/overlay_main.cpp.o:
+
+libisp_core.a:
 
 libimgui.a:
 
