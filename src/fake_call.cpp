@@ -80,18 +80,66 @@ bool FakeCallApp::init() {
     }
 #endif
 
-    if (ops_per_ms_ == 0 && config_.simulate_cpu_load && config_.load_ms > 0.0) {
-        auto t0 = std::chrono::steady_clock::now();
-        uint64_t count = 0;
-        volatile uint32_t acc = 0x12345;
-        while (std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count() < 5.0) {
-            for (int i = 0; i < 1000; ++i) {
-                acc = (acc * 1664525 + 1013904223) ^ (acc >> 13);
+    if (config_.simulate_cpu_load && config_.load_ms > 0.0) {
+        constexpr int WIDTH = 1280;
+        constexpr int HEIGHT = 720;
+        size_t frame_bytes = WIDTH * HEIGHT;
+        if (current_frame_.empty()) {
+            current_frame_.resize(frame_bytes, 0x80);
+            ref_frame_.resize(frame_bytes, 0x7E);
+            residual_.resize(frame_bytes, 0);
+            for (size_t i = 0; i < frame_bytes; ++i) {
+                current_frame_[i] = static_cast<uint8_t>((i * 17 + 31) & 0xFF);
+                ref_frame_[i] = static_cast<uint8_t>((i * 19 + 7) & 0xFF);
             }
-            count += 1000;
         }
-        double elapsed_ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count();
-        ops_per_ms_ = (elapsed_ms > 0.0) ? static_cast<uint64_t>(count / elapsed_ms) : 1000000ULL;
+
+        // Measure pass execution time across multiple trials to find unhindered baseline
+        double min_pass_ms = 1e9;
+        for (int trial = 0; trial < 4; ++trial) {
+            auto t0 = std::chrono::steady_clock::now();
+            uint64_t dummy = 0;
+            for (int y = 0; y < HEIGHT; y += 16) {
+                for (int x = 0; x < WIDTH; x += 16) {
+                    int sad = 0;
+                    for (int dy = 0; dy < 16; ++dy) {
+                        int row = (y + dy) * WIDTH;
+                        for (int dx = 0; dx < 16; ++dx) {
+                            int idx = row + (x + dx);
+                            int diff = static_cast<int>(current_frame_[idx]) - static_cast<int>(ref_frame_[idx]);
+                            sad += std::abs(diff);
+                            residual_[idx] = static_cast<int16_t>(diff);
+                        }
+                    }
+                    dummy += sad;
+                    for (int sby = 0; sby < 16; sby += 8) {
+                        for (int sbx = 0; sbx < 16; sbx += 8) {
+                            int32_t dct_sum = 0;
+                            for (int v = 0; v < 8; ++v) {
+                                int r_offset = (y + sby + v) * WIDTH + (x + sbx);
+                                for (int u = 0; u < 8; ++u) {
+                                    int16_t val = residual_[r_offset + u];
+                                    dct_sum += (val * (u + 1) * (v + 1)) >> 2;
+                                }
+                            }
+                            dummy += (dct_sum >> 4);
+                        }
+                    }
+                }
+            }
+            (void)dummy;
+            double pass_time = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count();
+            if (pass_time > 0.0001 && pass_time < min_pass_ms) {
+                min_pass_ms = pass_time;
+            }
+        }
+
+        if (min_pass_ms > 0.0001 && min_pass_ms < 1e8) {
+            calibrated_iterations_ = std::max(1u, static_cast<uint32_t>(std::round(config_.load_ms / min_pass_ms)));
+        } else {
+            calibrated_iterations_ = 10;
+        }
+        ops_per_ms_ = static_cast<uint64_t>(1000.0 / std::max(min_pass_ms, 0.001));
     }
 
     return true;
@@ -113,25 +161,66 @@ void FakeCallApp::read_video_frame() {
 
     char frame_buf[4096];
     ssize_t bytes_read = ::read(device_fd_, frame_buf, sizeof(frame_buf));
-    if (bytes_read == 0) {
+    if (bytes_read > 0) {
+        // If device returns data, update current frame buffer
+        size_t to_copy = std::min(static_cast<size_t>(bytes_read), current_frame_.size());
+        if (to_copy > 0) {
+            std::memcpy(current_frame_.data(), frame_buf, to_copy);
+        }
+    } else if (bytes_read == 0) {
         // Reached end of file / buffer; rewind to simulate continuous video stream
         ::lseek(device_fd_, 0, SEEK_SET);
+    } else {
+        // Direct read() not supported or streaming V4L2 device; mutate frame pattern
+        if (!current_frame_.empty()) {
+            current_frame_[0] = static_cast<uint8_t>(current_frame_[0] + 1);
+        }
     }
 }
 
 void FakeCallApp::process_simulated_frame() {
-    if (!config_.simulate_cpu_load || config_.load_ms <= 0.0) {
+    if (!config_.simulate_cpu_load || config_.load_ms <= 0.0 || current_frame_.empty()) {
         return;
     }
 
-    uint64_t target_ops = ops_per_ms_ * static_cast<uint64_t>(config_.load_ms);
-    if (target_ops == 0) target_ops = 50000;
+    constexpr int WIDTH = 1280;
+    constexpr int HEIGHT = 720;
+    uint64_t dummy_acc = 0;
 
-    volatile uint32_t acc = 0x54321;
-    for (uint64_t i = 0; i < target_ops; ++i) {
-        acc = (acc * 1664525 + 1013904223) ^ (acc >> 13);
+    for (uint32_t iter = 0; iter < calibrated_iterations_; ++iter) {
+        // Process 16x16 macroblocks across 1280x720 video frame
+        for (int y = 0; y < HEIGHT; y += 16) {
+            for (int x = 0; x < WIDTH; x += 16) {
+                int sad = 0;
+                for (int dy = 0; dy < 16; ++dy) {
+                    int row = (y + dy) * WIDTH;
+                    for (int dx = 0; dx < 16; ++dx) {
+                        int idx = row + (x + dx);
+                        int diff = static_cast<int>(current_frame_[idx]) - static_cast<int>(ref_frame_[idx]);
+                        sad += std::abs(diff);
+                        residual_[idx] = static_cast<int16_t>(diff);
+                    }
+                }
+                dummy_acc += sad;
+
+                // 2D 8x8 block transform approximation on the 4 sub-blocks
+                for (int sby = 0; sby < 16; sby += 8) {
+                    for (int sbx = 0; sbx < 16; sbx += 8) {
+                        int32_t dct_sum = 0;
+                        for (int v = 0; v < 8; ++v) {
+                            int r_offset = (y + sby + v) * WIDTH + (x + sbx);
+                            for (int u = 0; u < 8; ++u) {
+                                int16_t val = residual_[r_offset + u];
+                                dct_sum += (val * (u + 1) * (v + 1)) >> 2;
+                            }
+                        }
+                        dummy_acc += (dct_sum >> 4);
+                    }
+                }
+            }
+        }
     }
-    (void)acc;
+    (void)dummy_acc;
 }
 
 double FakeCallApp::get_deadline_miss_rate() const {

@@ -109,6 +109,7 @@ private:
     void io_worker_thread(uint32_t thread_id, const std::string& filepath);
     void memory_worker_thread(uint32_t thread_id);
     void stress_worker_thread(uint32_t thread_id);
+    void mem_stream_worker_thread(uint32_t thread_id);
     void reporter_loop();
 
     WorkloadConfig config_;

@@ -62,6 +62,11 @@ private:
     size_t deadline_misses_{0};
     uint64_t ops_per_ms_{0};
 
+    std::vector<uint8_t> current_frame_;
+    std::vector<uint8_t> ref_frame_;
+    std::vector<int16_t> residual_;
+    uint32_t calibrated_iterations_{48};
+
     void read_video_frame();
     void process_simulated_frame();
 };

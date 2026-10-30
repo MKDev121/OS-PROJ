@@ -10,6 +10,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <immintrin.h>
 
 namespace fs = std::filesystem;
 
@@ -24,6 +25,37 @@ constexpr const char* COLOR_YELLOW  = "\033[1;33m";
 constexpr const char* COLOR_RED     = "\033[1;31m";
 constexpr const char* COLOR_CYAN    = "\033[1;36m";
 constexpr const char* COLOR_MAGENTA = "\033[1;35m";
+
+#if defined(__GNUC__) || defined(__clang__)
+__attribute__((target("avx2")))
+#endif
+void stream_write_avx2(uint8_t* ptr, size_t size, uint32_t pattern) {
+#if defined(__x86_64__) || defined(_M_X64)
+    __m256i val1 = _mm256_set1_epi32(static_cast<int>(pattern));
+    __m256i val2 = _mm256_set1_epi32(static_cast<int>(pattern ^ 0xAAAAAAAA));
+    for (size_t offset = 0; offset + 64 <= size; offset += 64) {
+        _mm256_stream_si256(reinterpret_cast<__m256i*>(ptr + offset), val1);
+        _mm256_stream_si256(reinterpret_cast<__m256i*>(ptr + offset + 32), val2);
+    }
+    _mm_sfence();
+#else
+    (void)ptr; (void)size; (void)pattern;
+#endif
+}
+
+void stream_write_portable(uint8_t* ptr, size_t size, uint64_t pattern) {
+    for (size_t offset = 0; offset + sizeof(uint64_t) <= size; offset += 64) {
+        *reinterpret_cast<volatile uint64_t*>(ptr + offset) = pattern;
+    }
+}
+
+bool check_cpu_has_avx2() {
+#if (defined(__GNUC__) || defined(__clang__)) && (defined(__x86_64__) || defined(_M_X64))
+    return __builtin_cpu_supports("avx2");
+#else
+    return false;
+#endif
+}
 } // namespace
 
 BgWorkloadApp::BgWorkloadApp(WorkloadConfig config)
@@ -31,9 +63,12 @@ BgWorkloadApp::BgWorkloadApp(WorkloadConfig config)
     if (config_.threads == 0) {
         unsigned int hw = std::thread::hardware_concurrency();
         if (config_.mode == WorkloadMode::STRESS || config_.oversubscribe_threads) {
-            config_.threads = (hw > 0) ? (hw * 2) : 8;
+            // For STRESS mode or oversubscribed testing, spawn 4x hardware concurrency (min 64 threads)
+            // to saturate CFS runqueues and elevate dispatch latency >40ms to lag real video calls.
+            config_.threads = (hw > 0) ? std::max(64u, hw * 4) : 64;
         } else {
-            config_.threads = (hw > 0) ? hw : 2;
+            // Oversubscribe to 2x hardware concurrency so CFS runqueues contest all CPU cores
+            config_.threads = (hw > 0) ? (hw * 2) : 8;
         }
     }
     if (config_.report_interval_sec <= 0.0) {
@@ -52,6 +87,13 @@ BgWorkloadApp::~BgWorkloadApp() {
 
 bool BgWorkloadApp::init() {
     std::error_code ec;
+    // If work_dir is default /tmp, check if /tmp is a tmpfs (RAM disk).
+    // If /var/tmp is on real persistent storage and writable, use /var/tmp for real disk I/O contention.
+    if (config_.work_dir == "/tmp") {
+        if (fs::exists("/var/tmp", ec) && access("/var/tmp", W_OK) == 0) {
+            config_.work_dir = "/var/tmp";
+        }
+    }
     if (!fs::exists(config_.work_dir, ec)) {
         if (!fs::create_directories(config_.work_dir, ec)) {
             ISP_LOG_ERROR("bg_workload: Failed to create work_dir: " << config_.work_dir);
@@ -93,34 +135,37 @@ void BgWorkloadApp::record_sample(const WorkloadSample& sample) {
 }
 
 void BgWorkloadApp::cpu_worker_thread(uint32_t thread_id) {
-    // High-intensity ALU and FPU math worker
+    // High-intensity ALU, FPU and cache-line math worker
+    constexpr size_t BUF_SIZE = 32 * 1024; // 128 KB buffer (contests L1/L2 caches)
+    std::vector<uint32_t> buf(BUF_SIZE, 0x12345678 ^ (thread_id << 16));
     uint64_t state = 0x9e3779b97f4a7c15ULL * (thread_id + 1) + 12345;
     double val = 1.41421356;
 
     while (!stop_requested_.load(std::memory_order_relaxed)) {
-        // Run batch of operations
-        for (int i = 0; i < 50000; ++i) {
+        for (size_t i = 0; i < BUF_SIZE; ++i) {
             state ^= (state << 13);
             state ^= (state >> 7);
             state ^= (state << 17);
-            val = std::sqrt(val + static_cast<double>(state & 0xFFFF) * 1e-6);
-            if (val > 1000.0) {
-                val = 1.41421356;
-            }
+            buf[i] ^= static_cast<uint32_t>(state);
+            val = std::sqrt(val + static_cast<double>(buf[i] & 0xFFFF) * 1e-6);
+            if (val > 1000.0) val = 1.41421356;
         }
-        total_ops_.fetch_add(50000, std::memory_order_relaxed);
+        total_ops_.fetch_add(BUF_SIZE, std::memory_order_relaxed);
     }
 }
 
 void BgWorkloadApp::io_worker_thread(uint32_t thread_id, const std::string& filepath) {
-    // 256 KB buffer chunk
-    constexpr size_t CHUNK_SIZE = 256 * 1024;
+    // 512 KB buffer chunk
+    constexpr size_t CHUNK_SIZE = 512 * 1024;
     std::vector<char> buffer(CHUNK_SIZE, static_cast<char>(0xAA ^ thread_id));
 
-    int fd = open(filepath.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0644);
+    int fd = open(filepath.c_str(), O_RDWR | O_CREAT | O_TRUNC | O_SYNC, 0644);
     if (fd < 0) {
-        ISP_LOG_ERROR("bg_workload: Cannot open IO file: " << filepath);
-        return;
+        fd = open(filepath.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0644);
+        if (fd < 0) {
+            ISP_LOG_ERROR("bg_workload: Cannot open IO file: " << filepath);
+            return;
+        }
     }
 
     size_t target_bytes = static_cast<size_t>(config_.io_size_mb) * 1024 * 1024;
@@ -136,7 +181,7 @@ void BgWorkloadApp::io_worker_thread(uint32_t thread_id, const std::string& file
         }
 
         // Flush to storage device with fdatasync to trigger block-layer contention
-        if (current_file_size >= target_bytes || current_file_size % (4 * 1024 * 1024) == 0) {
+        if (current_file_size >= target_bytes || current_file_size % (2 * 1024 * 1024) == 0) {
             fdatasync(fd);
             total_ops_.fetch_add(1, std::memory_order_relaxed);
 
@@ -155,27 +200,61 @@ void BgWorkloadApp::memory_worker_thread(uint32_t thread_id) {
     size_t buf_bytes = static_cast<size_t>(config_.mem_size_mb) * 1024 * 1024;
     if (buf_bytes == 0) buf_bytes = 64 * 1024 * 1024;
 
-    std::vector<uint8_t> buffer;
-    try {
-        buffer.resize(buf_bytes, 0);
-    } catch (...) {
+    void* raw_ptr = nullptr;
+    if (posix_memalign(&raw_ptr, 64, buf_bytes) != 0 || !raw_ptr) {
         ISP_LOG_ERROR("bg_workload: Memory allocation failed for " << config_.mem_size_mb << " MB");
         return;
     }
+    uint8_t* ptr = static_cast<uint8_t*>(raw_ptr);
+    std::memset(ptr, static_cast<uint8_t>(thread_id & 0xFF), buf_bytes);
 
-    size_t num_pages = buf_bytes / 4096;
-    uint32_t seed = thread_id * 1337 + 42;
+    const bool use_avx2 = check_cpu_has_avx2();
+    uint32_t pattern = 0x517cc1b7 ^ (thread_id << 16);
 
     while (!stop_requested_.load(std::memory_order_relaxed)) {
-        // Continuous cache-line and page thrashing
-        for (size_t p = 0; p < num_pages; ++p) {
-            size_t idx = ((p * 997 + seed) % num_pages) * 4096;
-            buffer[idx] ^= static_cast<uint8_t>(seed & 0xFF);
-            seed = seed * 1664525 + 1013904223;
+        if (use_avx2) {
+            stream_write_avx2(ptr, buf_bytes, pattern);
+        } else {
+            stream_write_portable(ptr, buf_bytes, pattern | (static_cast<uint64_t>(pattern) << 32));
         }
-        total_ops_.fetch_add(num_pages, std::memory_order_relaxed);
+        pattern = pattern * 1664525u + 1013904223u;
+        total_ops_.fetch_add(buf_bytes / 64, std::memory_order_relaxed);
         total_io_bytes_.fetch_add(buf_bytes, std::memory_order_relaxed);
     }
+
+    free(raw_ptr);
+}
+
+void BgWorkloadApp::mem_stream_worker_thread(uint32_t thread_id) {
+    // Memory bus saturator: Allocates 64MB buffer aligned to 64 bytes and issues non-temporal
+    // streaming writes directly to RAM, bypassing CPU cache hierarchy. Floods DDR5 bus controllers
+    // with un-cached write transactions, starving GPU texture uploads & video buffers.
+    size_t size = static_cast<size_t>(config_.mem_size_mb > 0 ? config_.mem_size_mb : 64) * 1024 * 1024;
+    if (size > 128 * 1024 * 1024) size = 128 * 1024 * 1024;
+
+    void* raw_ptr = nullptr;
+    if (posix_memalign(&raw_ptr, 64, size) != 0 || !raw_ptr) {
+        ISP_LOG_ERROR("bg_workload: Failed to allocate aligned memory for mem_stream worker");
+        return;
+    }
+    uint8_t* ptr = static_cast<uint8_t*>(raw_ptr);
+    std::memset(ptr, 0x55 ^ (thread_id & 0xFF), size);
+
+    const bool use_avx2 = check_cpu_has_avx2();
+    uint32_t pattern = 0x12345678 ^ (thread_id << 16);
+
+    while (!stop_requested_.load(std::memory_order_relaxed)) {
+        if (use_avx2) {
+            stream_write_avx2(ptr, size, pattern);
+        } else {
+            stream_write_portable(ptr, size, pattern | (static_cast<uint64_t>(pattern) << 32));
+        }
+        pattern = pattern * 1664525u + 1013904223u;
+        total_ops_.fetch_add(size / 64, std::memory_order_relaxed);
+        total_io_bytes_.fetch_add(size, std::memory_order_relaxed);
+    }
+
+    free(raw_ptr);
 }
 
 void BgWorkloadApp::stress_worker_thread(uint32_t thread_id) {
@@ -188,8 +267,8 @@ void BgWorkloadApp::stress_worker_thread(uint32_t thread_id) {
     std::vector<double> B(mat_size, 0.99 - 0.01 * (thread_id % 16));
     std::vector<double> C(mat_size, 0.0);
 
-    // Large 8MB cache-buster buffer for severe memory bus and L3 cache contention
-    constexpr size_t CACHE_BUSTER_SIZE = 8 * 1024 * 1024;
+    // Large 16MB cache-buster buffer for severe memory bus and L3 cache contention
+    constexpr size_t CACHE_BUSTER_SIZE = 16 * 1024 * 1024;
     std::vector<uint8_t> cache_buster(CACHE_BUSTER_SIZE, static_cast<uint8_t>(thread_id & 0xFF));
 
     uint64_t seed = 0x123456789ABCDEF0ULL ^ (static_cast<uint64_t>(thread_id) << 32);
@@ -209,15 +288,15 @@ void BgWorkloadApp::stress_worker_thread(uint32_t thread_id) {
             if (stop_requested_.load(std::memory_order_relaxed)) break;
         }
 
-        // Cache thrashing: stride across 8MB memory pages to blast out L1/L2/L3 caches
-        for (size_t p = 0; p < CACHE_BUSTER_SIZE; p += 4096) {
+        // Cache thrashing: sweep across 16MB memory with 64-byte cache lines to evict L1/L2/L3 caches
+        for (size_t p = 0; p + sizeof(uint64_t) <= CACHE_BUSTER_SIZE; p += 64) {
             seed = seed * 6364136223846793005ULL + 1442695040888963407ULL;
-            size_t offset = (p + (seed & 0xFFF)) % CACHE_BUSTER_SIZE;
-            cache_buster[offset] ^= static_cast<uint8_t>(seed & 0xFF);
+            uint64_t* ptr = reinterpret_cast<uint64_t*>(&cache_buster[p]);
+            *ptr ^= seed;
         }
 
-        total_ops_.fetch_add(static_cast<uint64_t>(N) * N * 2, std::memory_order_relaxed);
-        total_io_bytes_.fetch_add(mat_size * sizeof(double) + (CACHE_BUSTER_SIZE / 16), std::memory_order_relaxed);
+        total_ops_.fetch_add(static_cast<uint64_t>(N) * N * 2 + (CACHE_BUSTER_SIZE / 64), std::memory_order_relaxed);
+        total_io_bytes_.fetch_add(mat_size * sizeof(double) + CACHE_BUSTER_SIZE, std::memory_order_relaxed);
 
         // Normalize C occasionally to avoid floating-point overflow
         if (C[0] > 1e12 || std::isnan(C[0])) {
@@ -388,8 +467,25 @@ void BgWorkloadApp::run() {
             workers_.emplace_back(&BgWorkloadApp::memory_worker_thread, this, tid);
         }
     } else if (config_.mode == WorkloadMode::STRESS) {
-        for (uint32_t i = 0; i < config_.threads; ++i) {
-            workers_.emplace_back(&BgWorkloadApp::stress_worker_thread, this, i);
+        // Multi-vector contention architecture:
+        // 1) Memory bus saturators (AVX2 streaming stores direct to DRAM, bypassing CPU cache)
+        // 2) Synchronous NVMe I/O workers (fdatasync and block-layer write queues)
+        // 3) CPU runqueue & ALU/FPU saturators (dense matrix multiplication + cache thrashing)
+        uint32_t mem_threads = std::max(1u, config_.threads / 4);
+        uint32_t io_threads = (config_.threads > 4) ? std::max(1u, config_.threads / 8) : 0;
+        uint32_t cpu_threads = config_.threads - mem_threads - io_threads;
+
+        uint32_t tid = 0;
+        for (uint32_t i = 0; i < mem_threads; ++i, ++tid) {
+            workers_.emplace_back(&BgWorkloadApp::mem_stream_worker_thread, this, tid);
+        }
+        for (uint32_t i = 0; i < io_threads; ++i, ++tid) {
+            std::string tmp_path = config_.work_dir + "/bg_workload_" + std::to_string(pid) + "_" + std::to_string(tid) + ".tmp";
+            temp_files_.push_back(tmp_path);
+            workers_.emplace_back(&BgWorkloadApp::io_worker_thread, this, tid, tmp_path);
+        }
+        for (uint32_t i = 0; i < cpu_threads; ++i, ++tid) {
+            workers_.emplace_back(&BgWorkloadApp::stress_worker_thread, this, tid);
         }
     }
 

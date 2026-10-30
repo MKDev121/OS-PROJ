@@ -4,6 +4,13 @@ An Operating Systems daemon designed to protect latency-sensitive interactive se
 
 ---
 
+## Documentation Quick Links
+- **[Architecture & Algorithm Design](docs/ARCHITECTURE_AND_ALGORITHMS.md)**: Surface-level summary, subsystem breakdown, and detailed algorithms (session detection, classification, CFS bandwidth clamping, anti-starvation aging, hysteresis, cgroup restoration).
+- **[Demonstration & Testing Guide](docs/DEMO_AND_TESTING_GUIDE.md)**: Step-by-step walkthrough for Test 1 (hard throttling) and Test 2 (video call protection & recovery).
+- **[Environment Setup Guide](docs/ENVIRONMENT_SETUP.md)**: System prerequisites, kernel cgroup v2 setup, and dependencies.
+
+---
+
 ## Architecture Overview
 
 ```

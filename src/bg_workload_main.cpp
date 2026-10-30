@@ -23,7 +23,8 @@ void print_usage(const char* prog_name) {
               << "Interactive Session Protector daemon.\n\n"
               << "Options:\n"
               << "  -m, --mode <mode>        Workload mode: cpu, io, memory, mixed, stress [default: cpu]\n"
-              << "      --stress, --hog      Ultra-heavy contention: pins 100% of all cores & memory bus\n"
+              << "      --stress, --hog      Ultra-heavy multi-vector contention: pins all cores, memory bus & NVMe\n"
+              << "      --lag-call, --real-lag  Aggressively lag real video calls (Google Meet, Zoom, Discord, WebRTC)\n"
               << "      --matrix <size>      Run dense matrix multiplication with cache-thrashing (e.g. 500)\n"
               << "  -t, --threads <num>      Number of worker threads (0 = auto-detect CPU cores) [default: auto]\n"
               << "  -d, --duration <sec>     Run duration in seconds (0 = run indefinitely) [default: 0]\n"
@@ -35,9 +36,11 @@ void print_usage(const char* prog_name) {
               << "  -q, --quiet              Suppress periodic terminal output (only print final summary)\n"
               << "  -h, --help               Show this help message and exit\n\n"
               << "Examples:\n"
+              << "  " << prog_name << " --stress                   # Multi-vector contention to lag video calls\n"
+              << "  " << prog_name << " --lag-call                 # Dedicated mode for real video call testing\n"
               << "  " << prog_name << " --mode cpu --threads 4 --duration 30\n"
               << "  " << prog_name << " --mode mixed --output workload_metrics.csv\n"
-              << "  " << prog_name << " -m io --work-dir /tmp --io-size 128\n";
+              << "  " << prog_name << " -m io --work-dir /var/tmp --io-size 128\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -48,7 +51,8 @@ int main(int argc, char* argv[]) {
         if (arg == "-h" || arg == "--help") {
             print_usage(argv[0]);
             return 0;
-        } else if (arg == "--stress" || arg == "--hog" || arg == "--heavy") {
+        } else if (arg == "--stress" || arg == "--hog" || arg == "--heavy" || 
+                   arg == "--lag-call" || arg == "--real-lag" || arg == "--lag-video") {
             config.mode = isp::WorkloadMode::STRESS;
             config.oversubscribe_threads = true;
         } else if (arg == "--matrix") {

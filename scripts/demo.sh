@@ -151,11 +151,11 @@ success "Cgroup hierarchy initialized (protector.slice: protected, background, n
 step 2 "Background Workloads Starting"
 info "Spawning synthetic high-contention background workload (bg_workload)..."
 if [ -f "build/bg_workload" ]; then
-    ./build/bg_workload --mode cpu --threads 2 --report 1.0 -q > /tmp/isp_demo_bg.log 2>&1 &
+    ./build/bg_workload --stress --report 1.0 -q > /tmp/isp_demo_bg.log 2>&1 &
     BG_WORKER_PID=$!
     disown "$BG_WORKER_PID" 2>/dev/null || true
     sleep 0.2
-    success "Background workload active (PID: ${BG_WORKER_PID}, command: bg_workload --mode cpu)"
+    success "Background workload active (PID: ${BG_WORKER_PID}, command: bg_workload --stress)"
 else
     # Fallback spin loop
     (

@@ -25,8 +25,8 @@ void print_usage(const char* prog_name) {
               << "  -f, --fps <val>         Target frames per second (default: 30.0)\n"
               << "  -t, --duration <sec>    Run duration in seconds (default: 60)\n"
               << "  -o, --output <file>     Path to output CSV metrics file (default: fake_call_metrics.csv)\n"
-              << "      --load-ms <ms>      Target frame encode work in ms [default: 12.0ms]\n"
-              << "      --heavy             Realistic heavy video encode workload (15.0ms/frame)\n"
+              << "      --load-ms <ms>      Target frame encode work in ms [default: 18.0ms]\n"
+              << "      --heavy             Realistic heavy video encode workload (22.0ms/frame)\n"
               << "      --tolerance <ratio> Deadline miss tolerance ratio (default: 1.2)\n"
               << "      --no-cpu-load       Disable simulated video encode CPU workload\n"
               << "  -h, --help              Show this help message and exit\n";
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
     config.output_csv = "fake_call_metrics.csv";
     config.deadline_tolerance_ratio = 1.2;
     config.simulate_cpu_load = true;
-    config.load_ms = 14.0;
+    config.load_ms = 18.0;
 
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
